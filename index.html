@@ -1,0 +1,3693 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>시장 8축 진단 대시보드 v4.0 — 금리곡선 + 갱신버튼</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Pretendard', system-ui, -apple-system, sans-serif; }
+  .glow-pos { box-shadow: 0 0 24px rgba(34,197,94,0.25); }
+  .glow-neu { box-shadow: 0 0 24px rgba(234,179,8,0.20); }
+  .glow-neg { box-shadow: 0 0 24px rgba(239,68,68,0.25); }
+  details[open] summary .chev { transform: rotate(180deg); }
+  .chev { transition: transform .25s; }
+  .tab-btn.active { background: #0f172a; color: white; }
+  .pulse-dot { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+  .card-hover { transition: transform .2s, box-shadow .2s; }
+  .card-hover:hover { transform: translateY(-2px); }
+  .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .study-content h4 { font-weight: 700; color: #0f172a; margin-top: 1rem; margin-bottom: 0.5rem; }
+  .study-content p { margin-bottom: 0.5rem; line-height: 1.7; }
+  .study-content ul { margin-bottom: 0.75rem; padding-left: 1.25rem; line-height: 1.7; }
+  .study-content ul li { list-style: disc; margin-bottom: 0.25rem; }
+  .study-content .quote { background: linear-gradient(to right, #fef3c7, #fde68a); border-left: 4px solid #f59e0b; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0.5rem; font-style: italic; color: #78350f; }
+  .study-content .example { background: #f1f5f9; border-left: 4px solid #64748b; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0.5rem; }
+  .study-content .danger { background: #fee2e2; border-left: 4px solid #ef4444; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0.5rem; }
+  .study-content .tip { background: #d1fae5; border-left: 4px solid #10b981; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0.5rem; }
+  .study-content table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.875rem; }
+  .study-content th, .study-content td { border: 1px solid #e2e8f0; padding: 0.5rem; text-align: left; }
+  .study-content th { background: #f8fafc; font-weight: 600; }
+  .gauge-bar { height: 10px; border-radius: 5px; background: linear-gradient(to right, #10b981 0%, #10b981 33%, #f59e0b 33%, #f59e0b 66%, #ef4444 66%, #ef4444 100%); position: relative; }
+  .gauge-marker { position: absolute; top: -3px; width: 4px; height: 16px; background: #0f172a; border-radius: 2px; }
+  .matrix-active { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; font-weight: 700; box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
+  .sticky-mini { position: sticky; top: 60px; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+<!-- ============== HEADER ============== -->
+<header class="gradient-bg text-white">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="pulse-dot inline-block w-3 h-3 bg-emerald-400 rounded-full"></span>
+          <span class="text-xs tracking-widest text-emerald-300 uppercase">Live · 2026.05.24 · v4.0</span>
+        </div>
+        <h1 class="text-4xl font-extrabold mt-2">시장 8축 진단 대시보드</h1>
+        <p class="text-slate-300 mt-1">자산네제곱 1단계 통합판 · 8개의 동력을 읽고 적용하는 법</p>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="text-right">
+          <div class="text-xs text-slate-400">현재 시장 국면</div>
+          <div class="text-2xl font-bold text-emerald-400">강세장 (후반)</div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs text-slate-400">권장 전략</div>
+          <div class="text-2xl font-bold text-amber-300">중립 + 방어</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============== 실시간 티커 테이프 (Live Ticker) ============== -->
+<div class="bg-slate-900 border-b border-slate-700">
+  <div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+      "symbols": [
+        {"description": "S&P 500", "proName": "FOREXCOM:SPXUSD"},
+        {"description": "Nasdaq 100", "proName": "FOREXCOM:NSXUSD"},
+        {"description": "VIX", "proName": "CBOE:VIX"},
+        {"description": "10Y", "proName": "TVC:US10Y"},
+        {"description": "DXY 달러", "proName": "TVC:DXY"},
+        {"description": "WTI 유가", "proName": "TVC:USOIL"},
+        {"description": "구리", "proName": "COMEX:HG1!"},
+        {"description": "금", "proName": "TVC:GOLD"},
+        {"description": "비트코인", "proName": "BITSTAMP:BTCUSD"}
+      ],
+      "showSymbolLogo": true,
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "colorTheme": "dark",
+      "locale": "kr"
+    }
+    </script>
+  </div>
+</div>
+
+<!-- ============== TAB NAV ============== -->
+<nav class="bg-white border-b sticky top-0 z-30 shadow-sm">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex gap-1 overflow-x-auto scrollbar-hide">
+      <button onclick="showTab('dashboard')" class="tab-btn active px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="dashboard">📊 대시보드</button>
+      <button onclick="showTab('charts')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="charts">📈 실시간 차트</button>
+      <button onclick="showTab('simulate')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="simulate">🎮 시뮬레이션 & 상관관계</button>
+      <button onclick="showTab('stockanalysis')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="stockanalysis">🔬 종목 분석 (2-3단계)</button>
+      <button onclick="showTab('study8')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="study8">📚 8축 통합 (분석+학습)</button>
+      <button onclick="showTab('philosophy')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="philosophy">🧠 핵심 철학</button>
+      <button onclick="showTab('tools')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="tools">🔗 도구상자 (소스+용어)</button>
+      <button onclick="showTab('workbook')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="workbook">✍️ 실전 워크북</button>
+    </div>
+  </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-6 py-8">
+
+<!-- ============================================================= -->
+<!-- ============== TAB 1: DASHBOARD (대폭 강화) ================== -->
+<!-- ============================================================= -->
+<section id="tab-dashboard" class="tab-content">
+
+  <!-- ⚠️ 스냅샷 안내 배너 + 갱신 버튼 -->
+  <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-5 mb-6 shadow-sm">
+    <div class="flex items-start gap-4 mb-4">
+      <div class="text-3xl">⚠️</div>
+      <div class="flex-1">
+        <h3 class="font-bold text-amber-900 mb-2">데이터 갱신 안내 — 어떤 게 자동? 어떤 게 수동?</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+          <div class="bg-white border border-amber-200 rounded-lg p-3">
+            <div class="font-bold text-emerald-700 mb-1">🟢 자동 (실시간)</div>
+            <div class="text-xs text-slate-700">상단 티커 테이프 · <b>📈 실시간 차트 탭</b> (TradingView)</div>
+          </div>
+          <div class="bg-white border border-amber-200 rounded-lg p-3">
+            <div class="font-bold text-amber-700 mb-1">🟡 스냅샷 (수동)</div>
+            <div class="text-xs text-slate-700"><b>핵심 숫자 카드</b> · 8축 평가 · 종합 점수<br>기준일: <b id="lastAnalysisDate">2026.05.24</b> (<span id="daysAgo">오늘</span>)</div>
+          </div>
+          <div class="bg-white border border-amber-200 rounded-lg p-3">
+            <div class="font-bold text-rose-700 mb-1">🔄 갱신 방법</div>
+            <div class="text-xs text-slate-700">아래 버튼 클릭 → Claude에 붙여넣기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 갱신 액션 버튼 그룹 -->
+    <div class="bg-white rounded-xl p-4 border-2 border-dashed border-amber-400">
+      <div class="text-xs font-bold text-amber-900 mb-3">🔄 평가 신호 갱신 요청 — 원하는 갱신 종류 선택</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <button onclick="copyPrompt('quick')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-3 rounded-lg text-sm font-semibold text-left transition">
+          <div class="flex items-center gap-2"><span class="text-lg">⚡</span><b>빠른 갱신 (5분)</b></div>
+          <div class="text-xs text-emerald-100 mt-1">핵심 숫자 8개만 업데이트</div>
+        </button>
+        <button onclick="copyPrompt('full')" class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-3 rounded-lg text-sm font-semibold text-left transition">
+          <div class="flex items-center gap-2"><span class="text-lg">📊</span><b>전체 재진단 (15분)</b></div>
+          <div class="text-xs text-indigo-100 mt-1">8축 평가 + 전략 + 시나리오</div>
+        </button>
+        <button onclick="copyPrompt('event')" class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-3 rounded-lg text-sm font-semibold text-left transition">
+          <div class="flex items-center gap-2"><span class="text-lg">🚨</span><b>이벤트 점검</b></div>
+          <div class="text-xs text-rose-100 mt-1">FOMC/CPI/NFP 발표 후</div>
+        </button>
+      </div>
+      <div id="copyStatus" class="hidden mt-3 bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded text-sm text-emerald-900"></div>
+      <div class="text-xs text-slate-500 mt-2">💡 버튼 클릭 → 프롬프트가 클립보드 복사됨 → Claude 채팅창에 붙여넣기 (Cmd+V)</div>
+    </div>
+  </div>
+
+  <!-- 1. 신호 집계 + 4-4-반반 규칙 -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white rounded-2xl p-6 border-l-4 border-emerald-500 shadow-sm card-hover">
+      <div class="text-xs text-slate-500 mb-1">긍정 신호</div>
+      <div class="text-4xl font-bold text-emerald-600">3</div>
+      <div class="text-xs text-slate-500 mt-1">실적 · 마진 · VIX</div>
+    </div>
+    <div class="bg-white rounded-2xl p-6 border-l-4 border-amber-500 shadow-sm card-hover">
+      <div class="text-xs text-slate-500 mb-1">중립 신호</div>
+      <div class="text-4xl font-bold text-amber-600">4</div>
+      <div class="text-xs text-slate-500 mt-1">금리 · 자금 · 고용 · 소비</div>
+    </div>
+    <div class="bg-white rounded-2xl p-6 border-l-4 border-rose-500 shadow-sm card-hover">
+      <div class="text-xs text-slate-500 mb-1">부정 신호</div>
+      <div class="text-4xl font-bold text-rose-600">1</div>
+      <div class="text-xs text-slate-500 mt-1">달러 / 원자재</div>
+    </div>
+    <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-sm card-hover">
+      <div class="text-xs text-slate-400 mb-1">종합 점수</div>
+      <div class="text-4xl font-bold text-emerald-400">+2</div>
+      <div class="text-xs text-slate-400 mt-1">(긍정3 - 부정1)</div>
+    </div>
+  </div>
+
+  <!-- 4-4-반반 규칙 강화 -->
+  <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl p-6 shadow-lg mb-6">
+    <div class="flex items-start gap-4">
+      <div class="text-4xl">📜</div>
+      <div class="flex-1">
+        <h2 class="text-lg font-bold mb-3">자산네제곱 종합 진단 규칙 (4-4-반반)</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+          <div class="bg-white/10 rounded-lg p-3"><b class="text-emerald-300">긍정 4+</b> → 강세 가능성<br><span class="text-xs text-slate-300">현재 3개 (1개 부족)</span></div>
+          <div class="bg-white/10 rounded-lg p-3 ring-2 ring-amber-300"><b class="text-amber-300">중립 우세 (현재)</b> → 횡보·변동성<br><span class="text-xs text-slate-200">3:4:1 → 강세 잠재, 충격 잠복</span></div>
+          <div class="bg-white/10 rounded-lg p-3"><b class="text-rose-300">부정 4+</b> → 약세 가능성<br><span class="text-xs text-slate-300">현재 1개 (3개 부족)</span></div>
+        </div>
+        <div class="bg-white/10 rounded-lg p-3 mt-3 text-xs">
+          <b class="text-amber-300">💡 변곡점 모니터:</b> 8축 중 절반 이상이 동시에 방향 전환하면 시장 주요 전환점. <b>현재 부정 → 긍정 후보:</b> 달러/원자재 (호르무즈 진정 시) · <b>긍정 → 부정 후보:</b> VIX (Fed 매파 시)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 시장 사이클 위치 (NEW - PDF p.34) -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">🔄 현재 경기 사이클 위치 <span class="text-xs text-slate-400 font-normal">(소비 패턴 기준 · PDF p.34)</span></h2>
+    <div class="grid grid-cols-4 gap-2 mb-3">
+      <div class="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-3 text-center"><div class="text-xs font-bold text-emerald-700">확장기</div><div class="text-xs text-emerald-600 mt-1">필수+재량 둘 다 ↑</div></div>
+      <div class="bg-amber-50 border-4 border-amber-500 rounded-lg p-3 text-center ring-4 ring-amber-200"><div class="text-xs font-bold text-amber-700">⭐ 둔화 초입 (현재)</div><div class="text-xs text-amber-700 mt-1">재량 ↓, 필수 유지</div></div>
+      <div class="bg-orange-50 border-2 border-orange-200 rounded-lg p-3 text-center"><div class="text-xs font-bold text-orange-700">둔화 진행</div><div class="text-xs text-orange-600 mt-1">재량 급락</div></div>
+      <div class="bg-rose-50 border-2 border-rose-200 rounded-lg p-3 text-center"><div class="text-xs font-bold text-rose-700">침체기</div><div class="text-xs text-rose-600 mt-1">필수마저 ↓</div></div>
+    </div>
+    <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded text-sm">
+      <b>📍 진단 근거:</b> Walmart PB 비중 ↑ (가격 민감 시작) · Starbucks 매출은 +9%지만 트래픽 둔화 · 명품 둔화 · <b>카드 연체율 3.3%</b> (정상 3% 초과) · 서브프라임 4.5~4.8%
+      <div class="mt-2 text-xs text-amber-900"><b>대응:</b> 재량 소비주(LULU, NKE 등) 비중 축소 / 필수 소비주(WMT, COST, PG) + 헬스케어(XLV) 비중 유지</div>
+    </div>
+  </div>
+
+  <!-- 3. 핵심 숫자 + 골디락스 범위 -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">⚡ 시장 핵심 숫자 + 적정 범위</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">S&P 500</span><span class="text-xs text-emerald-600">사상 최고</span></div>
+        <div class="text-xl font-bold">7,209</div>
+        <div class="text-xs text-slate-400 mt-1">목표가 Morgan Stanley 7,800 · Oppenheimer 8,100</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">Fed 금리</span><span class="text-xs text-amber-600">동결</span></div>
+        <div class="text-xl font-bold">3.50~3.75%</div>
+        <div class="text-xs text-slate-400 mt-1">2024.9월부터 인하 시작, 현재 일시 정지</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">10Y 국채</span><span class="text-xs text-rose-600">4% 초과</span></div>
+        <div class="text-xl font-bold">4.56%</div>
+        <div class="text-xs text-slate-400 mt-1">기준 4% · 위 = 높음, 아래 = 낮음 (PDF p.14)</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">VIX</span><span class="text-xs text-emerald-600">정상 범위</span></div>
+        <div class="text-xl font-bold">16.76</div>
+        <div class="text-xs text-slate-400 mt-1">15~20 정상 · 30+ 공포 · 10↓ 자만</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">DXY 달러</span><span class="text-xs text-amber-600">약세 초입</span></div>
+        <div class="text-xl font-bold">99.32</div>
+        <div class="text-xs text-slate-400 mt-1">100+ 강세 · 90↓ 약세 · 110+ 극단</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">WTI 유가</span><span class="text-xs text-rose-600">위협 수준</span></div>
+        <div class="text-xl font-bold">$100+</div>
+        <div class="text-xs text-slate-400 mt-1">$70~85 골디락스 · $100+ 인플레 위협</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">구리 (닥터)</span><span class="text-xs text-emerald-600">강세</span></div>
+        <div class="text-xl font-bold">$6.35</div>
+        <div class="text-xs text-slate-400 mt-1">$3.50~4.00 정상 · $4+ 경기 회복 · YoY +31%</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">금</div><span class="text-xs text-amber-600">고점 후퇴</span></div>
+        <div class="text-xl font-bold">$4,500</div>
+        <div class="text-xs text-slate-400 mt-1">상승 = 불확실성 · 하락 = 위험 선호</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">실업률</span><span class="text-xs text-emerald-600">골디락스</span></div>
+        <div class="text-xl font-bold">4.3%</div>
+        <div class="text-xs text-slate-400 mt-1">3.8~4.2% 적정 · 0.5%p 급등 시 Sahm 발동</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">NFP</span><span class="text-xs text-amber-600">미달</span></div>
+        <div class="text-xl font-bold">+11.5만</div>
+        <div class="text-xs text-slate-400 mt-1">15~20만 골디락스 · 현재 약간 미달</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">임금 YoY</span><span class="text-xs text-emerald-600">적정</span></div>
+        <div class="text-xl font-bold">3.6%</div>
+        <div class="text-xs text-slate-400 mt-1">3~4% 적정 · 5%+ 인플레 압박</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">CPI</span><span class="text-xs text-rose-600">목표 2배</span></div>
+        <div class="text-xl font-bold">4~5%</div>
+        <div class="text-xs text-slate-400 mt-1">Fed 목표 2% · 유가發 재상승</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">실질금리</span><span class="text-xs text-amber-600">중립</span></div>
+        <div class="text-xl font-bold">+0.1%</div>
+        <div class="text-xs text-slate-400 mt-1">마이너스 = 위험자산 최고환경 · 2%+ 부담</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">Beat Rate</span><span class="text-xs text-emerald-600">건강</span></div>
+        <div class="text-xl font-bold">84%</div>
+        <div class="text-xs text-slate-400 mt-1">70%+ 건강 · 60↓ 우려</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">S&P 순이익률</span><span class="text-xs text-emerald-600">사상 최고</span></div>
+        <div class="text-xl font-bold">13.4%</div>
+        <div class="text-xs text-slate-400 mt-1">10~12% 정상 · 13%+ 강함</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">PER</span><span class="text-xs text-rose-600">고평가</span></div>
+        <div class="text-xl font-bold">26.97</div>
+        <div class="text-xs text-slate-400 mt-1">역사 평균 16~18배</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">버핏지수</span><span class="text-xs text-rose-600">역대 최고</span></div>
+        <div class="text-xl font-bold">232.9%</div>
+        <div class="text-xs text-slate-400 mt-1">80~100% 정상 · 200%+ 거품권</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="flex justify-between items-baseline"><span class="text-xs text-slate-500">카드 연체율</span><span class="text-xs text-rose-600">초과</span></div>
+        <div class="text-xl font-bold">3.3%</div>
+        <div class="text-xs text-slate-400 mt-1">2% 정상 · 3-4% 둔화 · 5%+ 침체</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 금리 곡선 (Yield Curve) -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <div class="flex items-start justify-between flex-wrap gap-2 mb-4">
+      <div>
+        <h2 class="text-lg font-bold flex items-center gap-2">📉 미국 국채 금리 곡선 (Yield Curve) <span class="text-xs text-slate-400 font-normal">(PDF p.11-12)</span></h2>
+        <p class="text-xs text-slate-500 mt-1">단기·장기 금리 비교로 경기 침체 예측 — 역전 시 12~18개월 후 침체 선행</p>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="toggleYieldCompare('current')" class="yc-btn bg-indigo-500 text-white px-3 py-1 rounded-lg text-xs font-semibold active" data-yc="current">현재만</button>
+        <button onclick="toggleYieldCompare('compare')" class="yc-btn bg-slate-200 text-slate-700 px-3 py-1 rounded-lg text-xs font-semibold" data-yc="compare">역사 비교</button>
+        <button onclick="toggleYieldCompare('spread')" class="yc-btn bg-slate-200 text-slate-700 px-3 py-1 rounded-lg text-xs font-semibold" data-yc="spread">2s10s 스프레드</button>
+      </div>
+    </div>
+
+    <!-- 차트 캔버스 -->
+    <div class="relative" style="height:340px">
+      <canvas id="yieldCurveChart"></canvas>
+    </div>
+
+    <!-- 곡선 해석 카드 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
+      <div class="bg-emerald-50 border-l-4 border-emerald-500 rounded-lg p-3">
+        <div class="text-xs font-bold text-emerald-700">곡선 모양</div>
+        <div class="text-lg font-bold text-emerald-900 mt-1" id="curveShape">정상 (우상향)</div>
+        <div class="text-xs text-emerald-700 mt-1">단기 < 장기 → 경기 정상</div>
+      </div>
+      <div class="bg-amber-50 border-l-4 border-amber-500 rounded-lg p-3">
+        <div class="text-xs font-bold text-amber-700">2s10s 스프레드</div>
+        <div class="text-lg font-bold text-amber-900 mt-1" id="spread2s10s">+43bp</div>
+        <div class="text-xs text-amber-700 mt-1">10Y(4.56%) - 2Y(4.13%) = +0.43%p</div>
+      </div>
+      <div class="bg-rose-50 border-l-4 border-rose-500 rounded-lg p-3">
+        <div class="text-xs font-bold text-rose-700">역전 발생 여부</div>
+        <div class="text-lg font-bold text-rose-900 mt-1">❌ 해소됨</div>
+        <div class="text-xs text-rose-700 mt-1">2022-23 역전 → 2024년 정상화</div>
+      </div>
+    </div>
+
+    <!-- PDF 학습 박스 -->
+    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded mt-4 text-sm">
+      <div class="font-bold text-indigo-900 mb-1">💡 PDF 학습 — 금리 역전이란?</div>
+      <p class="text-indigo-900 leading-relaxed">정상은 <b>1년 < 2년 < 10년 < 30년</b> (오래 묶을수록 위험해서 더 높은 이자). 뒤집히면 "역전" — 시장이 <b>"지금은 높지만 2~3년 후 경기 나빠져서 Fed가 금리 확 내릴 것"</b>이라 베팅. 역사적으로 <b>역전 발생 후 12~18개월 안에 침체</b>.</p>
+      <p class="text-xs text-indigo-700 mt-2"><b>예외:</b> 2022-2023 역전 → 강한 고용 + 재정 지출이 받쳐줘서 침체 안 옴. <b>이게 8축을 함께 봐야 하는 이유.</b></p>
+    </div>
+  </div>
+
+  <!-- 5. 8축 카드 -->
+  <h2 class="text-2xl font-bold mb-4">🎯 8축 한눈에 보기 + PDF 적용 팁</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="axisGrid"></div>
+
+  <!-- 5. 자금흐름 4패턴 매칭 (NEW - PDF p.23) -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">💸 자금흐름 4패턴 매칭 <span class="text-xs text-slate-400 font-normal">(PDF p.23)</span></h2>
+    <p class="text-xs text-slate-500 mb-4">현재 어떤 패턴인지 확인 → 다음 액션 결정</p>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <div class="border-2 border-emerald-300 rounded-lg p-4 bg-emerald-50">
+        <div class="text-xs font-bold text-emerald-700 mb-1">패턴 1</div>
+        <div class="font-semibold text-sm">QQQ 유입 + SPY 유출</div>
+        <div class="text-xs text-emerald-700 mt-2">→ 기술주 강세 로테이션</div>
+      </div>
+      <div class="border-2 border-emerald-300 rounded-lg p-4 bg-emerald-50">
+        <div class="text-xs font-bold text-emerald-700 mb-1">패턴 2</div>
+        <div class="font-semibold text-sm">IWM 유입 + QQQ 유출</div>
+        <div class="text-xs text-emerald-700 mt-2">→ 중소형 선호, 위험 선호↑</div>
+      </div>
+      <div class="border-4 border-amber-500 rounded-lg p-4 matrix-active ring-4 ring-amber-200">
+        <div class="text-xs font-bold mb-1">⭐ 패턴 3 (현재)</div>
+        <div class="font-semibold text-sm">TLT 유입 + SPY 유출</div>
+        <div class="text-xs mt-2 text-amber-900">→ 안전자산 도피, 위험 회피</div>
+      </div>
+      <div class="border-2 border-rose-300 rounded-lg p-4 bg-rose-50">
+        <div class="text-xs font-bold text-rose-700 mb-1">패턴 4</div>
+        <div class="font-semibold text-sm">SQQQ 유입 급증</div>
+        <div class="text-xs text-rose-700 mt-2">→ 공포 정점 (역발상 매수 기회)</div>
+      </div>
+    </div>
+    <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded mt-4 text-sm">
+      <b>📍 현재 진단:</b> SPY/QQQ 약세 + IWM 더 약세 + TLT 유입 → <b>"위험 자산 일부에서 안전 자산으로 부분 이동"</b>. 강세 흐름 속 첫 균열. 단, SQQQ 급증은 없어 본격 약세 전환은 아님.
+      <div class="mt-2 text-xs"><b>대응:</b> 매수 추격 자제 · 현금 비중 확보 · TLT 5~10% 검토</div>
+    </div>
+  </div>
+
+  <!-- 6. 달러×구리×유가 시나리오 매트릭스 (NEW - PDF p.50) -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">🌐 달러 × 구리 × 유가 시나리오 매트릭스 <span class="text-xs text-slate-400 font-normal">(PDF p.50)</span></h2>
+    <p class="text-xs text-slate-500 mb-4">3개 지표 조합으로 시장 국면 판단</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-slate-100">
+            <th class="border p-2 text-left">달러</th>
+            <th class="border p-2 text-left">구리</th>
+            <th class="border p-2 text-left">유가</th>
+            <th class="border p-2 text-left">해석</th>
+            <th class="border p-2 text-left">투자 의미</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="border p-2">약세</td><td class="border p-2">상승</td><td class="border p-2">상승</td><td class="border p-2">경기 강세 + 위험 선호</td><td class="border p-2 text-emerald-700">주식 전반 강세</td></tr>
+          <tr><td class="border p-2">약세</td><td class="border p-2">상승</td><td class="border p-2">유지</td><td class="border p-2">제조 회복, 소비 안정</td><td class="border p-2 text-emerald-700">기술주 강세</td></tr>
+          <tr><td class="border p-2">약세</td><td class="border p-2">상승</td><td class="border p-2">하락</td><td class="border p-2">제조↑, 소비 둔화</td><td class="border p-2 text-amber-700">선택적 투자</td></tr>
+          <tr><td class="border p-2">강세</td><td class="border p-2">하락</td><td class="border p-2">하락</td><td class="border p-2">경기 침체 우려</td><td class="border p-2 text-rose-700">방어주 전환</td></tr>
+          <tr class="matrix-active"><td class="border p-2"><b>⭐ 약세</b></td><td class="border p-2"><b>상승</b></td><td class="border p-2"><b>급등</b></td><td class="border p-2"><b>공급 충격 / 지정학 리스크 (현재)</b></td><td class="border p-2"><b>에너지·원자재 헤지 필수</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bg-rose-50 border-l-4 border-rose-500 p-3 rounded mt-4 text-sm">
+      <b>📍 현재 매칭:</b> DXY 99.32 (약세) + 구리 +31% (상승) + WTI $100+ (급등) → <b>"공급 충격 + 지정학 리스크"</b> 시나리오. 호르무즈 해협 분쟁 3개월째.
+      <div class="mt-2 text-xs"><b>대응:</b> XLE(에너지) 편입 검토 · 항공·운송업 회피 · 인플레 헤지 (GLD, TIPS)</div>
+    </div>
+  </div>
+
+  <!-- 7. Sahm Rule 게이지 (NEW - PDF p.30) -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">🚨 Sahm Rule 게이지 — 침체 예측 50년 100% 적중 <span class="text-xs text-slate-400 font-normal">(PDF p.30)</span></h2>
+    <p class="text-xs text-slate-500 mb-4">실업률 3개월 평균이 과거 12개월 최저 대비 <b>+0.5%p 이상</b> 상승 시 침체 시작</p>
+    <div class="bg-slate-50 rounded-xl p-5">
+      <div class="flex justify-between text-xs text-slate-500 mb-2">
+        <span>안전 (0~0.3%p)</span>
+        <span>경계 (0.3~0.5%p)</span>
+        <span>발동 (0.5%p+)</span>
+      </div>
+      <div class="gauge-bar mb-3">
+        <div class="gauge-marker" style="left: 35%;"></div>
+      </div>
+      <div class="flex justify-between text-xs">
+        <div><div class="text-slate-500">12개월 최저</div><div class="font-bold">4.0%</div></div>
+        <div class="text-center"><div class="text-slate-500">현재 (3개월 평균)</div><div class="font-bold text-amber-600">4.3%</div></div>
+        <div class="text-right"><div class="text-slate-500">차이</div><div class="font-bold text-amber-600">+0.3%p</div></div>
+      </div>
+    </div>
+    <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded mt-4 text-sm">
+      <b>📍 진단:</b> 경계 영역 진입. <b>+0.2%p 추가 상승 시 Sahm Rule 발동</b>. 매주 목요일 실업수당 청구 건수 체크 필수.
+      <div class="mt-2 text-xs text-amber-900"><b>참고:</b> 2024년 8월에도 발동 직전 (0.5%p)에서 다시 하락 → 시장 반등. <b>한 달 데이터로 판단 ×, 3-6개월 추세 봐야.</b></div>
+    </div>
+  </div>
+
+  <!-- 8. 고용 맥락 해석 (NEW - PDF p.28-29) -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">⚖️ 고용의 4가지 맥락 — 같은 지표, 다른 해석 <span class="text-xs text-slate-400 font-normal">(PDF p.28-29)</span></h2>
+    <p class="text-xs text-slate-500 mb-4">"고용 좋으면 무조건 호재" → 틀린 생각. 맥락에 따라 4가지 시나리오</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div class="bg-emerald-50 border-2 border-emerald-300 rounded-lg p-4">
+        <div class="text-xs font-bold text-emerald-700 mb-1">① 회복기 (긍정)</div>
+        <div class="text-sm">고용 점진 개선, 임금 적당</div>
+        <div class="text-xs text-emerald-700 mt-1">→ 소비↑, 실적↑, 주가↑</div>
+      </div>
+      <div class="bg-rose-50 border-2 border-rose-300 rounded-lg p-4">
+        <div class="text-xs font-bold text-rose-700 mb-1">② 과열기 (부정)</div>
+        <div class="text-sm">고용 너무 좋음, 임금 5%+</div>
+        <div class="text-xs text-rose-700 mt-1">→ 인플레 우려, Fed 인상</div>
+      </div>
+      <div class="bg-amber-100 border-4 border-amber-500 rounded-lg p-4 ring-4 ring-amber-200">
+        <div class="text-xs font-bold text-amber-800 mb-1">⭐ ③ 소프트 랜딩 (현재)</div>
+        <div class="text-sm">고용 조금 둔화, 실업률 4.3%, 임금 3.6%</div>
+        <div class="text-xs text-amber-800 mt-1">→ Fed 인하 가능, 환영</div>
+      </div>
+      <div class="bg-rose-50 border-2 border-rose-300 rounded-lg p-4">
+        <div class="text-xs font-bold text-rose-700 mb-1">④ 침체 진입 (매우 부정)</div>
+        <div class="text-sm">실업률 한 달 +0.5%p 급등</div>
+        <div class="text-xs text-rose-700 mt-1">→ 침체, 폭락</div>
+      </div>
+    </div>
+    <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded mt-4 text-sm">
+      <b>📍 현재 매칭:</b> NFP 11.5만(둔화), 실업률 4.3%(안정), 임금 3.6%(적정) → <b>"소프트 랜딩" 시나리오</b>. Fed 인하 여지 있음.
+      <div class="mt-2 text-xs"><b>주의:</b> 단기실업자 +35.8만 증가 + 풀타임/파트타임 비율 악화 시 ④번 시나리오로 급변 가능. <b>매주 목요일 실업수당 청구 체크</b>.</div>
+    </div>
+  </div>
+
+  <!-- 9. 8축 상호작용 다이어그램 (NEW - PDF p.62) -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">🔗 8축 상호작용 — 금리가 움직이면 연쇄 반응 <span class="text-xs text-slate-400 font-normal">(PDF p.62)</span></h2>
+    <p class="text-xs text-slate-500 mb-4">금리 한 축의 변화가 다른 축으로 어떻게 퍼지는지</p>
+    <div class="bg-gradient-to-br from-slate-50 to-blue-50 rounded-xl p-5">
+      <div class="text-center mb-4">
+        <div class="inline-block bg-slate-900 text-white px-6 py-3 rounded-full font-bold">💰 금리 인상 ↑</div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
+        <div class="bg-white rounded-lg p-3 text-center border border-rose-200"><div class="text-xs font-semibold text-rose-700">실적</div><div class="text-xs mt-1">기업 이자 비용 ↑<br>이익 ↓</div></div>
+        <div class="bg-white rounded-lg p-3 text-center border border-rose-200"><div class="text-xs font-semibold text-rose-700">자금흐름</div><div class="text-xs mt-1">현금 매력도 ↑<br>주식 유출</div></div>
+        <div class="bg-white rounded-lg p-3 text-center border border-rose-200"><div class="text-xs font-semibold text-rose-700">마진</div><div class="text-xs mt-1">이자 비용 ↑<br>마진 압박</div></div>
+        <div class="bg-white rounded-lg p-3 text-center border border-rose-200"><div class="text-xs font-semibold text-rose-700">달러</div><div class="text-xs mt-1">달러 강세 →<br>원자재 약세</div></div>
+        <div class="bg-white rounded-lg p-3 text-center border border-rose-200"><div class="text-xs font-semibold text-rose-700">VIX</div><div class="text-xs mt-1">불확실성 ↑<br>VIX 상승</div></div>
+      </div>
+      <p class="text-xs text-slate-500 mt-4 text-center italic">"금리 하나가 움직이면 나머지 축들도 연쇄 반응. 그래서 8축을 함께 봐야 한다."</p>
+    </div>
+  </div>
+
+  <!-- 10. 전략 (기존 흡수) -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h2 class="text-xl font-bold mb-4 flex items-center gap-2">🎯 현재 권장 전략</h2>
+      <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded mb-4">
+        <div class="font-bold text-amber-900">중립적 (살짝 방어 가미)</div>
+        <div class="text-sm text-amber-800 mt-1">추세는 살아있지만, 고평가·유가 리스크가 누적되는 후반 구간</div>
+      </div>
+      <ul class="space-y-3 text-sm">
+        <li class="flex gap-3"><span class="font-bold text-slate-400">①</span><div><b>현금 비중 20~30% 유지</b> — 변동성 확대 시 분할 매수 탄약</div></li>
+        <li class="flex gap-3"><span class="font-bold text-slate-400">②</span><div><b>퀄리티(대형 우량주) &gt; 중소형주</b> — IWM 약세, 양극화 심화 중</div></li>
+        <li class="flex gap-3"><span class="font-bold text-slate-400">③</span><div><b>장기채(TLT) + 금(GLD) 5~10% 헤지</b> — 지정학 충격 대비</div></li>
+        <li class="flex gap-3"><span class="font-bold text-slate-400">④</span><div><b>AI 빅테크 추격매수 자제</b> — 가이던스 둔화 시 변동성 확대 가능</div></li>
+        <li class="flex gap-3"><span class="font-bold text-slate-400">⑤</span><div><b>에너지·원자재 일부 편입 고려 (XLE)</b> — 유가 추세 상승의 인플레 헤지</div></li>
+        <li class="flex gap-3"><span class="font-bold text-slate-400">⑥</span><div><b>재량 소비 줄이고 필수·헬스케어 확대</b> — 둔화 초입 사이클</div></li>
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h2 class="text-xl font-bold mb-4 flex items-center gap-2">⚠️ 다음 주 주의 변수</h2>
+      <div class="space-y-3">
+        <div class="border-l-4 border-rose-500 pl-4 py-2"><div class="font-bold">호르무즈 해협 갈등 (3개월째)</div><div class="text-sm text-slate-600">미군함 충돌 보도. 유가 추가 급등 시 인플레 재점화 → Fed 매파 회귀 가능</div></div>
+        <div class="border-l-4 border-rose-500 pl-4 py-2"><div class="font-bold">6월 FOMC</div><div class="text-sm text-slate-600">Fed가 인하 신호 거두면 채권금리·달러 상승 → 주식 압박</div></div>
+        <div class="border-l-4 border-amber-500 pl-4 py-2"><div class="font-bold">NVDA 실적 후속 효과</div><div class="text-sm text-slate-600">5/20 호실적 발표 이후 AI 모멘텀 지속 여부 확인</div></div>
+        <div class="border-l-4 border-amber-500 pl-4 py-2"><div class="font-bold">6월 CPI 발표</div><div class="text-sm text-slate-600">4월처럼 4~5%대 유지 시 시장 흔들림. 3%대 진입 시 안도 랠리</div></div>
+        <div class="border-l-4 border-rose-500 pl-4 py-2"><div class="font-bold">버핏지수 232.9% (역대 최고)</div><div class="text-sm text-slate-600">평균 회귀 압력 누적. 트리거 이벤트 시 조정 폭 확대 가능</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. 시나리오 -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h2 class="text-xl font-bold mb-4">📈 향후 3개월 시나리오</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+        <div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">강세 (확률 35%)</div>
+        <div class="text-2xl font-bold mt-1 mb-2 text-emerald-900">S&P500 → 7,800~8,100</div>
+        <ul class="text-sm text-emerald-900 space-y-1"><li>• 호르무즈 갈등 완화 → 유가 $80↓</li><li>• CPI 3%대 진입 → Fed 9월 인하</li><li>• AI 가이던스 추가 상향</li><li><b>대응:</b> 추가 매수, 위험자산 비중↑</li></ul>
+      </div>
+      <div class="bg-amber-50 border-4 border-amber-500 rounded-xl p-5 ring-4 ring-amber-200">
+        <div class="text-xs font-bold text-amber-700 uppercase tracking-wider">⭐ 기본 (확률 45%)</div>
+        <div class="text-2xl font-bold mt-1 mb-2 text-amber-900">횡보 6,800~7,400</div>
+        <ul class="text-sm text-amber-900 space-y-1"><li>• 유가 $90~110 박스권</li><li>• CPI 4~5%대 고착 → Fed 동결</li><li>• 실적 견조, 멀티플 정체</li><li><b>대응:</b> 현금 보유, 변동성 매도</li></ul>
+      </div>
+      <div class="bg-rose-50 border border-rose-200 rounded-xl p-5">
+        <div class="text-xs font-bold text-rose-700 uppercase tracking-wider">약세 (확률 20%)</div>
+        <div class="text-2xl font-bold mt-1 mb-2 text-rose-900">조정 -10~15%</div>
+        <ul class="text-sm text-rose-900 space-y-1"><li>• 호르무즈 확전 → 유가 $130+</li><li>• Fed 추가 인상 시사</li><li>• AI 캐펙스 둔화 신호</li><li><b>대응:</b> 방어주, TLT, GLD 비중↑</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. 3줄 요약 -->
+  <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-8 shadow-lg">
+    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">💡 초보자를 위한 3줄 요약</h2>
+    <ol class="space-y-3">
+      <li class="flex gap-3"><span class="bg-emerald-500 text-white font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">1</span><span>지금 시장은 <b class="text-emerald-400">강세장</b>이다. 왜냐하면 <b>S&P500이 신고점이고, 6분기 연속 두 자릿수 실적 + 사상 최고 마진</b>이기 때문.</span></li>
+      <li class="flex gap-3"><span class="bg-amber-500 text-white font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">2</span><span>투자할 만한가? <b class="text-amber-400">Yes (조건부)</b>. <b>밸류에이션이 역대급으로 비싸므로 분할 매수 + 우량주 위주 + 현금 20~30% 유지</b>.</span></li>
+      <li class="flex gap-3"><span class="bg-rose-500 text-white font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">3</span><span>다음 주 주의할 것: <b class="text-rose-400">유가 $100 지속 여부 · Fed 위원 발언 · 호르무즈 헤드라인 · 6월 CPI</b>.</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- ============== TAB CHARTS: 실시간 차트 (TradingView) ========= -->
+<!-- ============================================================= -->
+<section id="tab-charts" class="tab-content hidden">
+
+  <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold flex items-center gap-2">📈 실시간 차트 — TradingView Live</h2>
+    <p class="text-sm text-slate-700 mt-2">아래 차트는 <b>TradingView에서 실시간 갱신</b>됩니다. 미국 장 마감 후에는 마감가가 표시되고, 장 열리면 실시간 업데이트됩니다.</p>
+    <p class="text-xs text-slate-500 mt-1">💡 차트 클릭 → TradingView로 이동해 더 상세히 볼 수 있습니다.</p>
+  </div>
+
+  <!-- 섹션 1: 미니 카드 그리드 (한눈에) -->
+  <h3 class="text-lg font-bold mb-3 flex items-center gap-2">⚡ 한눈에 보기 (라이브 스냅샷)</h3>
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"FOREXCOM:SPXUSD","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true,"largeChartUrl":""}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"NASDAQ:QQQ","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"AMEX:IWM","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"CBOE:VIX","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"TVC:US10Y","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"TVC:DXY","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"TVC:USOIL","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"COMEX:HG1!","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"TVC:GOLD","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"AMEX:TLT","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"AMEX:GLD","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3 shadow-sm">
+      <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+        {"symbol":"AMEX:SQQQ","width":"100%","height":180,"locale":"kr","dateRange":"3M","colorTheme":"light","isTransparent":true,"autosize":true}
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <!-- 섹션 2: 섹터 ETF 히트맵 -->
+  <h3 class="text-lg font-bold mb-3 flex items-center gap-2">🏭 섹터 ETF 한눈에 (자금 흐름 추적용)</h3>
+  <div class="bg-white rounded-2xl p-4 shadow-sm mb-8" style="height:400px">
+    <div class="tradingview-widget-container" style="height:100%">
+      <div class="tradingview-widget-container__widget" style="height:100%"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+      {
+        "exchanges": [],
+        "dataSource": "SPX500",
+        "grouping": "sector",
+        "blockSize": "market_cap_basic",
+        "blockColor": "change",
+        "locale": "kr",
+        "symbolUrl": "",
+        "colorTheme": "light",
+        "hasTopBar": false,
+        "isDataSetEnabled": false,
+        "isZoomEnabled": true,
+        "hasSymbolTooltip": true,
+        "isMonoSize": false,
+        "width": "100%",
+        "height": "100%"
+      }
+      </script>
+    </div>
+  </div>
+
+  <!-- 섹션 3: 상세 차트 - 시장 종합 -->
+  <h3 class="text-lg font-bold mb-3 flex items-center gap-2">📊 S&P 500 상세 차트</h3>
+  <div class="bg-white rounded-2xl p-4 shadow-sm mb-6" style="height:500px">
+    <div class="tradingview-widget-container" style="height:100%">
+      <div class="tradingview-widget-container__widget" style="height:100%"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+      {
+        "autosize": true,
+        "symbol": "FOREXCOM:SPXUSD",
+        "interval": "D",
+        "timezone": "Asia/Seoul",
+        "theme": "light",
+        "style": "1",
+        "locale": "kr",
+        "withdateranges": true,
+        "hide_side_toolbar": false,
+        "allow_symbol_change": true,
+        "studies": ["MASimple@tv-basicstudies", "Volume@tv-basicstudies"],
+        "support_host": "https://www.tradingview.com"
+      }
+      </script>
+    </div>
+  </div>
+
+  <!-- 섹션 4: VIX 상세 (공포지수) -->
+  <h3 class="text-lg font-bold mb-3 flex items-center gap-2">😨 VIX 공포지수 상세</h3>
+  <div class="bg-white rounded-2xl p-4 shadow-sm mb-6" style="height:450px">
+    <div class="tradingview-widget-container" style="height:100%">
+      <div class="tradingview-widget-container__widget" style="height:100%"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+      {
+        "autosize": true,
+        "symbol": "CBOE:VIX",
+        "interval": "D",
+        "timezone": "Asia/Seoul",
+        "theme": "light",
+        "style": "1",
+        "locale": "kr",
+        "withdateranges": true,
+        "studies": ["MASimple@tv-basicstudies"],
+        "support_host": "https://www.tradingview.com"
+      }
+      </script>
+    </div>
+  </div>
+
+  <!-- 섹션 5: 경제 캘린더 -->
+  <h3 class="text-lg font-bold mb-3 flex items-center gap-2">📅 미국 경제 지표 캘린더 (실시간)</h3>
+  <div class="bg-white rounded-2xl p-4 shadow-sm mb-6" style="height:500px">
+    <div class="tradingview-widget-container" style="height:100%">
+      <div class="tradingview-widget-container__widget" style="height:100%"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+      {
+        "colorTheme": "light",
+        "isTransparent": false,
+        "width": "100%",
+        "height": "100%",
+        "locale": "kr",
+        "importanceFilter": "0,1",
+        "countryFilter": "us"
+      }
+      </script>
+    </div>
+  </div>
+
+  <!-- 섹션 6: 실시간 종합 시세 테이블 -->
+  <h3 class="text-lg font-bold mb-3 flex items-center gap-2">📋 8축 핵심 자산 종합 시세</h3>
+  <div class="bg-white rounded-2xl p-4 shadow-sm mb-6" style="height:600px">
+    <div class="tradingview-widget-container" style="height:100%">
+      <div class="tradingview-widget-container__widget" style="height:100%"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+      {
+        "colorTheme": "light",
+        "dateRange": "12M",
+        "showChart": true,
+        "locale": "kr",
+        "largeChartUrl": "",
+        "isTransparent": false,
+        "showSymbolLogo": true,
+        "showFloatingTooltip": true,
+        "width": "100%",
+        "height": "100%",
+        "plotLineColorGrowing": "rgba(41, 98, 255, 1)",
+        "plotLineColorFalling": "rgba(41, 98, 255, 1)",
+        "gridLineColor": "rgba(240, 243, 250, 0)",
+        "scaleFontColor": "rgba(106, 109, 120, 1)",
+        "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
+        "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
+        "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
+        "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
+        "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
+        "tabs": [
+          {
+            "title": "지수 ETF",
+            "symbols": [
+              {"s":"AMEX:SPY","d":"S&P 500"},
+              {"s":"NASDAQ:QQQ","d":"Nasdaq 100"},
+              {"s":"AMEX:IWM","d":"Russell 2000"},
+              {"s":"AMEX:DIA","d":"Dow 30"}
+            ]
+          },
+          {
+            "title": "섹터 ETF",
+            "symbols": [
+              {"s":"AMEX:XLK","d":"기술"},
+              {"s":"AMEX:XLF","d":"금융"},
+              {"s":"AMEX:XLE","d":"에너지"},
+              {"s":"AMEX:XLV","d":"헬스케어"},
+              {"s":"AMEX:XLY","d":"임의소비재"},
+              {"s":"AMEX:XLP","d":"필수소비재"},
+              {"s":"AMEX:XLI","d":"산업재"},
+              {"s":"AMEX:XLU","d":"유틸리티"}
+            ]
+          },
+          {
+            "title": "안전·리스크",
+            "symbols": [
+              {"s":"AMEX:TLT","d":"장기 국채"},
+              {"s":"AMEX:GLD","d":"금"},
+              {"s":"AMEX:SQQQ","d":"나스닥 인버스"},
+              {"s":"AMEX:VXX","d":"VIX 단기"}
+            ]
+          },
+          {
+            "title": "Mag7",
+            "symbols": [
+              {"s":"NASDAQ:AAPL","d":"Apple"},
+              {"s":"NASDAQ:MSFT","d":"Microsoft"},
+              {"s":"NASDAQ:GOOGL","d":"Alphabet"},
+              {"s":"NASDAQ:AMZN","d":"Amazon"},
+              {"s":"NASDAQ:META","d":"Meta"},
+              {"s":"NASDAQ:NVDA","d":"NVIDIA"},
+              {"s":"NASDAQ:TSLA","d":"Tesla"}
+            ]
+          },
+          {
+            "title": "원자재·달러",
+            "symbols": [
+              {"s":"TVC:DXY","d":"달러 인덱스"},
+              {"s":"TVC:USOIL","d":"WTI"},
+              {"s":"COMEX:HG1!","d":"구리"},
+              {"s":"TVC:GOLD","d":"금"},
+              {"s":"COMEX:SI1!","d":"은"}
+            ]
+          }
+        ]
+      }
+      </script>
+    </div>
+  </div>
+
+  <!-- 사용 팁 -->
+  <div class="bg-indigo-50 border-l-4 border-indigo-500 rounded-xl p-5">
+    <h3 class="font-bold text-indigo-900 mb-2">💡 차트 활용 팁</h3>
+    <ul class="text-sm text-indigo-900 space-y-1">
+      <li>① <b>티커 테이프(상단)</b>: 페이지 어디서나 보이는 라이브 가격 스트림</li>
+      <li>② <b>한눈에 보기 카드</b>: 3개월 추세를 한 번에 비교 (8축 핵심 지표)</li>
+      <li>③ <b>섹터 히트맵</b>: 어떤 섹터가 강한지 → 자금흐름 4패턴 매칭에 활용</li>
+      <li>④ <b>경제 캘린더</b>: NFP, CPI, FOMC 발표 일정 자동 표시 — 매주 목요일 체크</li>
+      <li>⑤ <b>종합 시세 테이블</b>: Mag7 가이던스 후 주가 추적 / 섹터 로테이션 관찰</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- ============== TAB SIMULATE: 시뮬레이션 & 상관관계 =========== -->
+<!-- ============================================================= -->
+<section id="tab-simulate" class="tab-content hidden">
+
+  <div class="bg-gradient-to-r from-fuchsia-50 to-purple-50 border-l-4 border-fuchsia-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold flex items-center gap-2">🎮 8축 시뮬레이션 & 상관관계 마스터</h2>
+    <p class="text-sm text-slate-700 mt-2">"받지 말고 써라"의 실전판 — <b>슬라이더를 직접 움직여서</b> 8축이 어떻게 상호작용하는지 손으로 체득.</p>
+    <p class="text-xs text-slate-500 mt-1">⬇️ 아래 5개 섹션을 순서대로 따라가면 8축이 완전히 자기 것이 됩니다.</p>
+  </div>
+
+  <!-- 빠른 이동 -->
+  <div class="bg-white rounded-xl p-4 mb-6 shadow-sm">
+    <div class="flex flex-wrap gap-2">
+      <a href="#sim-slider" class="bg-fuchsia-100 hover:bg-fuchsia-200 px-3 py-1 rounded-lg text-sm font-semibold">A. 슬라이더 시뮬레이터</a>
+      <a href="#sim-matrix" class="bg-purple-100 hover:bg-purple-200 px-3 py-1 rounded-lg text-sm font-semibold">B. 상관관계 매트릭스</a>
+      <a href="#sim-chain" class="bg-indigo-100 hover:bg-indigo-200 px-3 py-1 rounded-lg text-sm font-semibold">C. 연쇄 반응</a>
+      <a href="#sim-scenario" class="bg-blue-100 hover:bg-blue-200 px-3 py-1 rounded-lg text-sm font-semibold">D. 역사 시나리오</a>
+      <a href="#sim-quiz" class="bg-emerald-100 hover:bg-emerald-200 px-3 py-1 rounded-lg text-sm font-semibold">E. 실전 퀴즈</a>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- A. 슬라이더 시뮬레이터 -->
+  <!-- ================================================ -->
+  <div id="sim-slider" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-2 flex items-center gap-2">A. 🎚️ 8축 슬라이더 시뮬레이터</h3>
+    <p class="text-xs text-slate-500 mb-4">각 축을 <b>긍정/중립/부정</b>으로 조정하면 → 종합 평가, 시장 국면, 권장 전략이 <b>실시간으로 계산</b>됩니다.</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <!-- 좌: 슬라이더 -->
+      <div id="simSliders" class="space-y-3"></div>
+
+      <!-- 우: 결과 패널 -->
+      <div class="bg-slate-50 rounded-xl p-5 sticky top-24" style="align-self:flex-start">
+        <h4 class="font-bold mb-3 text-base">📊 실시간 계산 결과</h4>
+
+        <div class="grid grid-cols-3 gap-2 mb-4">
+          <div class="bg-emerald-100 rounded-lg p-2 text-center">
+            <div class="text-xs text-emerald-700">긍정</div>
+            <div class="text-2xl font-bold text-emerald-700" id="simPos">3</div>
+          </div>
+          <div class="bg-amber-100 rounded-lg p-2 text-center">
+            <div class="text-xs text-amber-700">중립</div>
+            <div class="text-2xl font-bold text-amber-700" id="simNeu">4</div>
+          </div>
+          <div class="bg-rose-100 rounded-lg p-2 text-center">
+            <div class="text-xs text-rose-700">부정</div>
+            <div class="text-2xl font-bold text-rose-700" id="simNeg">1</div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg p-3 mb-3">
+          <div class="text-xs text-slate-500">시장 국면</div>
+          <div class="text-2xl font-bold" id="simPhase">강세장 (후반)</div>
+          <div class="text-xs text-slate-400 mt-1" id="simPhaseDesc">4-4-반반 규칙 적용</div>
+        </div>
+
+        <div class="bg-white rounded-lg p-3 mb-3">
+          <div class="text-xs text-slate-500">권장 전략</div>
+          <div class="text-xl font-bold" id="simStrategy">중립적 (방어 가미)</div>
+          <div class="text-xs text-slate-600 mt-1" id="simStrategyDesc">현금 20-30%, 우량주 위주</div>
+        </div>
+
+        <div class="bg-slate-900 text-white rounded-lg p-3">
+          <div class="text-xs text-slate-400">종합 점수 (긍정-부정)</div>
+          <div class="text-3xl font-bold text-emerald-400" id="simScore">+2</div>
+          <div class="text-xs text-slate-400 mt-1" id="simInterp">강세 우위, 변동성 잠복</div>
+        </div>
+
+        <button onclick="resetSim()" class="w-full mt-4 bg-slate-200 hover:bg-slate-300 py-2 rounded-lg text-sm font-semibold">🔄 현재 시점(2026.05.24)으로 리셋</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- B. 상관관계 매트릭스 -->
+  <!-- ================================================ -->
+  <div id="sim-matrix" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-2 flex items-center gap-2">B. 🕸️ 8축 상관관계 매트릭스</h3>
+    <p class="text-xs text-slate-500 mb-1"><b>가로 (행) = 영향을 주는 축</b> · <b>세로 (열) = 영향받는 축</b></p>
+    <p class="text-xs text-slate-500 mb-4">셀에 마우스 호버 → 상세 설명. 색상: <span class="text-emerald-600">●</span> 강한 정 / <span class="text-rose-600">●</span> 강한 부 / <span class="text-amber-600">●</span> 중간 / <span class="text-slate-400">○</span> 약함</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs border-collapse" id="corrMatrix">
+        <thead><tr id="corrHead"></tr></thead>
+        <tbody id="corrBody"></tbody>
+      </table>
+    </div>
+
+    <div id="corrDetail" class="bg-slate-50 border-l-4 border-slate-400 p-4 rounded mt-4 hidden">
+      <div class="text-xs text-slate-500 mb-1" id="corrDetailHead">셀 호버/클릭 시 상세 설명 표시</div>
+      <div class="text-sm" id="corrDetailBody"></div>
+    </div>
+
+    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded mt-4 text-sm">
+      <div class="font-bold text-indigo-900 mb-2">🔑 매트릭스 핵심 패턴 4가지 (PDF 기반)</div>
+      <ol class="space-y-1 text-indigo-900 text-xs">
+        <li><b>① 금리(1) → 모든 축에 강력한 파급</b>: 실적·자금흐름·마진·달러·VIX 5개 축에 동시 영향</li>
+        <li><b>② 달러/원자재(7) → 마진(6) → 실적(2)</b>: 유가↑ = 항공/운송 마진 파괴</li>
+        <li><b>③ 고용(4) → 소비(5) → 실적(2)</b>: 일자리는 모든 경제 활동의 출발점 (PDF p.26-27)</li>
+        <li><b>④ VIX(8) ← 모든 축의 반영</b>: VIX는 다른 7개 축의 종합 결과 (후행적 + 심리적)</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- C. 연쇄 반응 시뮬레이터 -->
+  <!-- ================================================ -->
+  <div id="sim-chain" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-2 flex items-center gap-2">C. ⛓️ 연쇄 반응 시뮬레이터</h3>
+    <p class="text-xs text-slate-500 mb-4">한 축이 움직이면 <b>1차 → 2차 → 3차</b> 어떻게 퍼지는지 시각화 (PDF p.62)</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+      <div>
+        <label class="text-xs text-slate-500">시작 축</label>
+        <select id="chainAxis" class="w-full border border-slate-300 rounded-lg p-2 text-sm" onchange="renderChain()">
+          <option value="1">1. 금리</option>
+          <option value="2">2. 기업실적</option>
+          <option value="3">3. 자금흐름</option>
+          <option value="4">4. 고용</option>
+          <option value="5">5. 소비</option>
+          <option value="6">6. 기업마진</option>
+          <option value="7">7. 달러/원자재</option>
+          <option value="8">8. VIX</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-xs text-slate-500">방향</label>
+        <select id="chainDir" class="w-full border border-slate-300 rounded-lg p-2 text-sm" onchange="renderChain()">
+          <option value="up">↑ 상승 / 강화</option>
+          <option value="down">↓ 하락 / 약화</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="chainResult" class="space-y-4"></div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- D. 역사 시나리오 프리셋 -->
+  <!-- ================================================ -->
+  <div id="sim-scenario" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-2 flex items-center gap-2">D. 📜 역사적 시나리오 프리셋</h3>
+    <p class="text-xs text-slate-500 mb-4">버튼 클릭 → 위 <b>슬라이더 시뮬레이터</b>가 그 시점의 8축 상태로 자동 세팅됩니다. 어떻게 평가됐는지 직접 확인.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="scenarioBtns"></div>
+
+    <div id="scenarioContext" class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded mt-4 hidden">
+      <div class="font-bold text-amber-900" id="scenarioTitle"></div>
+      <div class="text-sm text-amber-800 mt-2" id="scenarioDesc"></div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- E. 실전 퀴즈 -->
+  <!-- ================================================ -->
+  <div id="sim-quiz" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-2 flex items-center gap-2">E. 🧠 실전 시나리오 퀴즈</h3>
+    <p class="text-xs text-slate-500 mb-4">아래 상황을 보고 <b>먼저 자기 답을 정한 뒤</b> 정답 확인. 틀려도 OK — "왜 그렇게 생각했나"가 중요.</p>
+
+    <div id="quizList" class="space-y-4"></div>
+  </div>
+
+</section>
+
+<!-- ============================================================= -->
+<!-- ============== TAB STOCKANALYSIS: 종목 분석 (2-3단계) ======== -->
+<!-- ============================================================= -->
+<section id="tab-stockanalysis" class="tab-content hidden">
+
+  <div class="bg-gradient-to-r from-orange-50 to-amber-50 border-l-4 border-orange-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold flex items-center gap-2">🔬 종목 분석 — 자산네제곱 2-3단계 통합</h2>
+    <p class="text-sm text-slate-700 mt-2"><b>1단계가 "시장이 왜 움직이는가"였다면</b>, 여기는 <b>"어디로 돈이 흐르고, 어떤 기업을 살까"</b>의 영역.</p>
+    <p class="text-xs text-slate-500 mt-1">탑다운(시장→섹터→산업→기업) + 바텀업(기업→재무→경쟁→밸류) 결합. 사진(2단계)이 아니라 영화(3단계)를 본다.</p>
+  </div>
+
+  <!-- Quick Nav -->
+  <div class="bg-white rounded-xl p-4 mb-6 shadow-sm sticky top-16 z-20">
+    <div class="text-xs text-slate-500 mb-2">⚡ 빠른 이동 (총 11개 모듈)</div>
+    <div class="flex flex-wrap gap-2">
+      <a href="#sa-overview" class="bg-orange-100 hover:bg-orange-200 px-3 py-1 rounded-lg text-xs font-semibold">1.프레임워크</a>
+      <a href="#sa-rotation" class="bg-orange-100 hover:bg-orange-200 px-3 py-1 rounded-lg text-xs font-semibold">2.섹터 로테이션</a>
+      <a href="#sa-lifecycle" class="bg-orange-100 hover:bg-orange-200 px-3 py-1 rounded-lg text-xs font-semibold">3.산업 수명주기</a>
+      <a href="#sa-3cycle" class="bg-orange-100 hover:bg-orange-200 px-3 py-1 rounded-lg text-xs font-semibold">4.3중 사이클</a>
+      <a href="#sa-forces" class="bg-amber-100 hover:bg-amber-200 px-3 py-1 rounded-lg text-xs font-semibold">5.5가지 힘</a>
+      <a href="#sa-dependency" class="bg-amber-100 hover:bg-amber-200 px-3 py-1 rounded-lg text-xs font-semibold">6.종속성 맵</a>
+      <a href="#sa-turning" class="bg-amber-100 hover:bg-amber-200 px-3 py-1 rounded-lg text-xs font-semibold">7.변곡점 체크</a>
+      <a href="#sa-moat" class="bg-rose-100 hover:bg-rose-200 px-3 py-1 rounded-lg text-xs font-semibold">8.5가지 해자</a>
+      <a href="#sa-checklist" class="bg-rose-100 hover:bg-rose-200 px-3 py-1 rounded-lg text-xs font-semibold">9.9개 체크리스트</a>
+      <a href="#sa-scenario" class="bg-purple-100 hover:bg-purple-200 px-3 py-1 rounded-lg text-xs font-semibold">10.시나리오 빌더</a>
+      <a href="#sa-prompt" class="bg-purple-100 hover:bg-purple-200 px-3 py-1 rounded-lg text-xs font-semibold">11.AI 프롬프트</a>
+    </div>
+  </div>
+
+  <!-- ============== 1. 프레임워크 개요 ============== -->
+  <div id="sa-overview" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">1. 🧭 탑다운 + 바텀업 결합 프레임워크</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4">
+        <div class="font-bold text-blue-900 mb-2">⬇️ 탑다운 (시장 → 섹터 → 산업 → 기업)</div>
+        <p class="text-sm text-blue-900 mb-2">큰 흐름을 먼저 보고 좁혀간다. <b>"성수가 뜬다더라 → 맛집 거리"</b></p>
+        <ul class="text-xs text-blue-800 space-y-1">
+          <li>✅ 장점: 속도, 큰 파도 탈 수 있음</li>
+          <li>❌ 단점: 예측 틀리면 섹터 전체 무너짐</li>
+        </ul>
+      </div>
+      <div class="bg-emerald-50 border-l-4 border-emerald-500 rounded-lg p-4">
+        <div class="font-bold text-emerald-900 mb-2">⬆️ 바텀업 (기업 → 재무 → 경쟁 → 밸류)</div>
+        <p class="text-sm text-emerald-900 mb-2">회사 자체부터 검증. <b>"이 식당 직접 가봤어 → 맛있어"</b></p>
+        <ul class="text-xs text-emerald-800 space-y-1">
+          <li>✅ 장점: 확신, 시장 폭락에도 버틸 수 있음</li>
+          <li>❌ 단점: 시간 오래 걸림, 큰 흐름 놓침</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-gradient-to-r from-orange-100 to-amber-100 border-2 border-orange-300 rounded-lg p-4">
+      <div class="font-bold text-orange-900 mb-2">🎯 결합 — 가장 좋은 방법</div>
+      <p class="text-sm text-orange-900"><b>파도는 탑다운이 찾아주고, 배는 바텀업이 골라준다.</b></p>
+      <p class="text-xs text-orange-800 mt-2">탑다운으로 "AI 반도체가 뜨겁다" → 바텀업으로 "그 안에서 NVDA/AMD/INTC/ARM/TSMC 비교 → 가장 튼튼한 배 선택"</p>
+    </div>
+
+    <!-- 올바른 순서 -->
+    <div class="mt-4 bg-slate-50 rounded-lg p-4">
+      <div class="font-bold text-slate-900 mb-2">⚠️ 올바른 종목 분석 순서 (2단계 핵심)</div>
+      <div class="flex items-center justify-between gap-2 text-xs flex-wrap">
+        <div class="bg-white rounded p-2 flex-1 min-w-[140px] border border-slate-300"><b>1단계.</b> 비즈니스 모델 이해<br><span class="text-slate-500">뭘 팔고 누구한테?</span></div>
+        <span class="text-slate-400">→</span>
+        <div class="bg-white rounded p-2 flex-1 min-w-[140px] border border-slate-300"><b>2단계.</b> 경쟁 구조 분석<br><span class="text-slate-500">경쟁사보다 나은가?</span></div>
+        <span class="text-slate-400">→</span>
+        <div class="bg-white rounded p-2 flex-1 min-w-[140px] border border-slate-300"><b>3단계.</b> 재무 건전성<br><span class="text-slate-500">실제로 잘 버나?</span></div>
+        <span class="text-slate-400">→</span>
+        <div class="bg-white rounded p-2 flex-1 min-w-[140px] border border-slate-300"><b>4단계.</b> 밸류에이션 & 타이밍<br><span class="text-slate-500">싸나? 지금이 적기?</span></div>
+      </div>
+      <p class="text-xs text-rose-600 mt-2">❌ <b>밸류에이션부터 보는 게 가장 흔한 실수 → 가치 함정에 빠짐</b></p>
+    </div>
+  </div>
+
+  <!-- ============== 2. 섹터 로테이션 4계절 ============== -->
+  <div id="sa-rotation" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">2. 🔄 섹터 로테이션 사이클 (4계절)</h3>
+    <p class="text-xs text-slate-500 mb-4">경제는 회복→확장→둔화→침체로 순환. 각 사이클마다 강한 섹터가 다르다.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div class="bg-green-50 border-2 border-green-300 rounded-xl p-4">
+        <div class="text-3xl mb-2">🌸</div>
+        <div class="font-bold text-green-900">회복 초기 (봄)</div>
+        <div class="text-xs text-green-700 mt-1">실업↓ GDP↑ 금리↓ 신뢰↑</div>
+        <div class="mt-3 pt-3 border-t border-green-200">
+          <div class="text-xs font-bold text-emerald-700">💚 강한 섹터</div>
+          <div class="text-xs text-green-900">기술 · 임의소비재 · 금융</div>
+          <div class="text-xs font-bold text-rose-700 mt-2">🔴 약한 섹터</div>
+          <div class="text-xs text-rose-900">유틸리티 · 필수소비재</div>
+        </div>
+      </div>
+
+      <div class="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-4">
+        <div class="text-3xl mb-2">☀️</div>
+        <div class="font-bold text-yellow-900">확장기 (여름)</div>
+        <div class="text-xs text-yellow-700 mt-1">실업↓ GDP↑ 금리↑ 신뢰↑</div>
+        <div class="mt-3 pt-3 border-t border-yellow-200">
+          <div class="text-xs font-bold text-emerald-700">💚 강한 섹터</div>
+          <div class="text-xs text-yellow-900">에너지 · 소재 · 산업재</div>
+          <div class="text-xs font-bold text-rose-700 mt-2">🔴 약한 섹터</div>
+          <div class="text-xs text-rose-900">기술 · 부동산</div>
+        </div>
+      </div>
+
+      <div class="bg-orange-50 border-2 border-orange-400 rounded-xl p-4 ring-4 ring-orange-200">
+        <div class="text-3xl mb-2">🍂</div>
+        <div class="font-bold text-orange-900">⭐ 둔화 초기 (가을, 현재)</div>
+        <div class="text-xs text-orange-700 mt-1">실업↑ GDP↓ 금리고점 신뢰↓</div>
+        <div class="mt-3 pt-3 border-t border-orange-200">
+          <div class="text-xs font-bold text-emerald-700">💚 강한 섹터</div>
+          <div class="text-xs text-orange-900">헬스케어 · 필수소비재 · 유틸리티</div>
+          <div class="text-xs font-bold text-rose-700 mt-2">🔴 약한 섹터</div>
+          <div class="text-xs text-rose-900">에너지 · 소재</div>
+        </div>
+      </div>
+
+      <div class="bg-slate-100 border-2 border-slate-400 rounded-xl p-4">
+        <div class="text-3xl mb-2">❄️</div>
+        <div class="font-bold text-slate-900">침체기 (겨울)</div>
+        <div class="text-xs text-slate-700 mt-1">실업↑ GDP↓ 금리인하 신뢰↓</div>
+        <div class="mt-3 pt-3 border-t border-slate-300">
+          <div class="text-xs font-bold text-emerald-700">💚 강한 자산</div>
+          <div class="text-xs text-slate-900">채권 · 금 · 방어주</div>
+          <div class="text-xs font-bold text-rose-700 mt-2">🔴 약함</div>
+          <div class="text-xs text-rose-900">거의 모든 섹터, 현금↑</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded mt-4 text-sm">
+      <b>📍 현재 매칭 (2026.05):</b> 실업률 4.3% (안정), Fed 동결, 카드 연체율 3.3% (둔화 시작), Walmart PB 비중↑ → <b>둔화 초기 (가을)</b>. 헬스케어·필수소비재·유틸리티 비중 유지가 정석.
+    </div>
+  </div>
+
+  <!-- ============== 3. 산업 수명주기 ============== -->
+  <div id="sa-lifecycle" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">3. 🌱 산업 수명주기 4단계</h3>
+    <p class="text-xs text-slate-500 mb-4">모든 산업은 사람처럼 나이를 먹는다. 각 단계마다 투자 전략이 다르다.</p>
+
+    <table class="w-full text-xs border-collapse">
+      <thead>
+        <tr class="bg-slate-100">
+          <th class="border p-2">단계</th>
+          <th class="border p-2">특징</th>
+          <th class="border p-2">예시</th>
+          <th class="border p-2">투자 전략</th>
+          <th class="border p-2">포지션</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bg-rose-50">
+          <td class="border p-2 font-bold text-rose-900">🌱 도입기<br>(유아기)</td>
+          <td class="border p-2">시장 막 생김, 성장률 50%+, 대부분 적자, 변동성 극심</td>
+          <td class="border p-2">양자컴퓨팅, 핵융합, BCI</td>
+          <td class="border p-2">복권 사듯이, 10배 노리고 0 각오</td>
+          <td class="border p-2 text-center"><b>5% 이하</b></td>
+        </tr>
+        <tr class="bg-emerald-50">
+          <td class="border p-2 font-bold text-emerald-900">🌿 성장기<br>(청년기)</td>
+          <td class="border p-2">성장률 20-50%, 흑자 전환, 승자 윤곽</td>
+          <td class="border p-2">AI 인프라, 전기차, 클라우드, 사이버보안</td>
+          <td class="border p-2">1-2등 집중, 3-5배 목표, 2-3년 보유</td>
+          <td class="border p-2 text-center"><b>20-30%</b></td>
+        </tr>
+        <tr class="bg-blue-50">
+          <td class="border p-2 font-bold text-blue-900">🌳 성숙기<br>(장년기)</td>
+          <td class="border p-2">성장률 5-20%, 과점 구조, 낮은 변동성</td>
+          <td class="border p-2">소프트웨어, 소비재, 금융</td>
+          <td class="border p-2">1-2위만, 15-20% + 배당, 5년+</td>
+          <td class="border p-2 text-center"><b>40-50%</b></td>
+        </tr>
+        <tr class="bg-slate-100">
+          <td class="border p-2 font-bold text-slate-700">🍁 쇠퇴기<br>(노년기)</td>
+          <td class="border p-2">성장률 마이너스, 마진 압박, M&A·파산</td>
+          <td class="border p-2">신문, 케이블TV, 석탄, 전통 소매</td>
+          <td class="border p-2">대부분 회피, 명확한 턴어라운드만</td>
+          <td class="border p-2 text-center"><b>5% 이하</b></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-4 text-sm">
+      <b>💡 활용:</b> 같은 자동차 산업이라도 내연기관(-5%) vs 전기차(+22%) vs 자율주행(+35%)이 완전 다름. <b>"세부 산업"을 봐야 한다.</b>
+    </div>
+  </div>
+
+  <!-- ============== 4. 3중 사이클 ============== -->
+  <div id="sa-3cycle" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">4. 🎰 3중 사이클 — 왜 좋은 회사인데 안 오를까?</h3>
+    <p class="text-xs text-slate-500 mb-4">주가는 3개 톱니바퀴가 동시에 맞물려 돌아간다. 모두 상승 국면이면 폭발, 하나라도 하락이면 횡보.</p>
+
+    <div class="space-y-3">
+      <div class="bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-lg p-4">
+        <div class="font-bold text-blue-900 mb-1">① 거시 사이클 (1단계 8축)</div>
+        <p class="text-sm text-blue-900">금리, 고용, 유동성이 만드는 큰 파도. 8축 종합 진단 결과.</p>
+        <p class="text-xs text-blue-700 mt-1">→ 현재: 강세 우위 횡보 (8축 3:4:1)</p>
+      </div>
+      <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-300 rounded-lg p-4">
+        <div class="font-bold text-emerald-900 mb-1">② 산업 사이클 (수요·공급)</div>
+        <p class="text-sm text-emerald-900">그 산업의 수요와 공급 싸움. CAPEX 2~3년 늦게 터지는 시한폭탄.</p>
+        <p class="text-xs text-emerald-700 mt-1">→ 체크: 업계 전체가 공장 짓고 있나? 재고 회전일수 추이?</p>
+      </div>
+      <div class="bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-300 rounded-lg p-4">
+        <div class="font-bold text-orange-900 mb-1">③ 기업 사이클 (주문·재고)</div>
+        <p class="text-sm text-orange-900">그 회사의 주문과 재고 상황. Order Backlog 증가? 영업이익률 추이?</p>
+        <p class="text-xs text-orange-700 mt-1">→ 체크: 최근 4분기 Order Backlog 추이, 마진 트렌드</p>
+      </div>
+    </div>
+
+    <div class="bg-purple-50 border-l-4 border-purple-500 rounded-lg p-4 mt-4 text-sm">
+      <b class="text-purple-900">⚡ 핵심 규칙:</b>
+      <ul class="mt-2 space-y-1 text-purple-900">
+        <li><b>3개 모두 상승:</b> 주가 폭발 🚀</li>
+        <li><b>1개 하락:</b> 횡보 또는 약상승</li>
+        <li><b>2개 이상 하락:</b> 좋은 회사라도 떨어진다 ❌</li>
+      </ul>
+    </div>
+
+    <div class="bg-rose-50 border-l-4 border-rose-500 rounded-lg p-4 mt-3 text-sm">
+      <b class="text-rose-900">📚 실제 사례 — 배터리 산업 2020~2024:</b>
+      <p class="text-rose-900 mt-1">2020~2021 거시(좋음) + 산업(좋음, 공장 짓는 중) + 기업(좋음) → <b>3개 모두 상승 → 폭등</b>.</p>
+      <p class="text-rose-900 mt-1">2024 거시(횡보) + <b>산업(공급 폭발, 나쁨)</b> + 기업(주문 감소) → <b>2개 하락 → 폭락</b>. 산업 사이클의 무서움.</p>
+    </div>
+  </div>
+
+  <!-- ============== 5. 5가지 힘 (인터랙티브) ============== -->
+  <div id="sa-forces" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">5. ⚔️ 5가지 힘의 줄다리기 (3단계 PDF 핵심)</h3>
+    <p class="text-xs text-slate-500 mb-4">실적을 결정하는 5가지 힘. 한쪽은 끌어올리고, 다른 쪽은 끌어내린다. <b>주가는 현재 균형이 아니라 3개월 후 균형을 본다.</b></p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <!-- 좌: 5가지 힘 슬라이더 -->
+      <div id="forcesSliders" class="space-y-3"></div>
+
+      <!-- 우: 결과 패널 -->
+      <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-5 sticky top-32" style="align-self:flex-start">
+        <h4 class="font-bold mb-3 text-base">⚖️ 줄다리기 결과</h4>
+
+        <div class="grid grid-cols-2 gap-2 mb-4">
+          <div class="bg-emerald-100 rounded-lg p-3 text-center">
+            <div class="text-xs text-emerald-700">끌어올림</div>
+            <div class="text-3xl font-bold text-emerald-700" id="forcesUp">0</div>
+          </div>
+          <div class="bg-rose-100 rounded-lg p-3 text-center">
+            <div class="text-xs text-rose-700">끌어내림</div>
+            <div class="text-3xl font-bold text-rose-700" id="forcesDown">0</div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg p-3 mb-3">
+          <div class="text-xs text-slate-500">3개월 후 실적 전망</div>
+          <div class="text-2xl font-bold" id="forcesOutlook">균형</div>
+        </div>
+
+        <div class="bg-slate-900 text-white rounded-lg p-3">
+          <div class="text-xs text-slate-400">권장 액션</div>
+          <div class="text-xl font-bold text-amber-300" id="forcesAction">분석 필요</div>
+          <div class="text-xs text-slate-400 mt-1" id="forcesActionDesc">슬라이더를 움직여보세요</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5가지 힘 설명 -->
+    <details class="mt-4 bg-slate-50 rounded-lg p-4">
+      <summary class="cursor-pointer font-semibold text-sm">📖 5가지 힘 상세 설명 (펼치기)</summary>
+      <div class="mt-3 space-y-3 text-sm">
+        <div>
+          <b>1. 수요의 힘 (3층 구조):</b>
+          <ul class="text-xs ml-4 mt-1 list-disc">
+            <li><b>1층 최종 수요</b>: 진짜 소비자 수요 — 안정적</li>
+            <li><b>2층 파생 수요</b>: 기업이 판매하려는 주문 — 증폭 효과 (1.5배)</li>
+            <li><b>3층 재고 수요</b>: "부족할까봐" 미리 확보 — 거품, 터진다</li>
+            <li>체크: 재고 회전일수, 주문 잔고, 납기 (3분기 추세)</li>
+          </ul>
+        </div>
+        <div>
+          <b>2. 가격의 힘 (3국면):</b>
+          <ul class="text-xs ml-4 mt-1 list-disc">
+            <li><b>국면 1 주도권:</b> 가격 올려도 따라옴 (천국, 마진 개선)</li>
+            <li><b>국면 2 방어:</b> 경쟁 때문에 못 올림 (보통)</li>
+            <li><b>국면 3 전쟁:</b> 생존 위해 깎음 (지옥, 마진 붕괴)</li>
+            <li>핵심: 국면 3→1 전환이 최고 매수 타이밍</li>
+          </ul>
+        </div>
+        <div>
+          <b>3. 비용의 힘 (고정비 vs 변동비):</b>
+          <ul class="text-xs ml-4 mt-1 list-disc">
+            <li><b>고정비 70%+</b>: 고위험 고수익 (소프트웨어, 항공)</li>
+            <li><b>변동비 70%+</b>: 저위험 저수익 (유통, 도소매)</li>
+            <li>상승 국면 → 고정비 / 하락 국면 → 변동비</li>
+          </ul>
+        </div>
+        <div>
+          <b>4. 경쟁의 힘 (3단계):</b>
+          <ul class="text-xs ml-4 mt-1 list-disc">
+            <li><b>1단계 공존</b>: 사이좋게 나눠먹기</li>
+            <li><b>2단계 경쟁</b>: 점유율 다툼, 마진 압박</li>
+            <li><b>3단계 전쟁</b>: 상대를 죽이자, 마진 붕괴</li>
+            <li>상위 3사 점유율 70%+ = 1단계, 50% 미만 = 3단계</li>
+          </ul>
+        </div>
+        <div>
+          <b>5. 레버리지의 힘 (증폭 장치):</b>
+          <ul class="text-xs ml-4 mt-1 list-disc">
+            <li>증폭률 = 이익 증가율 ÷ 매출 증가율</li>
+            <li><b>2.0+</b>: 고레버리지, 상승장에 폭발</li>
+            <li><b>1.5 이하</b>: 저레버리지, 안정적</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============== 6. 종속성 맵 ============== -->
+  <div id="sa-dependency" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">6. 🌀 환경 종속성 4가지 타입</h3>
+    <p class="text-xs text-slate-500 mb-4">"독립적인 기업은 없다." 종속 변수를 알면 실적 발표를 3개월 먼저 예측 가능.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div class="bg-blue-50 border-2 border-blue-300 rounded-xl p-4">
+        <div class="font-bold text-blue-900">① 거시경제 종속형 🌊</div>
+        <p class="text-xs text-blue-900 mt-2"><b>예시:</b> 은행(금리), 자동차(금리+고용), 명품(부의효과)</p>
+        <p class="text-xs text-blue-700 mt-1"><b>선행지표:</b> 연준 회의록, 국채금리, 신규 실업수당청구</p>
+      </div>
+      <div class="bg-purple-50 border-2 border-purple-300 rounded-xl p-4">
+        <div class="font-bold text-purple-900">② 산업 사이클 종속형 🌀</div>
+        <p class="text-xs text-purple-900 mt-2"><b>예시:</b> 반도체(재고 사이클), 배터리(전기차 수요), 철강(건설 경기)</p>
+        <p class="text-xs text-purple-700 mt-1"><b>선행지표:</b> 재고 회전일수, 업계 CAPEX, 가동률</p>
+      </div>
+      <div class="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4">
+        <div class="font-bold text-emerald-900">③ 고객사 종속형 🔗</div>
+        <p class="text-xs text-emerald-900 mt-2"><b>예시:</b> TSMC(애플/엔비디아), 디스플레이(삼성/애플), 자동차 부품사(완성차)</p>
+        <p class="text-xs text-emerald-700 mt-1"><b>선행지표:</b> 고객사 실적·가이던스·CAPEX (보통 2-4주 먼저)</p>
+      </div>
+      <div class="bg-rose-50 border-2 border-rose-300 rounded-xl p-4">
+        <div class="font-bold text-rose-900">④ 규제 종속형 ⚖️</div>
+        <p class="text-xs text-rose-900 mt-2"><b>예시:</b> 제약(FDA), 암호화폐(정부 정책), 전기차(보조금)</p>
+        <p class="text-xs text-rose-700 mt-1"><b>선행지표:</b> FDA 심사 일정, 정부 정책 발표, 보조금 가이드라인</p>
+      </div>
+    </div>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded mt-4 text-sm">
+      <b>🎯 종속성 맵 3단계 만들기 (PDF p.10-12):</b>
+      <ol class="mt-2 ml-4 list-decimal text-xs">
+        <li><b>핵심 변수 9개</b> 찾기 (매출 3개 + 비용 3개 + 마진 3개) — 구체적으로!</li>
+        <li><b>선행 지표</b> 찾기 — 1-3개월 선행 + 핵심 변수와 상관관계 높은 것</li>
+        <li><b>모니터링 시스템</b> — 어디서, 얼마나 자주, 어떤 신호 → 어떤 액션</li>
+      </ol>
+    </div>
+
+    <details class="mt-3 bg-slate-50 rounded-lg p-4">
+      <summary class="cursor-pointer text-sm font-semibold">📖 실제 예시: NVDA 종속성 맵</summary>
+      <div class="mt-3 text-xs space-y-2">
+        <p><b>종속 변수:</b> 빅테크 데이터센터 CAPEX (MSFT, GOOGL, META, AMZN)</p>
+        <p><b>선행 지표:</b> 빅테크 분기 실적 + CAPEX 가이던스 (NVDA 실적 발표보다 2-4주 먼저 발표)</p>
+        <p><b>모니터링:</b> 분기 실적 시즌마다 빅테크 4사 캐펙스 가이던스 확인</p>
+        <p class="bg-emerald-100 p-2 rounded"><b>💡 인사이트:</b> "빅테크가 'CAPEX 50% 증가' 가이던스 주면 NVDA 다음 분기 폭발 확정". 남들이 NVDA 실적 보고 놀랄 때, 우리는 이미 알고 매수 완료.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============== 7. 변곡점 4가지 패턴 ============== -->
+  <div id="sa-turning" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">7. 🎯 구조적 변곡점 4가지 패턴</h3>
+    <p class="text-xs text-slate-500 mb-4">힘의 균형이 역전되는 순간. <b>2개 이상 동시 출현 = 구조적 변곡점 = 매수 타이밍</b></p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div class="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-4">
+        <div class="font-bold text-emerald-900 flex items-center gap-2">① 수요 반전 📈</div>
+        <ul class="text-xs text-emerald-900 mt-2 space-y-1 list-disc ml-4">
+          <li>재고 회전일수 3분기 연속 감소</li>
+          <li>신규 주문 2분기 연속 증가</li>
+          <li>가동률 상승</li>
+          <li>납기 길어짐</li>
+        </ul>
+        <label class="mt-3 flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" class="turning-check" data-pattern="demand"/>
+          <span class="text-sm font-semibold">신호 포착</span>
+        </label>
+      </div>
+
+      <div class="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-4">
+        <div class="font-bold text-emerald-900 flex items-center gap-2">② 가격 안정화 💰</div>
+        <ul class="text-xs text-emerald-900 mt-2 space-y-1 list-disc ml-4">
+          <li>가격 인하 폭 3분기 연속 감소</li>
+          <li>"가격 전쟁 그만" 업계 분위기</li>
+          <li>업계 1위 가격 인상 시도</li>
+          <li>약한 회사 철수·도산</li>
+        </ul>
+        <label class="mt-3 flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" class="turning-check" data-pattern="price"/>
+          <span class="text-sm font-semibold">신호 포착</span>
+        </label>
+      </div>
+
+      <div class="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-4">
+        <div class="font-bold text-emerald-900 flex items-center gap-2">③ 비용 정점 ⚙️</div>
+        <ul class="text-xs text-emerald-900 mt-2 space-y-1 list-disc ml-4">
+          <li>원자재 가격 2분기 연속 안정</li>
+          <li>인건비 상승률 둔화</li>
+          <li>구조조정 완료</li>
+          <li>효율화 효과 나타남</li>
+        </ul>
+        <label class="mt-3 flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" class="turning-check" data-pattern="cost"/>
+          <span class="text-sm font-semibold">신호 포착</span>
+        </label>
+      </div>
+
+      <div class="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-4">
+        <div class="font-bold text-emerald-900 flex items-center gap-2">④ 경쟁 완화 🛡️</div>
+        <ul class="text-xs text-emerald-900 mt-2 space-y-1 list-disc ml-4">
+          <li>약한 경쟁사 도태</li>
+          <li>시장 통합 (M&A)</li>
+          <li>점유율 안정화</li>
+          <li>신규 진입 없음</li>
+        </ul>
+        <label class="mt-3 flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" class="turning-check" data-pattern="competition"/>
+          <span class="text-sm font-semibold">신호 포착</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="turningResult" class="mt-4 bg-slate-100 border-2 border-slate-300 rounded-xl p-4 text-center">
+      <div class="text-xs text-slate-500">현재 포착된 변곡점 신호</div>
+      <div class="text-3xl font-bold text-slate-700 mt-1" id="turningCount">0 / 4</div>
+      <div class="text-sm mt-2" id="turningJudgment">신호 없음 — 일반 모니터링</div>
+    </div>
+
+    <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded mt-4 text-sm">
+      <b>📚 실제 예시 — NVDA 2023 완벽한 변곡점:</b>
+      <p class="text-xs mt-2">① 수요 반전 (챗GPT 출시, 빅테크 캐펙스 대폭 증가) + ② 가격 안정화 (공급 부족으로 프리미엄) + ③ 비용 정점 (고정비 구조 + 매출 폭증) + ④ 경쟁 완화 (CUDA 생태계로 AMD 차단) → <b>4개 모두 충족 = 완벽한 변곡점 → +200% 폭등</b></p>
+    </div>
+  </div>
+
+  <!-- ============== 8. 5가지 해자 점수표 ============== -->
+  <div id="sa-moat" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">8. 🛡️ 5가지 해자 (Moat) 점수표</h3>
+    <p class="text-xs text-slate-500 mb-4">워렌 버핏의 핵심 개념. 50점 만점 — 40+ 매우강함 / 30-40 강함 / 20 미만 약함</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div id="moatSliders" class="space-y-3"></div>
+
+      <div class="bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl p-5 sticky top-32" style="align-self:flex-start">
+        <h4 class="font-bold mb-3 text-base">🏰 해자 점수</h4>
+        <div class="text-center mb-4">
+          <div class="text-6xl font-bold" id="moatTotal">25</div>
+          <div class="text-sm text-slate-500">/ 50점</div>
+        </div>
+        <div class="bg-white rounded-lg p-3 mb-3">
+          <div class="text-xs text-slate-500">등급</div>
+          <div class="text-xl font-bold" id="moatGrade">⚙️ 보통</div>
+          <div class="text-xs text-slate-600 mt-1" id="moatGradeDesc">평균적인 경쟁 우위</div>
+        </div>
+        <div class="bg-slate-900 text-white rounded-lg p-3">
+          <div class="text-xs text-slate-400">투자 권고</div>
+          <div class="text-base font-bold text-amber-300" id="moatRec">신중하게 접근</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 9. 9개 매수 체크리스트 ============== -->
+  <div id="sa-checklist" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">9. ✅ 9개 매수 체크리스트 (2단계 핵심)</h3>
+    <p class="text-xs text-slate-500 mb-4">분석 다 끝났을 때 매수 결정 도구. 9개 YES = 강력매수 / 7-8개 = 매수 / 5-6개 = 관망 / 4개 이하 = 회피</p>
+
+    <div id="checklistGrid" class="space-y-2"></div>
+
+    <div id="checklistResult" class="bg-slate-100 border-2 border-slate-300 rounded-xl p-4 text-center mt-4">
+      <div class="text-xs text-slate-500">현재 체크</div>
+      <div class="text-4xl font-bold mt-1" id="checkCount">0 / 9</div>
+      <div class="text-lg font-semibold mt-2" id="checkJudgment">시작하세요</div>
+      <div class="text-xs text-slate-500 mt-2" id="checkAction"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+      <div class="bg-emerald-50 border border-emerald-300 rounded-lg p-3">
+        <div class="text-xs font-bold text-emerald-700">매수 후 실행</div>
+        <div class="text-sm text-emerald-900 mt-1"><b>3번 분할</b> (30%+30%+40%)</div>
+      </div>
+      <div class="bg-amber-50 border border-amber-300 rounded-lg p-3">
+        <div class="text-xs font-bold text-amber-700">목표가</div>
+        <div class="text-sm text-amber-900 mt-1"><b>+50%</b> 도달 시 절반 매도, 나머지 Trailing Stop 15%</div>
+      </div>
+      <div class="bg-rose-50 border border-rose-300 rounded-lg p-3">
+        <div class="text-xs font-bold text-rose-700">손절</div>
+        <div class="text-sm text-rose-900 mt-1"><b>-20%</b> 또는 <b>투자 논리 붕괴 시</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== 10. 시나리오 빌더 ============== -->
+  <div id="sa-scenario" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">10. 📋 시나리오 빌더 (3단계 PDF Part 4)</h3>
+    <p class="text-xs text-slate-500 mb-4">"이러면 사고, 저러면 판다"를 미리 정의. 시장 움직일 때 감정이 아니라 시스템으로 판단.</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <!-- 긍정 시나리오 -->
+      <div class="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4">
+        <div class="font-bold text-emerald-900 mb-2">🟢 긍정 시나리오</div>
+        <label class="text-xs text-slate-600">환경 변화 (구체적으로):</label>
+        <textarea id="scPosEnv" class="w-full mt-1 p-2 border border-slate-300 rounded text-sm" rows="2" placeholder="예: Fed 0.5%p 인하 + 호르무즈 갈등 해소 → 유가 $80 진입"></textarea>
+
+        <label class="text-xs text-slate-600 mt-3 block">긍정 신호 5개 정의:</label>
+        <div class="space-y-1 mt-1">
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="pos1" placeholder="신호 1 — 예: 9월 FOMC 인하 시사"/>
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="pos2" placeholder="신호 2 — 예: CPI 3.0% 진입"/>
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="pos3" placeholder="신호 3 — 예: 빅테크 캐펙스 가이던스 상향"/>
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="pos4" placeholder="신호 4"/>
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="pos5" placeholder="신호 5"/>
+        </div>
+
+        <div class="mt-3 bg-white rounded p-3 text-xs">
+          <b>액션 플랜:</b>
+          <ul class="mt-1 space-y-1">
+            <li>• 신호 2개 포착 → <b>관심 종목 매수 검토</b></li>
+            <li>• 신호 3개 포착 → <b>적극 매수 (3분할)</b></li>
+            <li>• 목표가: <input class="border-b border-slate-300 w-16 text-center" placeholder="+50%"/></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 부정 시나리오 -->
+      <div class="bg-rose-50 border-2 border-rose-300 rounded-xl p-4">
+        <div class="font-bold text-rose-900 mb-2">🔴 부정 시나리오</div>
+        <label class="text-xs text-slate-600">환경 변화 (구체적으로):</label>
+        <textarea id="scNegEnv" class="w-full mt-1 p-2 border border-slate-300 rounded text-sm" rows="2" placeholder="예: 호르무즈 확전 → 유가 $130 + Fed 추가 인상 시사"></textarea>
+
+        <label class="text-xs text-slate-600 mt-3 block">부정 신호 5개 정의:</label>
+        <div class="space-y-1 mt-1">
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="neg1" placeholder="신호 1 — 예: 유가 $120 돌파"/>
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="neg2" placeholder="신호 2 — 예: CPI 5% 재가속"/>
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="neg3" placeholder="신호 3 — 예: Sahm Rule 발동"/>
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="neg4" placeholder="신호 4"/>
+          <input class="w-full p-2 border border-slate-300 rounded text-xs sc-signal" data-type="neg5" placeholder="신호 5"/>
+        </div>
+
+        <div class="mt-3 bg-white rounded p-3 text-xs">
+          <b>액션 플랜:</b>
+          <ul class="mt-1 space-y-1">
+            <li>• 신호 2개 포착 → <b>현금 비중 확대 (50%+)</b></li>
+            <li>• 신호 3개 포착 → <b>방어주 전환, TLT/GLD 매수</b></li>
+            <li>• 손절가: <input class="border-b border-slate-300 w-16 text-center" placeholder="-20%"/></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-2 mt-4">
+      <button onclick="saveScenario()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-semibold">💾 시나리오 저장</button>
+      <button onclick="loadScenario()" class="bg-slate-200 px-4 py-2 rounded-lg text-sm font-semibold">📂 불러오기</button>
+      <span id="scenarioStatus" class="text-xs text-slate-500 self-center"></span>
+    </div>
+  </div>
+
+  <!-- ============== 11. AI 프롬프트 ============== -->
+  <div id="sa-prompt" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">11. 🤖 AI 분석 프롬프트 (2-3단계 통합)</h3>
+    <p class="text-xs text-slate-500 mb-4">기업명만 바꿔 입력. 클릭하면 클립보드 복사 → Claude에 Cmd+V</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <button onclick="copySAPrompt('full2step')" class="bg-orange-500 hover:bg-orange-600 text-white rounded-lg p-4 text-left transition">
+        <div class="text-lg font-bold">📊 2단계: 기업 분석 (정적)</div>
+        <div class="text-xs text-orange-100 mt-1">비즈니스 → 경쟁 → 재무 → 밸류 + 9개 체크리스트</div>
+      </button>
+      <button onclick="copySAPrompt('flow3step')" class="bg-purple-500 hover:bg-purple-600 text-white rounded-lg p-4 text-left transition">
+        <div class="text-lg font-bold">🌊 3단계: 흐름 분석 (동적)</div>
+        <div class="text-xs text-purple-100 mt-1">종속성 + 5가지 힘 + 변곡점 + 시나리오 + 액션</div>
+      </button>
+    </div>
+
+    <div id="saPromptStatus" class="hidden mt-3 bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded text-sm text-emerald-900"></div>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded mt-4 text-sm">
+      <b>⚠️ PDF 원저자의 강조:</b> "AI 답변은 참고만. <b>먼저 스스로 생각하고, AI 결과와 비교하고, 본인 결론을 내려라.</b> 그 과정이 실력을 만든다."
+    </div>
+  </div>
+
+  <!-- ============== 12. 초보자 10가지 실수 ============== -->
+  <div class="bg-gradient-to-br from-rose-50 to-pink-50 border-2 border-rose-300 rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">⚠️ 초보자가 자주 하는 10가지 실수 (2단계)</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>1. 순서 안 지킴</b> — 밸류부터 봄 (가치 함정!)
+      </div>
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>2. 단일 지표 집착</b> — PE만 본다
+      </div>
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>3. 경쟁사 비교 안 함</b> — 절대 숫자만
+      </div>
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>4. 과거만 봄</b> — 가이던스 무시
+      </div>
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>5. 분석 마비</b> — 100% 확신 기다림
+      </div>
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>6. 손실 인정 안 함</b> — 본전 기다리다 -50%
+      </div>
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>7. 뉴스에 휘둘림</b> — 90%가 노이즈
+      </div>
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>8. 과도한 분산</b> — 30개 추적 불가
+      </div>
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>9. 기록 안 함</b> — 왜 샀는지 잊음
+      </div>
+      <div class="bg-white rounded-lg p-3 border-l-4 border-rose-400">
+        <b>10. 완벽주의</b> — 80점이면 충분
+      </div>
+    </div>
+    <div class="bg-emerald-100 border-l-4 border-emerald-500 p-3 rounded mt-4 text-sm">
+      <b>✅ 성공의 5가지 기준 (수익률 아님!):</b>
+      <ol class="mt-2 ml-4 list-decimal text-xs">
+        <li>내 종목이 뭐 하는지 안다 (초등학생 설명 가능)</li>
+        <li>왜 샀는지 설명 가능 (투자 논리 명확)</li>
+        <li>언제 팔지 기준이 있다 (목표가/손절/논리 붕괴)</li>
+        <li>추천에 안 휘둘린다 (자기 판단으로 결정)</li>
+        <li>실수에서 배운다 (틀린 이유 분석)</li>
+      </ol>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================= -->
+<!-- ============== TAB 2: 8축 통합 (분석+학습 합침) =============== -->
+<!-- ============================================================= -->
+<section id="tab-study8" class="tab-content hidden">
+  <div class="bg-gradient-to-r from-indigo-50 to-purple-50 border-l-4 border-indigo-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold flex items-center gap-2">📚 8축 통합 — 현재 분석 + PDF 학습 + 체크리스트 + 데이터 소스</h2>
+    <p class="text-sm text-slate-700 mt-2">각 축을 펼치면 <b>현재 상황 → 해석 → 깊이 공부 → 매주 체크 → 직링크</b>가 한 번에 보입니다.</p>
+  </div>
+
+  <!-- 빠른 이동 -->
+  <div class="bg-white rounded-xl p-4 mb-6 shadow-sm sticky-mini z-20">
+    <div class="text-xs text-slate-500 mb-2">⚡ 빠른 이동</div>
+    <div class="flex flex-wrap gap-2">
+      <a href="#axis-1" onclick="openAxis(1)" class="bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg text-sm">1.금리</a>
+      <a href="#axis-2" onclick="openAxis(2)" class="bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg text-sm">2.실적</a>
+      <a href="#axis-3" onclick="openAxis(3)" class="bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg text-sm">3.자금흐름</a>
+      <a href="#axis-4" onclick="openAxis(4)" class="bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg text-sm">4.고용</a>
+      <a href="#axis-5" onclick="openAxis(5)" class="bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg text-sm">5.소비</a>
+      <a href="#axis-6" onclick="openAxis(6)" class="bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg text-sm">6.마진</a>
+      <a href="#axis-7" onclick="openAxis(7)" class="bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg text-sm">7.달러/원자재</a>
+      <a href="#axis-8" onclick="openAxis(8)" class="bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-lg text-sm">8.VIX</a>
+    </div>
+  </div>
+
+  <div id="study8List" class="space-y-4"></div>
+</section>
+
+<!-- ============================================================= -->
+<!-- ============== TAB 3: PHILOSOPHY ============================ -->
+<!-- ============================================================= -->
+<section id="tab-philosophy" class="tab-content hidden">
+  <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-2xl p-8 mb-6 shadow-lg">
+    <h2 class="text-2xl font-bold mb-2">🧠 자산네제곱 1단계의 핵심 철학</h2>
+    <p class="text-purple-100">"물고기 잡는 방법을 배웠다고 끝이 아니다" — 시장을 읽는 8개의 동력</p>
+  </div>
+
+  <div class="space-y-4">
+    <div class="bg-white rounded-2xl p-6 shadow-sm border-l-4 border-indigo-500">
+      <h3 class="text-lg font-bold mb-3">📌 원칙 1. 결론이 아니라 과정을 가져가라</h3>
+      <p class="text-slate-700 leading-relaxed mb-3">대부분의 사람은 분석의 <b>결론만</b> 가져간다. "빅테크 사면 되네"로 끝낸다. 하지만 조금이라도 시장 상황이 바뀌면 흔들리고 손절한다.</p>
+      <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded">
+        <div class="text-sm text-amber-900"><b>왜?</b> 왜 그 결론에 도달했는지를 모르기 때문이다. 근거가 있으면 -15% 조정에도 흔들리지 않는다. "AI 인프라 수요 여전, 경쟁사 없음, 마진 60%, 가이던스 강함" — 근거가 무너지지 않았으면 흔들리지 않는다.</div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm border-l-4 border-emerald-500">
+      <h3 class="text-lg font-bold mb-3">📌 원칙 2. 정보 우위가 아닌 "해석 우위"를 노려라</h3>
+      <p class="text-slate-700 leading-relaxed mb-3">투자로 돈 버는 방법은 2가지.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="bg-rose-50 border border-rose-200 rounded-lg p-4">
+          <div class="font-bold text-rose-900 mb-1">❌ 정보 우위 전략</div>
+          <div class="text-sm text-rose-800">남보다 먼저 정보를 얻어 먼저 사고, 남이 알면 판다. 헤지펀드의 영역. <b>개인투자자는 절대 못 이긴다.</b></div>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+          <div class="font-bold text-emerald-900 mb-1">✅ 해석 우위 전략</div>
+          <div class="text-sm text-emerald-800">같은 뉴스를 봐도 진짜 의미를 해석. 남이 패닉할 때 기회를 본다. <b>개인이 가질 수 있는 유일한 우위.</b> 출처는? <u>배경지식</u>.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm border-l-4 border-amber-500">
+      <h3 class="text-lg font-bold mb-3">📌 원칙 3. 수익 = 정보의 질 × 소화 능력</h3>
+      <p class="text-slate-700 leading-relaxed mb-3">아무리 좋은 분석을 봐도 소화 못하면 수익이 안 난다.</p>
+      <div class="bg-slate-100 rounded-lg p-4 font-mono text-sm">
+        <div class="mb-2">📊 정보의 질 100점 × 소화 능력 30% = <b class="text-rose-600">수익 30점</b></div>
+        <div>📊 정보의 질 70점 × 소화 능력 90% = <b class="text-emerald-600">수익 63점</b></div>
+      </div>
+      <p class="text-sm text-slate-600 mt-3"><b>소화 능력 = 배경지식.</b> 이제 정보보다 배경지식에 투자할 때.</p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm border-l-4 border-rose-500">
+      <h3 class="text-lg font-bold mb-3">📌 원칙 4. 단일 변수로 판단하지 마라</h3>
+      <p class="text-slate-700 leading-relaxed mb-3">"금리만 보면 되지 않나?", "실적만 보면 되지 않나?" — <b>모두 틀렸다.</b></p>
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="text-sm text-blue-900 leading-relaxed">자동차에 비유하면 엔진만 좋다고 차가 잘 달리지 않는다. 브레이크, 타이어, 핸들, 연료, 오일, 냉각수, 배터리... <b>이 모든 게 함께 작동해야 차가 제대로 달린다.</b></div>
+        <div class="text-sm text-blue-900 mt-2">시장도 똑같다. <b>8개의 동력이 동시에, 서로 다른 방향으로, 다른 강도로 작동하면서 만들어지는 합성력이다.</b></div>
+      </div>
+      <p class="text-sm text-slate-600 mt-3">대부분의 투자자는 8개 중 1~2개만 본다. 그래서 "이상한 시장"이라고 느낀다. 실제로는 시장이 이상한 게 아니라, 당신이 보고 있지 않은 나머지 6~7개가 반대 신호를 보내고 있는 것이다.</p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm border-l-4 border-purple-500">
+      <h3 class="text-lg font-bold mb-3">📌 원칙 5. 같은 행동, 다른 결과 — "맥락"을 봐라</h3>
+      <p class="text-slate-700 leading-relaxed mb-3">"금리 인하 = 주식 상승" 공식은 <b>반만 맞다</b>.</p>
+      <table class="w-full text-sm border-collapse border border-slate-200">
+        <thead><tr class="bg-slate-100">
+          <th class="border p-2 text-left">금리 인하 이유</th>
+          <th class="border p-2 text-left">맥락</th>
+          <th class="border p-2 text-left">결과</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="border p-2">인플레 안정으로 인하</td><td class="border p-2">소프트 랜딩 성공</td><td class="border p-2 text-emerald-700">✅ 주식 강세</td></tr>
+          <tr><td class="border p-2">경기 급랭으로 인하</td><td class="border p-2">경기 침체 진입</td><td class="border p-2 text-rose-700">❌ 주식 약세</td></tr>
+        </tbody>
+      </table>
+      <p class="text-sm text-slate-600 mt-3"><b>"왜 오르나, 왜 내리나"</b>를 함께 봐야 한다.</p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm border-l-4 border-cyan-500">
+      <h3 class="text-lg font-bold mb-3">📌 원칙 6. 받지 말고 써라 — 정보는 쓰면서 자기 것이 된다</h3>
+      <ul class="space-y-2 text-sm text-slate-700">
+        <li class="flex gap-2"><span>1️⃣</span><div><b>쓰면 생각이 정리된다</b> — 머리로는 "이해했어"라고 생각하지만, 막상 쓰면 막힌다. 그게 진짜 이해의 순간.</div></li>
+        <li class="flex gap-2"><span>2️⃣</span><div><b>쓰면 구조가 잡힌다</b> — "금리 중요해"가 아니라 "금리 5%→4%, 실질금리 하락, 위험자산 유리"로 명확해진다.</div></li>
+        <li class="flex gap-2"><span>3️⃣</span><div><b>쓰면 기억에 남는다</b> — 읽기는 단기기억, 쓰기는 장기기억.</div></li>
+        <li class="flex gap-2"><span>4️⃣</span><div><b>설명할 수 있어야 정확히 안다</b> — 더닝-크루거 효과를 넘어야 진짜 실력.</div></li>
+      </ul>
+    </div>
+
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 shadow-lg">
+      <h3 class="text-lg font-bold mb-3">📌 원칙 7. 종합 진단 규칙 (4-4-반반)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+        <div class="bg-emerald-500/20 border border-emerald-500 rounded-lg p-4 text-center">
+          <div class="text-3xl font-bold text-emerald-400">4+</div>
+          <div class="text-sm mt-1">긍정 4개 이상 → <b class="text-emerald-300">강세</b></div>
+        </div>
+        <div class="bg-amber-500/20 border border-amber-500 rounded-lg p-4 text-center">
+          <div class="text-3xl font-bold text-amber-400">≈</div>
+          <div class="text-sm mt-1">반반 → <b class="text-amber-300">횡보·변동성</b></div>
+        </div>
+        <div class="bg-rose-500/20 border border-rose-500 rounded-lg p-4 text-center">
+          <div class="text-3xl font-bold text-rose-400">4+</div>
+          <div class="text-sm mt-1">부정 4개 이상 → <b class="text-rose-300">약세</b></div>
+        </div>
+      </div>
+      <p class="text-sm text-slate-300 leading-relaxed"><b>변곡점</b>은 8축 중 <b>절반 이상의 방향이 동시에 바뀔 때</b> 발생한다.</p>
+    </div>
+
+    <div class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-2xl p-6 shadow-lg">
+      <h3 class="text-lg font-bold mb-2">🎓 학습 로드맵</h3>
+      <div class="grid grid-cols-3 gap-3 text-sm">
+        <div class="bg-white/10 rounded-lg p-3"><b>2~3주</b><br/>익숙해진다</div>
+        <div class="bg-white/10 rounded-lg p-3"><b>1개월</b><br/>자연스러워진다</div>
+        <div class="bg-white/10 rounded-lg p-3"><b>3개월</b><br/>습관이 된다</div>
+      </div>
+      <p class="text-sm text-emerald-50 mt-3">"내일 하지 마라. 다음 주에 하지 마라. <b>지금 당장 시작하자.</b>"</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- ============== TAB 4: TOOLS (소스 + 용어 통합) ============== -->
+<!-- ============================================================= -->
+<section id="tab-tools" class="tab-content hidden">
+  <div class="bg-gradient-to-r from-cyan-50 to-blue-50 border-l-4 border-cyan-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold">🔗 도구상자 — 데이터 소스 + 용어집</h2>
+    <p class="text-sm text-slate-700 mt-2">매일/매주 어디서 보는지 + 헷갈리는 용어 한 곳에서 해결.</p>
+  </div>
+
+  <!-- 빠른 분류 탭 -->
+  <div class="bg-white rounded-xl p-4 mb-6 shadow-sm">
+    <div class="text-xs text-slate-500 mb-2">📋 카테고리</div>
+    <div class="flex flex-wrap gap-2">
+      <button onclick="document.getElementById('sources-section').scrollIntoView({behavior:'smooth'})" class="bg-cyan-100 hover:bg-cyan-200 text-cyan-800 px-3 py-1 rounded-lg text-sm font-semibold">🔗 데이터 소스</button>
+      <button onclick="document.getElementById('glossary-section').scrollIntoView({behavior:'smooth'})" class="bg-purple-100 hover:bg-purple-200 text-purple-800 px-3 py-1 rounded-lg text-sm font-semibold">📖 용어집</button>
+    </div>
+  </div>
+
+  <!-- 데이터 소스 -->
+  <div id="sources-section" class="mb-8">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">🔗 데이터 소스</h3>
+    <p class="text-xs text-slate-500 mb-4">PDF에 나온 모든 사이트 + α. <b>북마크 권장.</b></p>
+    <div id="sourcesList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+  </div>
+
+  <!-- 용어집 -->
+  <div id="glossary-section">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">📖 핵심 용어집</h3>
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <div id="glossaryList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- ============== TAB 5: WORKBOOK =============================== -->
+<!-- ============================================================= -->
+<section id="tab-workbook" class="tab-content hidden">
+  <div class="bg-gradient-to-r from-rose-50 to-pink-50 border-l-4 border-rose-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold">✍️ 실전 워크북 — 직접 써라</h2>
+    <p class="text-sm text-slate-700 mt-2">"읽기만 하면 3일 후 다 잊어버린다." 매주/매월 체크할 항목을 직접 채우는 곳.</p>
+  </div>
+
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-4">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">☀️ 매일 체크 (5분)</h3>
+    <div class="space-y-2">
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>VIX 확인</b> <span class="text-xs text-slate-500">(TradingView, 어제 대비 변화율)</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>10년물 국채 금리</b> <span class="text-xs text-slate-500">(FRED, 4% 위/아래?)</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>DXY · WTI · 구리 시세</b> <span class="text-xs text-slate-500">(3개 동시 확인 → 매트릭스 매칭)</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>주요 헤드라인</b> <span class="text-xs text-slate-500">(WSJ, FT, CNBC, 자산제곱 스레드)</span></div></label>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-4">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">📅 매주 체크 (30분)</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <h4 class="font-semibold text-sm mb-2 text-indigo-700">목요일</h4>
+        <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>실업수당 초기 청구</b> <span class="text-xs text-slate-500">(20-25만 정상)</span></div></label>
+        <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>BofA Flow Show</b> <span class="text-xs text-slate-500">(기관 자금흐름)</span></div></label>
+      </div>
+      <div>
+        <h4 class="font-semibold text-sm mb-2 text-indigo-700">주말</h4>
+        <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>ETF 자금 흐름</b> <span class="text-xs text-slate-500">(QQQ/SPY/IWM/TLT/SQQQ → 4패턴 매칭)</span></div></label>
+        <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>섹터 ETF 1~3위</b> <span class="text-xs text-slate-500">(XLK/XLF/XLE/XLI 등)</span></div></label>
+        <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>CME FedWatch</b> <span class="text-xs text-slate-500">(다음 회의 인하 확률)</span></div></label>
+        <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>8축 종합 진단 (스레드 공유)</b></div></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-4">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">📆 매월 체크 (1시간)</h3>
+    <div class="space-y-2">
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>NFP (첫째 주 금요일)</b> <span class="text-xs text-slate-500">— 15-20만 골디락스, 실업률, 임금 (4맥락 매칭)</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>CPI · PCE 발표</b> <span class="text-xs text-slate-500">— 전월비, 전년비, Core</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>소매 판매 증가율</b> <span class="text-xs text-slate-500">— 인플레보다 높은가? (실질 증가)</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>FOMC 회의 (8회/년)</b> <span class="text-xs text-slate-500">— 점도표, 파월 발언</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>Sahm Rule 게이지 업데이트</b></div></label>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-4">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">🗓️ 분기 체크 (실적 시즌)</h3>
+    <div class="space-y-2">
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>대형은행 실적</b> <span class="text-xs text-slate-500">— JPM, BAC, C, WFC (시즌 첫 톤)</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>Mag7 가이던스 + CAPEX</b> <span class="text-xs text-slate-500">— AAPL/MSFT/GOOGL/AMZN/META/NVDA/TSLA</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>Beat Rate 집계</b> <span class="text-xs text-slate-500">— 70% 이상이면 건강</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>S&P500 평균 영업이익률</b> <span class="text-xs text-slate-500">— 10-12% 정상, 13%+ 강함</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>월마트 vs 스타벅스 vs 명품</b> <span class="text-xs text-slate-500">— K자 양극화 + 사이클 위치</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>13F 보고서</b> <span class="text-xs text-slate-500">— 버크셔/아크 등 기관 포지션</span></div></label>
+      <label class="flex items-start gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><div><b>신용카드 연체율</b> <span class="text-xs text-slate-500">— JPM/BAC 실적 발표 시 (3% 이하 정상)</span></div></label>
+    </div>
+  </div>
+
+  <div class="bg-gradient-to-br from-purple-600 to-indigo-700 text-white rounded-2xl p-6 shadow-lg">
+    <h3 class="text-lg font-bold mb-3">🎯 1단계 과제 (PDF 그대로)</h3>
+    <ol class="space-y-2 text-sm">
+      <li class="flex gap-3"><span class="font-bold text-purple-300">①</span><div>오늘 8축을 직접 분석해본다 (한 번에 다 안 해도 OK)</div></li>
+      <li class="flex gap-3"><span class="font-bold text-purple-300">②</span><div>스레드/블로그 등에 분석을 <b>공유</b>한다</div></li>
+      <li class="flex gap-3"><span class="font-bold text-purple-300">③</span><div>다른 사람의 분석을 본다</div></li>
+      <li class="flex gap-3"><span class="font-bold text-purple-300">④</span><div>피드백을 받고 반영한다</div></li>
+      <li class="flex gap-3"><span class="font-bold text-purple-300">⑤</span><div>틀려도 OK — 정답이 아니라 <b>"왜 그렇게 생각했는지" 설명할 수 있느냐</b>가 중요</div></li>
+    </ol>
+    <div class="bg-white/10 rounded-lg p-3 mt-4 text-sm italic">"프로도 틀린다. 월스트리트 애널리스트도 틀린다. 워렌 버핏도 틀린다." — 자산제곱</div>
+  </div>
+
+  <div class="bg-yellow-50 border-2 border-dashed border-yellow-400 rounded-2xl p-6 mt-4">
+    <h3 class="text-lg font-bold mb-2">📝 이번 주 나의 8축 분석 (직접 써보기)</h3>
+    <p class="text-xs text-slate-600 mb-3">아래 칸에 직접 채워보세요. 브라우저에 자동 저장됩니다.</p>
+    <textarea id="myNote" class="w-full h-64 p-3 border border-slate-300 rounded-lg text-sm font-mono" placeholder="1. 금리:
+2. 실적:
+3. 자금흐름:
+4. 고용:
+5. 소비:
+6. 마진:
+7. 달러/원자재:
+8. VIX:
+
+종합 판단:
+이번 주 전략: "></textarea>
+    <div class="flex gap-2 mt-3">
+      <button onclick="saveNote()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-700">💾 저장</button>
+      <button onclick="loadNote()" class="bg-slate-200 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-300">📂 불러오기</button>
+      <button onclick="clearNote()" class="bg-rose-100 text-rose-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-rose-200">🗑️ 초기화</button>
+      <span id="saveStatus" class="text-xs text-slate-500 self-center"></span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="bg-slate-900 text-slate-400 text-center py-6 text-sm mt-12">
+  <div>시장 8축 진단 대시보드 · v3.0 (PDF 통합 + 매트릭스 + 사이클) · 2026.05.24</div>
+  <div class="text-xs mt-1">기반 자료: 자산네제곱 1단계 — "물고기 잡는 방법을 배웠다고 끝이 아니다"</div>
+  <div class="text-xs mt-1">데이터: Fed H.15 · BLS · FactSet · GuruFocus · TradingEconomics · CBOE · ICI</div>
+</footer>
+
+<script>
+// ============== DATA ==============
+const axes = [
+  {
+    id: 1, name: '금리', emoji: '💰', subtitle: '돈의 가격',
+    rating: '중립', color: 'amber',
+    metrics: [
+      { k: 'Fed 기준금리', v: '3.50~3.75%', tone: 'neu' },
+      { k: '10Y 국채', v: '4.56%', tone: 'neg' },
+      { k: '실질금리', v: '+0.1%', tone: 'neu' }
+    ],
+    summary: '금리는 비싸지만 인플레보다 살짝 높은 정도라, 채권보다 주식이 아직 매력 있어 보이는 묘한 균형 상태.',
+    pdfTip: '실질금리 +2% 넘으면 주식 부담 시작. 현재 0% 부근 → 중립',
+    interpretation: `<p><b>왜 이 평가인가?</b> Fed는 2024.9월부터 인하 사이클 시작했지만, 인플레가 4-5%로 다시 튀면서 인하 정지. 10년물 4.56%는 시장이 "추가 인하 어렵다"고 보는 신호. 실질금리는 0% 부근으로 채권/주식 사이 균형.</p>
+    <div class="tip"><b>적용 팁:</b> CME FedWatch 다음 회의 인하 확률 매주 체크. 확률 80%→40% 급변 시 시장 방향 판단의 핵심 신호.</div>`,
+    sources: [
+      { name: 'CME FedWatch', url: 'https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html' },
+      { name: 'FRED 10년물', url: 'https://fred.stlouisfed.org/series/DGS10' },
+      { name: 'Fed H.15', url: 'https://www.federalreserve.gov/releases/h15/' }
+    ],
+    weeklyCheck: ['연준 기준 금리 (추세)', '10년물 국채 (4% 위/아래)', '금리 역전 (2년vs10년)', 'CME FedWatch 확률 변화', '실질금리 (명목 - 인플레)']
+  },
+  {
+    id: 2, name: '기업실적', emoji: '🏢', subtitle: '회사들이 얼마나 잘 벌고 있나',
+    rating: '긍정', color: 'emerald',
+    metrics: [
+      { k: 'Beat Rate', v: '84%', tone: 'pos' },
+      { k: 'EPS YoY', v: '+15.1%', tone: 'pos' },
+      { k: 'Mag7 CAPEX', v: '$725B', tone: 'pos' }
+    ],
+    summary: '기업들은 여전히 돈을 잘 번다. AI 투자에 돈을 쏟아붓는데 실적까지 좋다는 게 핵심.',
+    pdfTip: '실적보다 가이던스가 더 중요. NVDA 2023 사례 — 실적은 좋았으나 가이던스 부족으로 조정.',
+    interpretation: `<p><b>왜 이 평가인가?</b> Q1 84% 어닝 비트(70% 기준 훌쩍 상회), 6분기 연속 두 자릿수 EPS 성장, Mag7 4사 CAPEX 합산 +77%. 가이던스 상향이 다수.</p>
+    <div class="tip"><b>적용 팁:</b> 실적 시즌 첫 2주(대형은행→빅테크)가 전체 분위기를 결정. NVDA 5/20 호실적 후 후속 빅테크 가이던스 체크.</div>
+    <div class="danger"><b>주의:</b> Mag7가 1분기 S&P500 대비 언더퍼폼 → AI 비용 우려. CAPEX 폭증이 마진을 깎으면 다음 분기 가이던스 하향 가능.</div>`,
+    sources: [
+      { name: 'FactSet Earnings Insight', url: 'https://insight.factset.com/' },
+      { name: 'Yahoo Earnings Calendar', url: 'https://finance.yahoo.com/calendar/earnings' }
+    ],
+    weeklyCheck: ['이번 주 발표 기업 캘린더', 'EPS/Revenue Beat/Miss', '가이던스 상향/하향', '컨퍼런스 콜 톤 ("headwinds" 등)']
+  },
+  {
+    id: 3, name: '자금흐름', emoji: '💸', subtitle: '돈이 실제로 어디로 가나',
+    rating: '중립', color: 'amber',
+    metrics: [
+      { k: '주간 ETF 유입', v: '+$57B', tone: 'pos' },
+      { k: 'IWM(중소형)', v: '약세', tone: 'neg' },
+      { k: 'TLT(장기채)', v: '유입', tone: 'neu' }
+    ],
+    summary: '대형주로 돈이 몰리는데 중소형은 외면받는 중. "대장주만 사두는" 양극화 장세.',
+    pdfTip: '현재 자금흐름 4패턴 중 패턴 3 (TLT 유입 + SPY 유출 일부) — "조심스러운 강세"',
+    interpretation: `<p><b>왜 이 평가인가?</b> 주간 순유입 +$57B 강함, 그러나 QQQ/SPY 약세 + IWM 더 약세 + TLT 유입 → 위험자산에서 안전자산으로 부분 이동.</p>
+    <div class="tip"><b>적용 팁:</b> 4패턴 매트릭스를 매주 매칭하라. 패턴이 바뀌면 시장 국면 전환 신호.</div>
+    <div class="example"><b>"기관이 사는데 개인이 파는 건 위험"</b> (PDF p.26) — NVDA 2024 사례: 개인은 "고점이다" 팔았으나 13F·ETF는 매수 지속 → 주가 계속 상승.</div>`,
+    sources: [
+      { name: 'ETF.com 자금흐름', url: 'https://www.etf.com/etfanalytics/etf-fund-flows-tool' },
+      { name: 'ETF CHECK (한국어)', url: 'https://www.etfcheck.co.kr/mobile/global/rank/inflow' },
+      { name: 'TradingView 자금유입', url: 'https://kr.tradingview.com/markets/etfs/funds-largest-inflows/' },
+      { name: 'Whale Wisdom (13F)', url: 'https://whalewisdom.com/' }
+    ],
+    weeklyCheck: ['QQQ/SPY/IWM 자금흐름 1위', '섹터 ETF Top3 (XLK/XLF/XLE 등)', 'TLT/GLD 안전자산 유입 여부', 'SQQQ 인버스 유입 (공포 신호)']
+  },
+  {
+    id: 4, name: '고용', emoji: '👷', subtitle: '사람들이 일자리를 갖고 있나',
+    rating: '중립', color: 'amber',
+    metrics: [
+      { k: '4월 NFP', v: '+115K', tone: 'neu' },
+      { k: '실업률', v: '4.3%', tone: 'neu' },
+      { k: '임금 YoY', v: '+3.6%', tone: 'pos' }
+    ],
+    summary: '고용시장이 "연착륙" 중. 식고 있지만 망가지진 않았다.',
+    pdfTip: '4맥락 매트릭스 중 ③ 소프트 랜딩 시나리오 매칭. Sahm Rule 0.3%p (경계 단계).',
+    interpretation: `<p><b>왜 이 평가인가?</b> NFP 11.5만(15-20만 골디락스 미달), 실업률 4.3%(3.8-4.2% 적정 살짝 초과), 임금 3.6%(적정 3-4% 범위). PDF의 4맥락 중 "소프트 랜딩" 패턴.</p>
+    <div class="tip"><b>적용 팁:</b> Sahm Rule 게이지가 0.5%p에 가까워지면 즉시 방어 모드 전환. 매주 목요일 실업수당 체크.</div>
+    <div class="danger"><b>주의:</b> 단기실업자 +35.8만 증가 → 풀타임/파트타임 비율 악화 가능성. 발표 시 풀타임 감소면 ④번 시나리오로 급변 가능.</div>`,
+    sources: [
+      { name: 'BLS Employment', url: 'https://www.bls.gov/news.release/empsit.nr0.htm' },
+      { name: 'FRED 실업률', url: 'https://fred.stlouisfed.org/series/UNRATE' },
+      { name: '실업수당 청구', url: 'https://fred.stlouisfed.org/series/ICSA' }
+    ],
+    weeklyCheck: ['주간 실업수당 청구 (목요일)', 'NFP 발표 (첫째 주 금요일)', '실업률 + Sahm Rule', '풀타임 vs 파트타임 비율']
+  },
+  {
+    id: 5, name: '소비', emoji: '🛒', subtitle: '사람들이 돈을 쓰고 있나',
+    rating: '중립', color: 'amber',
+    metrics: [
+      { k: '카드 연체율', v: '3.3%', tone: 'neg' },
+      { k: 'Walmart 매출', v: '+7.1%', tone: 'pos' },
+      { k: 'Starbucks SSS', v: '+7.1%', tone: 'pos' }
+    ],
+    summary: '부자 소비자는 잘 쓰는데, 저소득층은 신용카드로 버티는 "K자 소비" 양극화.',
+    pdfTip: '경기 사이클 "둔화 초입" — 재량 ↓, 필수 유지 (PDF p.34)',
+    interpretation: `<p><b>왜 이 평가인가?</b> 헤드라인 매출은 좋으나 Walmart PB 비중↑, 카드 연체율 3.3%(2% 정상 초과), 서브프라임 4.5~4.8%. 가격 민감도 증가는 둔화 초입 시그널.</p>
+    <div class="tip"><b>적용 팁:</b> 분기마다 재량(SBUX, NKE, 명품) vs 필수(WMT, COST, TGT) 매출 증가율 갭 측정. 갭이 벌어지면 침체 임박.</div>
+    <div class="danger"><b>경고:</b> 카드 연체율 4% 돌파 시 → 한도 축소 → 소비 감소 → 실적 악화 (3-6개월 선행 신호).</div>`,
+    sources: [
+      { name: 'FRED 소매판매', url: 'https://fred.stlouisfed.org/series/RSAFS' },
+      { name: 'FRED 카드 연체율', url: 'https://fred.stlouisfed.org/series/DRCCLACBS' }
+    ],
+    weeklyCheck: ['소매 판매 (월 1회)', '신용카드 연체율 (분기)', '재량 vs 필수 소비주 매출 갭', 'BNPL 사용량']
+  },
+  {
+    id: 6, name: '기업마진', emoji: '📈', subtitle: '효율적으로 돈 벌고 있나',
+    rating: '긍정', color: 'emerald',
+    metrics: [
+      { k: '순이익률', v: '13.4%', tone: 'pos' },
+      { k: '기록', v: '2009년래 최고', tone: 'pos' },
+      { k: 'IT 섹터', v: '선두', tone: 'pos' }
+    ],
+    summary: '비용 압박을 뚫고 사상 최고 마진. 기업들이 "효율의 끝판왕" 모드에 진입했다.',
+    pdfTip: '4대 비용 압박(인건비/원자재/물류/이자) 중 유가만 압박 중 → 에너지 빼고 마진 견조',
+    interpretation: `<p><b>왜 이 평가인가?</b> S&P500 Q1 순이익률 13.4% (FactSet 추적 이래 최고, 정상 10-12% 초과). 5개 섹터 마진 확대, IT 선두. AI 생산성 + 감원 효과.</p>
+    <div class="tip"><b>적용 팁:</b> 좋은 성장 3패턴(매출↑+마진↑ / 매출유지+마진↑ / 매출↑+마진유지) 중 어디에 해당하는지 매분기 분류.</div>
+    <div class="danger"><b>주의:</b> 에너지 섹터 마진은 5년 평균 아래(유가 비용 부담). 유가 추가 상승 시 항공·운송업 직격탄.</div>`,
+    sources: [
+      { name: 'FactSet 마진 데이터', url: 'https://insight.factset.com/' },
+      { name: 'GuruFocus 영업이익률', url: 'https://www.gurufocus.com/economic_indicators/4226/sp-500-operating-margin' }
+    ],
+    weeklyCheck: ['S&P500 영업이익률 분기 발표', '섹터별 마진 비교', '경영진 코멘트 ("pricing power" vs "margin headwinds")', '원자재 가격 추이']
+  },
+  {
+    id: 7, name: '달러/원자재', emoji: '🛢️', subtitle: '글로벌 자본 흐름',
+    rating: '부정', color: 'rose',
+    metrics: [
+      { k: 'DXY', v: '99.32', tone: 'neu' },
+      { k: 'WTI 유가', v: '$100+', tone: 'neg' },
+      { k: '구리', v: '$6.35 (+31%)', tone: 'pos' }
+    ],
+    summary: '유가가 시장의 가장 큰 시한폭탄. 호르무즈 갈등이 풀려야 인플레가 잡힌다.',
+    pdfTip: '달러×구리×유가 매트릭스 매칭: "공급 충격 + 지정학 리스크" → 에너지 헤지 필수',
+    interpretation: `<p><b>왜 이 평가인가?</b> DXY 99.32(약세 초입) + 구리 +31%(강세) + WTI $100+(급등). 매트릭스 최악 시나리오. 호르무즈 분쟁 3개월째, 미군함 충돌 보도.</p>
+    <div class="tip"><b>적용 팁:</b> 달러 약세 + 유가 급등은 빅테크 해외매출에 +(약달러)지만 인플레 압력은 -. XLE(에너지) 비중 확대로 헤지.</div>
+    <div class="danger"><b>경고:</b> 유가 $130 돌파 시 인플레 5% 재고착 → Fed 매파 회귀 → 주식 폭락 시나리오 발동.</div>`,
+    sources: [
+      { name: 'DXY 달러 인덱스', url: 'https://kr.tradingview.com/symbols/TVC-DXY/' },
+      { name: '구리 (HG1!)', url: 'https://kr.tradingview.com/symbols/COMEX-HG1%21/' },
+      { name: 'WTI (CL1!)', url: 'https://kr.tradingview.com/symbols/NYMEX-CL1%21/' },
+      { name: 'Kitco 귀금속', url: 'https://www.kitco.com/' }
+    ],
+    weeklyCheck: ['DXY (100 위/아래)', '구리 ($4.00 위/아래)', 'WTI ($70~85 vs $100+)', '금 가격 추세', '3개 조합 매트릭스 매칭']
+  },
+  {
+    id: 8, name: '변동성 VIX', emoji: '😨', subtitle: '시장이 얼마나 불안한가',
+    rating: '긍정', color: 'emerald',
+    metrics: [
+      { k: 'VIX', v: '16.76', tone: 'pos' },
+      { k: '범위', v: '17~21 박스', tone: 'neu' },
+      { k: '선물 구조', v: '콘탱고', tone: 'pos' }
+    ],
+    summary: '공포지수가 너무 잠잠해서 오히려 "안일함"이 걱정될 정도.',
+    pdfTip: 'VIX 함정: 너무 낮으면 위험. 갑작스러운 충격에 취약 → 일부 현금 보유',
+    interpretation: `<p><b>왜 이 평가인가?</b> VIX 16.76(15-20 정상), 4/23 이후 17~21 박스권. 선물 콘탱고 유지(VX6/VX1=1.062). 평균(1.15-1.20)보다 압축된 게 옅은 긴장감.</p>
+    <div class="tip"><b>적용 팁:</b> VIX 30+ 패닉 시 역발상 매수 기회 (떨어지는 칼날 주의, 분할). 백워데이션 발생 시 즉시 방어 모드.</div>
+    <div class="danger"><b>경고:</b> VIX 10↓는 "안전"이 아니라 "자만". 현재 16.76은 안정이지만, 곡선 평탄화는 잠복한 긴장 신호.</div>`,
+    sources: [
+      { name: 'VIX 차트', url: 'https://kr.tradingview.com/symbols/TVC-VIX/' },
+      { name: 'VIX Central (선물구조)', url: 'https://vixcentral.com/' }
+    ],
+    weeklyCheck: ['VIX 현재값 (10↓ 자만, 15-20 정상, 30+ 공포)', 'VIX 변화율 (하루 30% 급등?)', 'VIX vs 주가 동방향 = 이상 신호', '선물 콘탱고 vs 백워데이션']
+  }
+];
+
+// 학습 본문 (PDF 기반)
+const studyBodies = {
+  1: `
+    <h4>🧭 왜 금리가 모든 자산의 기준인가?</h4>
+    <p>금리 = 돈을 빌리는 비용. 1억 빌렸을 때 금리 3%면 1년 후 이자 300만 원, 6%면 600만 원. <b>금리가 높아지면 투자가 줄고, 낮아지면 투자가 늘어난다.</b></p>
+    <div class="quote">"금리는 경제 전체의 속도 조절 장치이자, 모든 자산 가격의 기준선이다."</div>
+    <h4>💡 핵심 개념: 기회비용</h4>
+    <p>1억이 있고 두 가지 선택:</p>
+    <ul><li><b>예금 5%</b>: 1년 후 확실하게 500만 원, 위험 제로</li><li><b>주식</b>: 10% 벌 수도, 20% 잃을 수도</li></ul>
+    <p>금리 5%면 → 주식이 5%보다 훨씬 더 벌어야 매력 / 금리 0.5%면 → 위험 감수해서라도 주식</p>
+    <div class="example"><b>2020~2021:</b> 금리 0%대 → 모든 위험자산 폭등 / <b>2022~2023:</b> 금리 5%대 → 모든 위험자산 조정</div>
+    <h4>⚠️ 99%가 놓치는 디테일 — "방향"이 아닌 "이유"를 봐라</h4>
+    <table><tr><th>금리 인하 이유</th><th>해석</th><th>결과</th></tr>
+    <tr><td>인플레 안정으로 인하</td><td>소프트 랜딩 성공</td><td>✅ 주식 강세</td></tr>
+    <tr><td>경기 급랭으로 인하</td><td>경기 침체 진입</td><td>❌ 주식 약세</td></tr></table>
+    <div class="danger">2024년 하반기 사례: 기대로 올랐다가 실제 인하 시점에 "경기 둔화 우려"로 오히려 조정.</div>
+    <h4>📈 금리 곡선: 경제 미래의 지도</h4>
+    <p>1년 < 2년 < 10년 < 30년이 정상. 뒤집히면 <b>"금리 역전"</b>: 역사적으로 12-18개월 후 침체.</p>
+    <div class="example">2022~2023 미국 국채 금리 역전 → 침체 경고. 하지만 강한 고용 + 재정 지출이 받쳐줘서 침체 안 옴. <b>이게 8축을 함께 봐야 하는 이유.</b></div>
+    <h4>🎯 CME FedWatch — 시장의 "진짜 기대"</h4>
+    <p>금리 선물 시장 데이터로 다음 FOMC 인하 확률 실시간 표시. 확률 50%→80% 급변 = 경기 약화 신호.</p>
+    <h4>💎 실질 금리 — 진짜 중요한 건 이것</h4>
+    <div class="quote">실질 금리 = 명목 금리 − 인플레이션율</div>
+    <p>은행 금리 5%, 인플레 3% → 실질 2%. 구매력은 2%만 늘어남.</p>
+    <ul><li><b>실질금리 높음</b> = 돈이 비쌈 = 위험자산 불리</li><li><b>실질금리 마이너스</b> = 돈이 쌈 = 위험자산 유리</li></ul>
+    <div class="tip">2020~2021: 명목 0.25% − 인플레 5~7% = 실질 -4~-6%. 역사적 위험자산 폭등기.</div>
+  `,
+  2: `
+    <h4>🧭 왜 실적이 주가의 본질인가?</h4>
+    <p>"주가는 실적을 따라간다"는 말은 반만 맞다. 정확히는 <b>"미래 실적 기대치"를 따라간다.</b></p>
+    <h4>📊 가이던스가 실적보다 중요한 이유</h4>
+    <div class="example"><b>NVDA 2023 Q4:</b> 매출·이익 역대 최고였으나, 가이던스가 "압도적"이지 못해서 → <b>주가 조정</b><br><b>TSLA 2024 Q1:</b> 실적은 예상치 미달이었으나, 머스크가 "신규 모델, FSD, 로봇택시" 언급 → <b>주가 상승</b></div>
+    <h4>📅 실적 시즌은 언제?</h4>
+    <ul><li>Q1: 4월 중순~5월 초</li><li>Q2: 7월 중순~8월 초</li><li>Q3: 10월 중순~11월 초</li><li>Q4: 1월 중순~2월 초</li></ul>
+    <div class="tip"><b>실적 시즌 첫 2주가 분위기를 결정.</b> 대형은행(JPM, BAC) → 빅테크 → 산업재 순.</div>
+    <h4>🎯 Beat Rate — 시장의 건강도</h4>
+    <ul><li><b>70%+</b>: 건강한 시장</li><li><b>60-70%</b>: 보통</li><li><b>60% 미만</b>: 우려</li></ul>
+    <h4>📖 헷갈리는 용어</h4>
+    <table><tr><th>용어</th><th>의미</th></tr>
+    <tr><td>EPS</td><td>주당순이익</td></tr><tr><td>Revenue</td><td>매출 (탑라인)</td></tr>
+    <tr><td>Net Income</td><td>순이익 (바텀라인)</td></tr><tr><td>YoY / QoQ</td><td>전년동기 / 전분기 대비</td></tr></table>
+    <h4>🤔 매출 vs 이익 — 뭐가 더 중요?</h4>
+    <ul><li><b>초기 성장 기업</b>: 매출 성장률 (시장 점유)</li><li><b>성숙 기업</b>: 이익률 (효율)</li></ul>
+    <h4>🎤 컨퍼런스 콜 톤 읽기</h4>
+    <ul><li>"headwinds", "challenges" → 경고</li><li>"strong demand", "raised guidance", "pricing power" → 호재</li></ul>
+  `,
+  3: `
+    <h4>🧭 왜 자금 흐름이 차트보다 정직한가?</h4>
+    <div class="quote">"뉴스는 해석이다. 차트는 결과다. 자금 흐름은 현실이다."</div>
+    <h4>📦 ETF란?</h4>
+    <p>여러 주식을 한 바구니에 담아 거래하는 상품. <b>SPY</b>(S&P500), <b>QQQ</b>(나스닥100), <b>IWM</b>(러셀2000), <b>DIA</b>(다우30)</p>
+    <h4>🏭 섹터 ETF (필수)</h4>
+    <table><tr><th>티커</th><th>섹터</th></tr>
+    <tr><td>XLK</td><td>기술</td></tr><tr><td>XLF</td><td>금융</td></tr><tr><td>XLE</td><td>에너지</td></tr>
+    <tr><td>XLV</td><td>헬스케어</td></tr><tr><td>XLY/XLP</td><td>임의/필수 소비재</td></tr>
+    <tr><td>XLI/XLB</td><td>산업재/소재</td></tr><tr><td>XLU/XLRE/XLC</td><td>유틸/부동산/통신</td></tr></table>
+    <h4>⚠️ 리스크 ETF</h4>
+    <ul><li><b>TLT</b>: 20년+ 장기국채 (안전자산)</li><li><b>GLD</b>: 금 (불확실성 헤지)</li><li><b>SQQQ</b>: 나스닥 -3배 (하락 베팅)</li></ul>
+    <h4>🔍 4가지 자금흐름 패턴</h4>
+    <div class="example">
+      <b>패턴 1:</b> QQQ↑ SPY↓ → 기술주 강세<br>
+      <b>패턴 2:</b> IWM↑ QQQ↓ → 중소형 선호<br>
+      <b>패턴 3:</b> TLT↑ SPY↓ → 안전자산 도피<br>
+      <b>패턴 4:</b> SQQQ 급증 → 공포 정점 (역발상 매수 기회)
+    </div>
+    <h4>⚡ "속도"가 핵심</h4>
+    <div class="tip">2020년 3월: SPY 일주일 -200억$ → 바닥 신호. 4월부터 QQQ 매주 유입 → 역대급 강세장 시작.</div>
+    <h4>🐋 기관 추적</h4>
+    <ol><li><b>13F</b>: 대형 기관 분기 보유 종목 (단, 45일 전 데이터)</li>
+    <li><b>내부자 거래</b>: CEO/CFO 매수 = 호재. 매도는 해석 애매</li>
+    <li><b>이상 옵션 거래</b>: 콜/풋 거래량 폭증 = 큰 손 포지션</li></ol>
+    <div class="example"><b>2024 NVDA:</b> 개인 "고점이다" 매도 / 기관 13F 보유 증가, ETF 유입 지속 → 주가 상승. <b>기관이 사는데 개인이 파는 건 위험.</b></div>
+  `,
+  4: `
+    <h4>🧭 왜 고용이 경제 활동의 출발점인가?</h4>
+    <p>경제 순환: 고용 → 소득 → 소비 → 기업 매출 → 더 많은 고용 → (반복)</p>
+    <div class="quote">"고용은 경제의 심장 박동이다. 매주 체크해야 한다."</div>
+    <h4>📊 주요 고용 지표 4가지</h4>
+    <table><tr><th>지표</th><th>발표</th><th>의미</th></tr>
+    <tr><td><b>비농업 고용 (NFP)</b></td><td>매월 첫째 금요일</td><td>가장 중요</td></tr>
+    <tr><td><b>실업률</b></td><td>NFP와 함께</td><td>원하는데 못 구한 비율</td></tr>
+    <tr><td><b>주간 실업수당</b></td><td>매주 목요일</td><td>실시간 지표</td></tr>
+    <tr><td><b>임금 상승률</b></td><td>NFP와 함께</td><td>인플레와 직결</td></tr></table>
+    <h4>⚖️ 고용의 양면성 — 4가지 맥락</h4>
+    <div class="tip"><b>① 회복기 (긍정):</b> 점진 개선 → 소비↑ → 주가↑</div>
+    <div class="danger"><b>② 과열기 (부정):</b> 너무 좋음, 임금 5%+ → Fed 인상 우려</div>
+    <div class="tip"><b>③ 소프트 랜딩 (긍정):</b> 적당 둔화, 실업률 3.8-4.2%, 임금 3-4% → Fed 인하 가능</div>
+    <div class="danger"><b>④ 침체 진입 (매우 부정):</b> 실업률 +0.5%p 급등 → 폭락</div>
+    <h4>🌟 골디락스 존</h4>
+    <ul><li>NFP: <b>월 15~20만</b></li><li>실업률: <b>3.8~4.2%</b></li><li>임금: <b>3~4%</b></li></ul>
+    <h4>🚨 Sahm Rule — 50년간 100% 적중</h4>
+    <div class="quote">실업률 3개월 이동평균이 12개월 최저점 대비 <b>+0.5%p</b> 상승 시 침체 시작</div>
+    <h4>🔍 풀타임 vs 파트타임 — 숨은 선행 신호</h4>
+    <div class="example">3월 NFP +20만 (좋아 보임) → 풀타임 -5만, 파트타임 +25만이면 <b>나쁜 신호</b></div>
+    <h4>⏱️ 실업수당 청구 기준</h4>
+    <ul><li>주당 20~25만 = 정상</li><li>30만+ = 둔화</li><li>40만+ = 침체</li><li>2020.3 코로나: 300만 (역사상 최악)</li></ul>
+  `,
+  5: `
+    <h4>🧭 왜 소비가 GDP의 70%인가?</h4>
+    <p>유럽·중국은 50-60%인데 <b>미국은 70%</b>. 소비 무너지면 경제 전체가 흔들린다.</p>
+    <h4>📊 주요 소비 지표</h4>
+    <table><tr><th>지표</th><th>의미</th></tr>
+    <tr><td>소비자 신뢰지수</td><td>"좋아질 것 같나?" 심리 (참고용)</td></tr>
+    <tr><td>소매 판매</td><td>실제로 얼마 샀나 (중요)</td></tr>
+    <tr><td>PCE</td><td>Fed가 가장 중시하는 인플레 지표</td></tr></table>
+    <div class="danger"><b>함정:</b> 신뢰지수만 보면 안 됨. 2023년 하반기: 신뢰지수↓ but 소매판매↑ → 시장은 실제 지출 따라감.</div>
+    <h4>🎯 필수 소비 vs 재량 소비</h4>
+    <table><tr><th>구분</th><th>예시</th><th>둔화 시</th></tr>
+    <tr><td>필수</td><td>식료품, 의약품, 전기/수도</td><td>줄이기 어려움</td></tr>
+    <tr><td>재량</td><td>외식, 여행, 명품, 자동차</td><td>제일 먼저 줄임</td></tr></table>
+    <h4>📉 경기 사이클 단계</h4>
+    <ul><li><b>확장기:</b> 둘 다↑</li><li><b>둔화 초입:</b> 재량만↓</li><li><b>침체기:</b> 필수마저↓</li></ul>
+    <h4>💳 신용카드 데이터 — 진짜 소비 여력</h4>
+    <table><tr><th>연체율</th><th>상태</th></tr>
+    <tr><td>2%</td><td>평상시</td></tr><tr><td>3-4%</td><td>둔화</td></tr><tr><td>5%+</td><td>침체</td></tr></table>
+    <div class="danger"><b>연쇄 효과:</b> 연체율↑ → 카드 한도↓ → 소비↓ → 실적↓ → 주가↓ (3-6개월 선행)</div>
+    <h4>🛒 온라인 vs 오프라인</h4>
+    <p>코로나 이후 영구 변화 — 아마존/쿠팡 구조적 성장, 전통 백화점 구조적 어려움.</p>
+  `,
+  6: `
+    <h4>🧭 마진이란?</h4>
+    <p>치킨집: 매출 3,000만, 비용 2,500만, 이익 500만 → 영업이익률 16.7%</p>
+    <p>마진은 <b>"얼마나 효율적으로 돈을 버는지"</b>. 매출↑이어도 비용이 더 빨리 늘면 이익↓.</p>
+    <h4>💸 4대 비용 압박</h4>
+    <ol><li><b>인건비</b>: 임금 인상 → 인건비 비중 30%면 임금 10%↑ = 비용 3%↑</li>
+    <li><b>원자재</b>: 자동차(철강/반도체), 음료(설탕), 전자(반도체/구리)</li>
+    <li><b>물류비</b>: 2021-22 해운비 10배 폭등</li>
+    <li><b>금리 → 이자</b>: 빚 1,000억, 금리 1%→5% 시 이자 10억→50억 (5배)</li></ol>
+    <h4>🎯 좋은 vs 나쁜 성장</h4>
+    <div class="tip"><b>좋은 성장 3패턴:</b><br>① 매출↑+마진↑ → 엔비디아 2023 (영업이익률 60%)<br>② 매출유지+마진↑ → 메타 2023 (2만 명 해고)<br>③ 매출↑+마진유지 → 애플 2024 (안정 25%)</div>
+    <div class="danger"><b>나쁜 성장:</b> 매출↑+마진↓ → 아마존 2022 (물류 폭증, 과잉 고용)</div>
+    <h4>💪 Pricing Power (가격 결정력)</h4>
+    <p>비용↑ 시 가격에 전가 가능한가? <b>강한 4가지 특징:</b></p>
+    <ol><li>브랜드 (애플, 루이비통, 코카콜라)</li>
+    <li>독점 (NVDA AI 칩, TSMC 반도체)</li>
+    <li>전환 비용 (MSFT Windows, 세일즈포스)</li>
+    <li>필수재 (전기/수도/의약)</li></ol>
+    <h4>🛢️ 원자재 영향 매트릭스</h4>
+    <table><tr><th>상승</th><th>최악</th><th>이득</th></tr>
+    <tr><td>유가</td><td>항공·운송</td><td>정유사·에너지</td></tr>
+    <tr><td>구리</td><td>전자·전기차·건설</td><td>구리 광산 (FCX)</td></tr>
+    <tr><td>반도체</td><td>자동차·가전</td><td>TSMC·삼성</td></tr></table>
+    <h4>📊 섹터별 평균 마진</h4>
+    <ul><li>기술 30-40%</li><li>금융 20-30%</li><li>헬스케어 15-25%</li><li>소비재 10-20%</li><li>소매 3-10%</li></ul>
+  `,
+  7: `
+    <h4>🧭 왜 달러가 단순한 통화가 아닌가?</h4>
+    <p><b>기축통화</b>. 국제 무역 80%+ 달러 결제. 유가·금·원자재 모두 달러로 표시.</p>
+    <h4>📊 DXY 구성</h4>
+    <ul><li>유로 58% · 엔 14% · 파운드 12% · 캐나다 9% · 스웨덴 4% · 스위스 4%</li>
+    <li>DXY 100+: 강세 / 90↓: 약세 / 110+: 극단</li></ul>
+    <h4>🔄 달러 강/약 시 자산</h4>
+    <table><tr><th>상황</th><th>달러</th><th>주식</th><th>금</th><th>원자재</th><th>신흥국</th></tr>
+    <tr><td>미국 금리↑</td><td>강</td><td>약</td><td>약</td><td>약</td><td>약</td></tr>
+    <tr><td>미국 금리↓</td><td>약</td><td>강</td><td>강</td><td>강</td><td>강</td></tr>
+    <tr><td>글로벌 위기</td><td>강</td><td>약</td><td>강</td><td>약</td><td>약</td></tr></table>
+    <div class="danger"><b>예외 2가지:</b> 달러 강세+미국 경제 강세 → 둘 다 상승 가능 / 달러 약세+미국 경제 약세 → 둘 다 약세 가능</div>
+    <h4>🩺 구리 — "닥터 코퍼"</h4>
+    <p>모든 곳에 사용: 건설·제조·전자·전기차(4배). <b>중국이 글로벌 수요 50%</b>.</p>
+    <table><tr><th>구리</th><th>의미</th></tr>
+    <tr><td>$3.50~4.00</td><td>정상</td></tr><tr><td>$4.00+</td><td>경기 회복/공급 부족</td></tr>
+    <tr><td>$3.50↓</td><td>경기 둔화</td></tr></table>
+    <h4>🛢️ 유가 — 양면적 지표</h4>
+    <p>① 인플레 압력 (운송·제조비↑) / ② 경기 수요 (활동↑)</p>
+    <table><tr><th>WTI</th><th>해석</th></tr>
+    <tr><td>$70-85</td><td>골디락스</td></tr><tr><td>$85-100</td><td>인플레 우려</td></tr>
+    <tr><td>$100+</td><td>경제 위협</td></tr><tr><td>$60↓</td><td>침체 우려</td></tr></table>
+    <h4>🎲 달러×구리×유가 매트릭스</h4>
+    <table><tr><th>달러</th><th>구리</th><th>유가</th><th>해석</th></tr>
+    <tr><td>약</td><td>↑</td><td>↑</td><td>경기 강세 (주식 강세)</td></tr>
+    <tr><td>약</td><td>↑</td><td>유지</td><td>제조 회복 (기술주 강세)</td></tr>
+    <tr><td>약</td><td>↑</td><td>↓</td><td>제조↑ 소비↓ (선택적)</td></tr>
+    <tr><td>강</td><td>↓</td><td>↓</td><td>침체 우려 (방어주)</td></tr>
+    <tr><td>강</td><td>유지</td><td>급등</td><td>공급 충격 / 지정학</td></tr></table>
+    <h4>🥇 금 — 불확실성의 잣대</h4>
+    <ul><li>금↑ = 불확실성 증가 또는 달러 약세</li><li>금↓ = 위험 선호 또는 달러 강세</li></ul>
+  `,
+  8: `
+    <h4>🧭 VIX란?</h4>
+    <p>VIX = <b>시장이 예상하는 향후 30일간의 변동성</b>. "공포지수". S&P500 옵션 가격 기반.</p>
+    <h4>📊 VIX 수준별 의미</h4>
+    <table><tr><th>VIX</th><th>상태</th></tr>
+    <tr><td>10↓</td><td>매우 안정 또는 <b>과도한 안심 (위험)</b></td></tr>
+    <tr><td>15-20</td><td>정상 범위</td></tr>
+    <tr><td>20-30</td><td>불안 증가</td></tr>
+    <tr><td>30+</td><td>공포 상태</td></tr>
+    <tr><td>40+</td><td>극도 패닉 (역사적 위기)</td></tr></table>
+    <h4>⚠️ VIX 함정 — 너무 낮을 때가 위험</h4>
+    <div class="danger">VIX 10↓ = 시장 자만 → 아무도 위험 대비 안 함 → 작은 악재에도 큰 폭락</div>
+    <h4>💎 VIX 30+ — 역설적 기회</h4>
+    <div class="tip">VIX 30+ = 공포 매도 정점. 역사적으로 바닥과 일치. 단, "떨어지는 칼날" 주의 → 분할 매수.</div>
+    <h4>⚡ 변화 속도가 더 중요</h4>
+    <ul><li><b>급등 (하루 30%+):</b> 패닉셀 정점, 단기 바닥 가능</li>
+    <li><b>서서히 상승:</b> 불안 누적, 조정 지속 가능</li>
+    <li><b>급락:</b> 공포 해소, 반등 가능</li></ul>
+    <h4>🔮 VIX 선물 구조</h4>
+    <table><tr><th>구조</th><th>의미</th><th>해석</th></tr>
+    <tr><td><b>콘탱고</b> (80%)</td><td>미래 선물 > 현재 VIX</td><td>정상 상태</td></tr>
+    <tr><td><b>백워데이션</b></td><td>미래 선물 < 현재 VIX</td><td><b>위기 신호, 방어</b></td></tr></table>
+    <h4>📈 VIX-주가 역관계 + 예외</h4>
+    <p>일반: VIX↑ = 주가↓ / 예외: 둘 다 같은 방향 = <b>이상 신호</b></p>
+    <h4>🎯 VIX별 행동 전략</h4>
+    <table><tr><th>VIX</th><th>전략</th></tr>
+    <tr><td>10↓</td><td>일부 현금, 충격 대비</td></tr>
+    <tr><td>15-20</td><td>정상 투자</td></tr>
+    <tr><td>20-30</td><td>방어 포지션</td></tr>
+    <tr><td>30+</td><td>역발상 분할 매수</td></tr></table>
+  `
+};
+
+// 데이터 소스
+const sources = [
+  { cat: '🏛️ 거시·금리', items: [
+    { name: 'FRED (St. Louis Fed)', url: 'https://fred.stlouisfed.org/', desc: '미국 모든 경제 지표의 본진', tag: '필수' },
+    { name: 'CME FedWatch Tool', url: 'https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html', desc: '다음 FOMC 금리 확률', tag: '주간' },
+    { name: 'Fed H.15 일일 금리표', url: 'https://www.federalreserve.gov/releases/h15/', desc: '연준 공식 일일 금리', tag: '매일' },
+    { name: 'BLS (노동통계국)', url: 'https://www.bls.gov/', desc: 'NFP, 실업률, CPI 원문', tag: '월간' }
+  ]},
+  { cat: '📊 시세·차트', items: [
+    { name: 'TradingView', url: 'https://kr.tradingview.com/', desc: '모든 차트의 표준', tag: '필수' },
+    { name: 'Investing.com', url: 'https://www.investing.com/', desc: '실시간 시세 + 경제 캘린더', tag: '매일' },
+    { name: 'Yahoo Finance', url: 'https://finance.yahoo.com/', desc: '실적 컨센서스', tag: '주간' }
+  ]},
+  { cat: '💸 ETF·자금흐름', items: [
+    { name: 'ETF.com 자금흐름', url: 'https://www.etf.com/etfanalytics/etf-fund-flows-tool', desc: '주간 ETF 순유입/유출', tag: '주간' },
+    { name: 'ETF CHECK (한국어)', url: 'https://www.etfcheck.co.kr/mobile/global/rank/inflow', desc: '한국어로 ETF 자금흐름', tag: '추천' },
+    { name: 'TradingView 자금유입 ETF', url: 'https://kr.tradingview.com/markets/etfs/funds-largest-inflows/', desc: '자금 유입 1위 ETF', tag: '추천' }
+  ]},
+  { cat: '🐋 기관·내부자', items: [
+    { name: 'SEC EDGAR', url: 'https://www.sec.gov/search-filings', desc: '13F 등 모든 공시', tag: '분기' },
+    { name: 'Whale Wisdom', url: 'https://whalewisdom.com/', desc: '13F 추적, 버크셔/아크', tag: '분기' },
+    { name: 'Insider Dashboard', url: 'https://www.insiderdashboard.com/?tab=ceo-buys', desc: 'CEO/CFO 매수 추적', tag: '주간' },
+    { name: 'CBOE 옵션 통계', url: 'https://www.cboe.com/markets/us/options/market-statistics', desc: '이상 옵션 거래량', tag: '심화' }
+  ]},
+  { cat: '🛢️ 원자재·달러', items: [
+    { name: 'DXY 달러 인덱스', url: 'https://kr.tradingview.com/symbols/TVC-DXY/', desc: '달러 강약 차트', tag: '매일' },
+    { name: '구리 선물 (HG1!)', url: 'https://kr.tradingview.com/symbols/COMEX-HG1%21/', desc: '닥터 코퍼 가격', tag: '매일' },
+    { name: 'WTI 원유 선물 (CL1!)', url: 'https://kr.tradingview.com/symbols/NYMEX-CL1%21/', desc: 'WTI 유가', tag: '매일' },
+    { name: 'Kitco', url: 'https://www.kitco.com/', desc: '귀금속 가격 전문', tag: '매일' }
+  ]},
+  { cat: '😨 변동성·VIX', items: [
+    { name: 'VIX 차트', url: 'https://kr.tradingview.com/symbols/TVC-VIX/', desc: 'CBOE 변동성', tag: '매일' },
+    { name: 'VIX Central', url: 'https://vixcentral.com/', desc: '콘탱고/백워데이션 시각화', tag: '심화' }
+  ]},
+  { cat: '📰 분석·뉴스', items: [
+    { name: 'FactSet Earnings Insight', url: 'https://insight.factset.com/', desc: 'Beat Rate, 마진 집계', tag: '분기' },
+    { name: 'GuruFocus', url: 'https://www.gurufocus.com/', desc: 'PER, 버핏지수', tag: '주간' },
+    { name: 'TradingEconomics', url: 'https://tradingeconomics.com/', desc: '글로벌 거시 지표', tag: '주간' },
+    { name: '자산제곱 스레드', url: 'https://www.threads.com/@asset.x2', desc: '원저자 실시간 코멘트', tag: '추천' }
+  ]}
+];
+
+// 용어집
+const glossary = [
+  { term: 'Beat Rate', def: '실적 발표 기업 중 예상치 상회 비율. 70%+ 건강.' },
+  { term: 'EPS', def: '주당순이익. 순이익 ÷ 주식 수.' },
+  { term: 'PER', def: '주가/EPS. 역사 평균 16-18배.' },
+  { term: '버핏 지수', def: '시총/GDP. 80-100% 정상, 120%+ 고평가, 200%+ 거품.' },
+  { term: 'VIX', def: 'S&P500 향후 30일 변동성 예측. 15-20 정상.' },
+  { term: '콘탱고/백워데이션', def: '선물>현물(정상)/선물<현물(위기).' },
+  { term: 'DXY', def: '6개 주요 통화 대비 달러 강도. 100 기준.' },
+  { term: '실질금리', def: '명목금리 - 인플레. 마이너스면 위험자산 최적.' },
+  { term: 'CAPEX', def: '자본적 지출. AI 빅테크 GPU 구매 포함.' },
+  { term: 'NFP', def: '비농업 고용. 매월 첫 금요일. 15-20만 골디락스.' },
+  { term: 'CPI/PCE', def: '소비자물가지수/개인소비지출. PCE가 Fed 핵심.' },
+  { term: 'SSS (동일점포 매출)', def: '1년+ 운영 매장 매출. 진짜 성장성.' },
+  { term: 'Sahm Rule', def: '실업률 3개월 평균이 12개월 최저 대비 +0.5%p 시 침체. 50년 100% 적중.' },
+  { term: '카드 연체율', def: '30일+ 연체 비율. 2% 평상, 3-4% 둔화, 5%+ 침체.' },
+  { term: 'TLT', def: '20년+ 미국 장기국채 ETF. 안전자산 대표.' },
+  { term: 'SQQQ', def: '나스닥 -3배 인버스. 유입 급증 = 공포.' },
+  { term: 'Mag7', def: 'AAPL/MSFT/GOOGL/AMZN/META/NVDA/TSLA. 시총 30%.' },
+  { term: '13F', def: '대형 기관 분기 보유 종목 공시. 45일 전 데이터.' },
+  { term: '닥터 코퍼', def: '구리. 모든 산업에 쓰여 경기 선행.' },
+  { term: 'Pricing Power', def: '비용을 가격에 전가하는 능력. 브랜드/독점/필수재.' },
+  { term: '골디락스 존', def: 'NFP 15-20만, 실업 3.8-4.2%, 임금 3-4%.' },
+  { term: '금리 역전', def: '단기금리 > 장기금리. 12-18개월 후 침체 선행.' },
+  { term: '13F', def: '대형 기관(억$+) 분기 보유 SEC 공시.' }
+];
+
+// === 헬퍼 ===
+function colorClasses(rating) {
+  if (rating === '긍정') return { bg: 'bg-emerald-50', border: 'border-emerald-500', text: 'text-emerald-700', badge: 'bg-emerald-500', glow: 'glow-pos' };
+  if (rating === '부정') return { bg: 'bg-rose-50', border: 'border-rose-500', text: 'text-rose-700', badge: 'bg-rose-500', glow: 'glow-neg' };
+  return { bg: 'bg-amber-50', border: 'border-amber-500', text: 'text-amber-700', badge: 'bg-amber-500', glow: 'glow-neu' };
+}
+function toneClass(t) { return t==='pos' ? 'text-emerald-600' : t==='neg' ? 'text-rose-600' : 'text-slate-600'; }
+function tagClass(t) {
+  const m = { '필수': 'bg-rose-500', '매일': 'bg-orange-500', '주간': 'bg-amber-500', '월간': 'bg-emerald-500', '분기': 'bg-blue-500', '심화': 'bg-purple-500', '추천': 'bg-cyan-500' };
+  return m[t] || 'bg-slate-500';
+}
+
+// === 렌더링 ===
+function renderAxisGrid() {
+  document.getElementById('axisGrid').innerHTML = axes.map(a => {
+    const c = colorClasses(a.rating);
+    return `
+    <div class="bg-white rounded-2xl p-5 border-t-4 ${c.border} shadow-sm card-hover ${c.glow}">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <div class="text-3xl">${a.emoji}</div>
+          <div class="text-xs text-slate-500 mt-1">축 ${a.id}</div>
+          <div class="font-bold text-lg">${a.name}</div>
+          <div class="text-xs text-slate-500">${a.subtitle}</div>
+        </div>
+        <span class="${c.badge} text-white text-xs font-bold px-3 py-1 rounded-full">${a.rating}</span>
+      </div>
+      <div class="space-y-1 mb-3">
+        ${a.metrics.map(m => `<div class="flex justify-between text-sm"><span class="text-slate-500">${m.k}</span><span class="font-semibold ${toneClass(m.tone)}">${m.v}</span></div>`).join('')}
+      </div>
+      <p class="text-xs ${c.text} ${c.bg} p-3 rounded-lg leading-relaxed mb-2">${a.summary}</p>
+      <div class="bg-indigo-50 border-l-2 border-indigo-400 px-2 py-1.5 text-xs text-indigo-900 rounded mb-3">💡 <b>PDF 적용 팁:</b> ${a.pdfTip}</div>
+      <button onclick="goToAxis(${a.id})" class="w-full bg-slate-100 hover:bg-slate-200 text-sm py-2 rounded-lg font-semibold text-slate-700">📚 이 축 깊이 보기 →</button>
+    </div>`;
+  }).join('');
+}
+
+function renderStudy8() {
+  document.getElementById('study8List').innerHTML = axes.map(a => {
+    const c = colorClasses(a.rating);
+    return `
+    <details id="axis-${a.id}" class="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <summary class="cursor-pointer p-5 flex items-center justify-between hover:bg-slate-50">
+        <div class="flex items-center gap-4">
+          <div class="text-3xl">${a.emoji}</div>
+          <div>
+            <div class="text-xs text-slate-500">축 ${a.id} · ${a.subtitle}</div>
+            <div class="font-bold text-lg">${a.name}</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="${c.badge} text-white text-xs font-bold px-3 py-1 rounded-full">${a.rating}</span>
+          <svg class="chev w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </summary>
+      <div class="px-5 pb-5 border-t pt-4 space-y-4 text-sm text-slate-700">
+        <!-- Section A: 현재 상황 -->
+        <div>
+          <h3 class="font-bold text-base mb-2 text-slate-900">📊 A. 현재 상황</h3>
+          <div class="grid grid-cols-3 gap-3 mb-3">
+            ${a.metrics.map(m => `<div class="bg-slate-50 rounded-lg p-3 text-center"><div class="text-xs text-slate-500">${m.k}</div><div class="font-bold ${toneClass(m.tone)}">${m.v}</div></div>`).join('')}
+          </div>
+          <div class="${c.bg} ${c.text} p-3 rounded-lg font-medium text-sm">💬 ${a.summary}</div>
+        </div>
+        <!-- Section B: 현재 해석 -->
+        <div>
+          <h3 class="font-bold text-base mb-2 text-slate-900">🧐 B. 현재 해석 & 적용</h3>
+          <div class="study-content">${a.interpretation}</div>
+        </div>
+        <!-- Section C: PDF 학습 -->
+        <div>
+          <h3 class="font-bold text-base mb-2 text-slate-900">📚 C. 깊이 공부 (PDF 학습)</h3>
+          <div class="study-content">${studyBodies[a.id]}</div>
+        </div>
+        <!-- Section D: 매주 체크리스트 -->
+        <div>
+          <h3 class="font-bold text-base mb-2 text-slate-900">✅ D. 매주 체크리스트</h3>
+          <div class="space-y-1">
+            ${a.weeklyCheck.map(c => `<label class="flex items-start gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded"><input type="checkbox" class="mt-1"><span class="text-sm">${c}</span></label>`).join('')}
+          </div>
+        </div>
+        <!-- Section E: 데이터 소스 -->
+        <div>
+          <h3 class="font-bold text-base mb-2 text-slate-900">🔗 E. 관련 데이터 소스</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+            ${a.sources.map(s => `<a href="${s.url}" target="_blank" rel="noopener" class="block bg-slate-50 hover:bg-slate-100 p-3 rounded-lg text-sm border border-slate-200">
+              <div class="font-semibold text-indigo-700">${s.name} →</div>
+              <div class="text-xs text-slate-500 truncate">${s.url}</div>
+            </a>`).join('')}
+          </div>
+        </div>
+        <!-- Section F: 노트 -->
+        <div>
+          <h3 class="font-bold text-base mb-2 text-slate-900">📝 F. 이 축에 대한 나의 노트</h3>
+          <textarea id="note-axis-${a.id}" class="w-full h-24 p-3 border border-slate-300 rounded-lg text-sm" placeholder="이 축에서 발견한 점, 의문점, 적용 아이디어를 적어보세요..."></textarea>
+          <div class="flex gap-2 mt-2">
+            <button onclick="saveAxisNote(${a.id})" class="bg-slate-900 text-white px-3 py-1 rounded text-xs font-semibold">💾 저장</button>
+            <span id="status-axis-${a.id}" class="text-xs text-slate-500 self-center"></span>
+          </div>
+        </div>
+      </div>
+    </details>`;
+  }).join('');
+  // 저장된 노트 불러오기
+  axes.forEach(a => {
+    const t = localStorage.getItem(`note_axis_${a.id}`);
+    if (t) document.getElementById(`note-axis-${a.id}`).value = t;
+  });
+}
+
+function renderSources() {
+  document.getElementById('sourcesList').innerHTML = sources.map(cat => `
+    <div class="bg-white rounded-2xl p-5 shadow-sm">
+      <h3 class="font-bold text-lg mb-3">${cat.cat}</h3>
+      <div class="space-y-3">
+        ${cat.items.map(it => `
+          <a href="${it.url}" target="_blank" rel="noopener" class="block border-l-4 border-slate-200 hover:border-indigo-500 pl-3 py-2 hover:bg-slate-50 rounded transition">
+            <div class="flex items-center justify-between gap-2">
+              <div class="font-semibold text-slate-900">${it.name}</div>
+              <span class="${tagClass(it.tag)} text-white text-xs px-2 py-0.5 rounded-full whitespace-nowrap">${it.tag}</span>
+            </div>
+            <div class="text-xs text-slate-600 mt-1">${it.desc}</div>
+            <div class="text-xs text-indigo-600 truncate mt-1">${it.url}</div>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderGlossary() {
+  document.getElementById('glossaryList').innerHTML = glossary.map(g => `
+    <div class="border-l-4 border-indigo-400 pl-4 py-2">
+      <div class="font-bold text-slate-900">${g.term}</div>
+      <div class="text-sm text-slate-600 mt-1">${g.def}</div>
+    </div>`).join('');
+}
+
+// === 탭 ===
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.getElementById('tab-' + name).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToAxis(id) {
+  showTab('study8');
+  setTimeout(() => openAxis(id), 100);
+}
+
+function openAxis(id) {
+  const el = document.getElementById('axis-' + id);
+  if (el) {
+    el.open = true;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// === 노트 저장 ===
+function saveNote() {
+  const txt = document.getElementById('myNote').value;
+  localStorage.setItem('myNote_8axis', txt);
+  localStorage.setItem('myNote_8axis_date', new Date().toLocaleString('ko-KR'));
+  document.getElementById('saveStatus').textContent = '✅ 저장됨 (' + new Date().toLocaleString('ko-KR') + ')';
+}
+function loadNote() {
+  const txt = localStorage.getItem('myNote_8axis');
+  const date = localStorage.getItem('myNote_8axis_date');
+  if (txt) {
+    document.getElementById('myNote').value = txt;
+    document.getElementById('saveStatus').textContent = '📂 불러옴 (' + date + ')';
+  }
+}
+function clearNote() {
+  if (confirm('정말 초기화?')) {
+    document.getElementById('myNote').value = '';
+    document.getElementById('saveStatus').textContent = '🗑️ 초기화됨';
+  }
+}
+function saveAxisNote(id) {
+  const txt = document.getElementById(`note-axis-${id}`).value;
+  localStorage.setItem(`note_axis_${id}`, txt);
+  document.getElementById(`status-axis-${id}`).textContent = '✅ 저장됨 ' + new Date().toLocaleTimeString('ko-KR');
+}
+
+// =====================================================
+// === 🔬 종목 분석 (2-3단계) 로직 ===
+// =====================================================
+
+// === 5가지 힘 (3단계 Part 2) ===
+const FIVE_FORCES = [
+  { id: 'demand', name: '수요의 힘', emoji: '📊', up: '강함 (재고↓, 주문↑, 납기↑)', down: '약함 (재고↑, 주문↓, 납기↓)' },
+  { id: 'price', name: '가격의 힘', emoji: '💰', up: '국면1 주도권 (마진 개선)', down: '국면3 전쟁 (마진 붕괴)' },
+  { id: 'cost', name: '비용의 힘', emoji: '⚙️', up: '안정/하락 (정점 지남)', down: '상승 압박 (인건비/원자재)' },
+  { id: 'compete', name: '경쟁의 힘', emoji: '⚔️', up: '공존 (상위3사 70%+)', down: '전쟁 (50% 미만)' },
+  { id: 'leverage', name: '레버리지', emoji: '🚀', up: '고레버리지 + 상승장', down: '고레버리지 + 하락장' }
+];
+
+let forceState = { demand: 0, price: 0, cost: 0, compete: 0, leverage: 0 };
+
+function renderForces() {
+  document.getElementById('forcesSliders').innerHTML = FIVE_FORCES.map(f => `
+    <div class="bg-white border border-slate-200 rounded-xl p-3">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2"><span class="text-xl">${f.emoji}</span><span class="font-semibold text-sm">${f.name}</span></div>
+        <span class="text-xs font-bold px-2 py-0.5 rounded-full" id="forceLabel-${f.id}">중립</span>
+      </div>
+      <div class="flex items-center text-xs text-slate-500 mb-1">
+        <span class="text-rose-600 truncate">← ${f.down}</span>
+        <span class="ml-auto text-emerald-600 truncate">${f.up} →</span>
+      </div>
+      <input type="range" min="-100" max="100" value="0" step="10" class="w-full force-slider" data-force="${f.id}" oninput="updateForce('${f.id}', this.value)">
+    </div>
+  `).join('');
+}
+
+function updateForce(id, value) {
+  forceState[id] = parseInt(value);
+  updateForcesUI();
+}
+
+function updateForcesUI() {
+  let up = 0, down = 0;
+  FIVE_FORCES.forEach(f => {
+    const v = forceState[f.id];
+    const lbl = document.getElementById(`forceLabel-${f.id}`);
+    if (v >= 30) { lbl.textContent = '끌어올림'; lbl.className = 'text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500 text-white'; up++; }
+    else if (v <= -30) { lbl.textContent = '끌어내림'; lbl.className = 'text-xs font-bold px-2 py-0.5 rounded-full bg-rose-500 text-white'; down++; }
+    else { lbl.textContent = '중립'; lbl.className = 'text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500 text-white'; }
+  });
+  document.getElementById('forcesUp').textContent = up;
+  document.getElementById('forcesDown').textContent = down;
+
+  let outlook, action, actionDesc;
+  if (up >= 3) {
+    outlook = '🚀 실적 상승';
+    action = '적극 매수';
+    actionDesc = '3분할 매수, 목표 +50%';
+  } else if (down >= 3) {
+    outlook = '📉 실적 하락';
+    action = '매도/회피';
+    actionDesc = '논리 붕괴 시 즉시 손절';
+  } else if (up - down >= 1) {
+    outlook = '↗️ 약한 상승';
+    action = '관심 매수';
+    actionDesc = '소액 시작, 변곡점 확인';
+  } else if (down - up >= 1) {
+    outlook = '↘️ 약한 하락';
+    action = '관망';
+    actionDesc = '추가 신호 대기';
+  } else {
+    outlook = '⚖️ 균형';
+    action = '관망';
+    actionDesc = '방향 명확해질 때까지 대기';
+  }
+  document.getElementById('forcesOutlook').textContent = outlook;
+  document.getElementById('forcesAction').textContent = action;
+  document.getElementById('forcesActionDesc').textContent = actionDesc;
+}
+
+// === 변곡점 체크 ===
+function attachTurningHandlers() {
+  document.querySelectorAll('.turning-check').forEach(c => {
+    c.addEventListener('change', updateTurningResult);
+  });
+  updateTurningResult();
+}
+
+function updateTurningResult() {
+  const checked = document.querySelectorAll('.turning-check:checked').length;
+  document.getElementById('turningCount').textContent = `${checked} / 4`;
+  let txt, cls;
+  if (checked >= 4) { txt = '🚀 완벽한 구조적 변곡점! 적극 매수 검토'; cls = 'bg-emerald-100 border-emerald-500 text-emerald-900'; }
+  else if (checked >= 2) { txt = '✅ 구조적 변곡점 확인 — 매수 타이밍'; cls = 'bg-emerald-50 border-emerald-400 text-emerald-800'; }
+  else if (checked === 1) { txt = '⚠️ 일시적 신호 — 추가 확인 필요'; cls = 'bg-amber-50 border-amber-400 text-amber-800'; }
+  else { txt = '신호 없음 — 일반 모니터링'; cls = 'bg-slate-100 border-slate-300 text-slate-700'; }
+  const result = document.getElementById('turningResult');
+  result.className = `mt-4 border-2 rounded-xl p-4 text-center ${cls}`;
+  document.getElementById('turningJudgment').textContent = txt;
+}
+
+// === 5가지 해자 점수 ===
+const MOATS = [
+  { id: 'network', name: '네트워크 효과', emoji: '🕸️', examples: '독점(카카오톡, 비자) / 강력(우버) / 일부(링크드인) / 없음' },
+  { id: 'switch', name: '전환 비용', emoji: '🔒', examples: '거의 불가능(SAP, Bloomberg) / 매우 어려움(iOS, Adobe) / 불편함 / 쉬움' },
+  { id: 'scale', name: '규모의 경제', emoji: '📦', examples: '압도적(Walmart, Amazon) / 상당(Target) / 일부 / 없음' },
+  { id: 'brand', name: '브랜드', emoji: '👑', examples: '명품(에르메스, 애플) / 강력(나이키, 스타벅스) / 알려진 / 제한적' },
+  { id: 'patent', name: '독점기술/특허', emoji: '🔬', examples: '20년 특허+표준(제약, CUDA) / 일부 특허 / 약함 / 없음' }
+];
+
+let moatState = { network: 5, switch: 5, scale: 5, brand: 5, patent: 5 };
+
+function renderMoats() {
+  document.getElementById('moatSliders').innerHTML = MOATS.map(m => `
+    <div class="bg-white border border-slate-200 rounded-xl p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="flex items-center gap-2"><span class="text-xl">${m.emoji}</span><span class="font-semibold text-sm">${m.name}</span></div>
+        <span class="text-sm font-bold text-rose-600" id="moatVal-${m.id}">5점</span>
+      </div>
+      <div class="text-xs text-slate-500 mb-2">${m.examples}</div>
+      <input type="range" min="0" max="10" value="5" step="1" class="w-full moat-slider" data-moat="${m.id}" oninput="updateMoat('${m.id}', this.value)">
+      <div class="flex justify-between text-xs text-slate-400"><span>0</span><span>5</span><span>10</span></div>
+    </div>
+  `).join('');
+  updateMoatTotal();
+}
+
+function updateMoat(id, value) {
+  moatState[id] = parseInt(value);
+  document.getElementById(`moatVal-${id}`).textContent = value + '점';
+  updateMoatTotal();
+}
+
+function updateMoatTotal() {
+  const total = Object.values(moatState).reduce((a,b)=>a+b, 0);
+  document.getElementById('moatTotal').textContent = total;
+  let grade, gradeDesc, rec;
+  if (total >= 40) { grade = '🏆 매우 강함'; gradeDesc = '워런 버핏형 종목'; rec = '강력 매수 검토'; }
+  else if (total >= 30) { grade = '💪 강함'; gradeDesc = '경쟁 우위 명확'; rec = '적극 매수'; }
+  else if (total >= 20) { grade = '⚙️ 보통'; gradeDesc = '평균적 경쟁 우위'; rec = '신중하게 접근'; }
+  else { grade = '⚠️ 약함'; gradeDesc = '경쟁에 취약'; rec = '회피 권장'; }
+  document.getElementById('moatGrade').textContent = grade;
+  document.getElementById('moatGradeDesc').textContent = gradeDesc;
+  document.getElementById('moatRec').textContent = rec;
+}
+
+// === 9개 매수 체크리스트 ===
+const CHECKLIST_9 = [
+  { id: 'biz', q: '비즈니스 이해 (초등학생도 설명 가능?)' },
+  { id: 'moat', q: '경쟁 우위 있음 (3년 후에도 이긴다?)' },
+  { id: 'growth', q: '산업 성장 (TAM 연 10%+ 성장?)' },
+  { id: 'fcf', q: 'FCF 플러스 (실제 현금 벌고 있음?)' },
+  { id: 'margin', q: '마진 개선 추세 (최근 8분기 상승?)' },
+  { id: 'debt', q: '이자보상배율 5배 이상 (부채 안전?)' },
+  { id: 'peg', q: 'PEG 1.5 이하 (성장 대비 가격 OK?)' },
+  { id: 'safety', q: '안전마진 확보 (적정가 30% 할인?)' },
+  { id: 'trend', q: '200일 이동평균선 위 (상승 추세?)' }
+];
+
+function renderChecklist() {
+  document.getElementById('checklistGrid').innerHTML = CHECKLIST_9.map((c, idx) => `
+    <label class="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-3 border border-slate-200 rounded-lg">
+      <input type="checkbox" class="check9 w-5 h-5" data-check="${c.id}" onchange="updateChecklist()">
+      <span class="font-bold text-slate-500 w-8">${idx+1}.</span>
+      <span class="text-sm flex-1">${c.q}</span>
+    </label>
+  `).join('');
+  updateChecklist();
+}
+
+function updateChecklist() {
+  const checked = document.querySelectorAll('.check9:checked').length;
+  document.getElementById('checkCount').textContent = `${checked} / 9`;
+  let judgment, action, cls;
+  if (checked === 9) { judgment = '🏆 강력 매수'; action = '지금 당장 사도 됨 (3분할 매수)'; cls = 'bg-emerald-100 border-emerald-500'; }
+  else if (checked >= 7) { judgment = '✅ 매수'; action = '확신 갖고 투자 (3분할 매수)'; cls = 'bg-emerald-50 border-emerald-400'; }
+  else if (checked >= 5) { judgment = '⚠️ 소액/관망'; action = '확신 부족, 추가 분석'; cls = 'bg-amber-50 border-amber-400'; }
+  else { judgment = '❌ 회피'; action = '다른 종목 찾기'; cls = 'bg-rose-50 border-rose-400'; }
+  document.getElementById('checkJudgment').textContent = judgment;
+  document.getElementById('checkAction').textContent = action;
+  document.getElementById('checklistResult').className = `border-2 rounded-xl p-4 text-center mt-4 ${cls}`;
+}
+
+// === 시나리오 저장 ===
+function saveScenario() {
+  const data = {
+    posEnv: document.getElementById('scPosEnv').value,
+    negEnv: document.getElementById('scNegEnv').value,
+    signals: {}
+  };
+  document.querySelectorAll('.sc-signal').forEach(s => {
+    data.signals[s.dataset.type] = s.value;
+  });
+  localStorage.setItem('myScenario', JSON.stringify(data));
+  localStorage.setItem('myScenarioDate', new Date().toLocaleString('ko-KR'));
+  document.getElementById('scenarioStatus').textContent = '✅ 저장됨 ' + new Date().toLocaleString('ko-KR');
+}
+
+function loadScenario() {
+  const data = JSON.parse(localStorage.getItem('myScenario') || '{}');
+  if (!data.posEnv && !data.negEnv) {
+    document.getElementById('scenarioStatus').textContent = '저장된 시나리오 없음';
+    return;
+  }
+  document.getElementById('scPosEnv').value = data.posEnv || '';
+  document.getElementById('scNegEnv').value = data.negEnv || '';
+  if (data.signals) {
+    document.querySelectorAll('.sc-signal').forEach(s => {
+      if (data.signals[s.dataset.type]) s.value = data.signals[s.dataset.type];
+    });
+  }
+  document.getElementById('scenarioStatus').textContent = '📂 불러옴 (' + (localStorage.getItem('myScenarioDate') || '?') + ')';
+}
+
+// === AI 프롬프트 (2단계, 3단계) ===
+const SA_PROMPTS = {
+  full2step: `당신은 전문 투자 분석가입니다. 초보자도 이해할 수 있게 쉽게 설명해주세요.
+
+분석 대상 기업: [기업명을 여기에 입력]
+
+【1단계: 3중 사이클 체크】
+거시 사이클: 현재 회복/확장/둔화/침체? 금리 방향? 고용?
+산업 사이클: TAM 성장률, 업계 CAPEX 상황, 재고/매출 비율 추이, 주요 기업 가이던스
+기업 사이클: Order Backlog, 재고, 마진, 가이던스 추이
+
+【2단계: 비즈니스 이해】
+1. 이 회사 뭐하는 곳인가? (초등학생도 이해 가능)
+2. 매출 구조 (부문별 비중, 성장률, 마진 표)
+3. Operating Leverage Score = 영업이익 증가율 ÷ 매출 증가율
+4. Pricing Power 있나?
+
+【3단계: 경쟁 분석】
+경쟁사 3개와 비교표 (매출 성장률, 영업이익률, PE)
+해자 점수 /50점 (네트워크/전환비용/규모/브랜드/특허)
+산업 성장률 CAGR
+
+【4단계: 재무 점검】
+1. FCF 플러스? 증가 추세?
+2. 마진 최근 8분기 추이
+3. 이자보상배율 (5배 이상 안전)
+4. 순부채/EBITDA
+
+【5단계: 가격 & 타이밍】
+1. PE 평가 (현재/경쟁사/과거 5년/절대기준)
+2. PEG = PE ÷ 예상성장률
+3. 안전마진 매수가
+4. 타이밍 체크 (200일선/실적 발표일/섹터 자금/촉매)
+
+【9개 매수 체크리스트】
+1. 비즈니스 이해
+2. 경쟁 우위 있음
+3. 산업 성장 (10%+)
+4. FCF 플러스
+5. 마진 개선 추세
+6. 이자보상배율 5배+
+7. PEG 1.5 이하
+8. 안전마진 확보
+9. 200일선 위
+→ 9개(강력매수) / 7-8개(매수) / 5-6개(관망) / 4개 이하(회피)
+
+【실행 가이드】
+매수: 3번 분할 (30%+30%+40%)
+목표가: +50% 도달 시 절반 매도, 나머지 Trailing Stop 15%
+손절: -20% 또는 투자 논리 붕괴 시
+논리 붕괴 시나리오: 핵심 제품 경쟁력 상실, 규제 타격, 회계 부정 의혹
+
+【3줄 요약】
+1. 판단: [강력매수/매수/관망/회피] - 이유
+2. 지금 살 만한가? [Yes/No] - 이유
+3. 주의점
+
+* 최신 데이터 기준, 불확실하면 "확인 필요" 표시
+* 추상적 표현 대신 구체적 수치 사용`,
+
+  flow3step: `당신은 초보 투자자를 돕는 친절하고 전문적인 분석가입니다.
+아래 기업을 구조적으로 분석해주세요.
+
+분석 대상: [기업명을 여기에 입력]
+
+【구조 분석】
+
+1. 종속성 분석
+- 이 회사는 무엇에 가장 종속되어 있나요? (거시경제/산업사이클/고객사/규제)
+- 구체적인 종속 변수는?
+- 선행 지표는 무엇이고 어디서 확인?
+
+2. 5가지 힘의 현재 상태
+
+수요의 힘
+- 현재 강한가 약한가?
+- 재고 회전일수, 주문 잔고, 납기는?
+- 최근 3분기 추세는?
+- 1층(최종)/2층(파생)/3층(재고) 중 어느 수요?
+
+가격의 힘
+- 현재 어느 국면? (주도권/방어/전쟁)
+- 최근 4분기 가격 추이
+- 경쟁사와 가격 경쟁
+
+비용의 힘
+- 고정비와 변동비 비율
+- 주요 비용 항목 추세
+- 원자재 가격, 인건비 변화
+
+경쟁의 힘
+- 현재 어느 단계? (공존/경쟁/전쟁)
+- 상위 3사 점유율
+- 최근 경쟁사 도산이나 신규 진입
+
+레버리지의 힘
+- 최근 4분기 증폭률 (이익증가율÷매출증가율)
+- 부채비율
+
+3. 힘의 균형
+- 끌어올리는 힘 (리스트)
+- 끌어내리는 힘 (리스트)
+- 현재 어느 쪽이 이기고 있나?
+
+4. 변곡점 체크 (4가지 패턴, 2개 이상이면 구조적 변곡점)
+- 수요 반전 신호: 있나? 구체적으로?
+- 가격 안정화 신호?
+- 비용 정점 신호?
+- 경쟁 완화 신호?
+
+5. 시나리오 분석
+
+긍정 시나리오
+- 환경이 어떻게 바뀔 때?
+- 5가지 힘이 어떻게 변하나?
+- 실적은 몇 % 변할까?
+- 주가는 몇 % 움직일까?
+
+부정 시나리오
+- 환경이 어떻게 바뀔 때?
+- 5가지 힘이 어떻게 변하나?
+- 실적은 몇 % 변할까?
+- 주가는 몇 % 움직일까?
+
+6. 신호와 액션 플랜
+긍정 시나리오 신호 5가지 (구체적)
+액션: 신호 2개 → ___ / 3개 → ___ / 목표가: ___ / 손절가: ___
+
+부정 시나리오 신호 5가지 (구체적)
+액션: 신호 2개 → ___ / 3개 → ___
+
+【3줄 요약】
+1. 이 회사는 [종속 변수]에 종속, 현재 [힘의 균형 상태]
+2. 변곡점 신호 [개수]개 포착 = [현재 판단]
+3. [긍정 신호] 시 매수, [부정 신호] 시 매도
+
+* 초보자가 실전에서 바로 적용 가능하게 구체적으로
+* 모든 수치와 신호는 최신 데이터 기준
+* 추상적 표현 대신 구체적 수치와 지표 사용`
+};
+
+function copySAPrompt(type) {
+  const text = SA_PROMPTS[type];
+  navigator.clipboard.writeText(text).then(() => {
+    const status = document.getElementById('saPromptStatus');
+    status.classList.remove('hidden');
+    const labels = { full2step: '📊 2단계 기업 분석', flow3step: '🌊 3단계 흐름 분석' };
+    status.innerHTML = `<b>${labels[type]}</b> 프롬프트 복사 완료! Claude에 <b>Cmd+V</b>로 붙여넣고 [기업명] 부분만 바꿔주세요.`;
+    setTimeout(() => status.classList.add('hidden'), 10000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('프롬프트 복사 완료!');
+  });
+}
+
+// =====================================================
+// === 🎮 시뮬레이션 & 상관관계 (모든 시뮬레이션 로직) ===
+// =====================================================
+
+// 8축 정의 (시뮬레이션용)
+const SIM_AXES = [
+  { id: 1, name: '금리', emoji: '💰', up: '금리 ↑ / 인플레 ↑', down: '금리 ↓ / 인플레 ↓', pdfPage: 'p.8-15' },
+  { id: 2, name: '기업실적', emoji: '🏢', up: '실적·가이던스 ↑', down: '실적·가이던스 ↓', pdfPage: 'p.15-19' },
+  { id: 3, name: '자금흐름', emoji: '💸', up: 'QQQ/SPY 유입', down: 'TLT/SQQQ 유입', pdfPage: 'p.20-26' },
+  { id: 4, name: '고용', emoji: '👷', up: 'NFP/실업률 골디락스', down: '실업률 급등', pdfPage: 'p.27-32' },
+  { id: 5, name: '소비', emoji: '🛒', up: '소매판매 강세', down: '연체율 ↑', pdfPage: 'p.33-37' },
+  { id: 6, name: '기업마진', emoji: '📈', up: '순이익률 ↑', down: '비용 압박', pdfPage: 'p.37-43' },
+  { id: 7, name: '달러/원자재', emoji: '🛢️', up: '달러↓ + 원자재 안정', down: '유가↑ / 달러↑', pdfPage: 'p.43-51' },
+  { id: 8, name: 'VIX', emoji: '😨', up: 'VIX 15-20 안정', down: 'VIX 30+ 공포', pdfPage: 'p.52-57' }
+];
+
+// 현재(2026.05.24) 값: -100=부정, 0=중립, +100=긍정
+const SIM_NOW = { 1: 0, 2: 60, 3: 0, 4: 0, 5: -10, 6: 70, 7: -50, 8: 50 };
+
+let simState = { ...SIM_NOW };
+
+// === A. 슬라이더 시뮬레이터 ===
+function renderSimSliders() {
+  document.getElementById('simSliders').innerHTML = SIM_AXES.map(a => `
+    <div class="bg-white border border-slate-200 rounded-xl p-3">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">${a.emoji}</span>
+          <span class="font-semibold text-sm">${a.id}. ${a.name}</span>
+        </div>
+        <span class="text-xs font-bold px-2 py-0.5 rounded-full" id="simLabel${a.id}">중립</span>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
+        <span class="text-rose-600">← ${a.down}</span>
+        <span class="ml-auto text-emerald-600">${a.up} →</span>
+      </div>
+      <input type="range" min="-100" max="100" value="${simState[a.id]}" step="10"
+        class="w-full sim-slider" data-axis="${a.id}"
+        oninput="updateSim(${a.id}, this.value)">
+    </div>
+  `).join('');
+  updateAllSim();
+}
+
+function updateSim(axisId, value) {
+  simState[axisId] = parseInt(value);
+  updateAllSim();
+}
+
+function ratingFromValue(v) {
+  if (v >= 30) return { label: '긍정', cls: 'bg-emerald-500 text-white' };
+  if (v <= -30) return { label: '부정', cls: 'bg-rose-500 text-white' };
+  return { label: '중립', cls: 'bg-amber-500 text-white' };
+}
+
+function updateAllSim() {
+  let pos = 0, neu = 0, neg = 0;
+  SIM_AXES.forEach(a => {
+    const v = simState[a.id];
+    const r = ratingFromValue(v);
+    const lbl = document.getElementById(`simLabel${a.id}`);
+    if (lbl) {
+      lbl.textContent = r.label;
+      lbl.className = `text-xs font-bold px-2 py-0.5 rounded-full ${r.cls}`;
+    }
+    if (r.label === '긍정') pos++;
+    else if (r.label === '부정') neg++;
+    else neu++;
+  });
+
+  document.getElementById('simPos').textContent = pos;
+  document.getElementById('simNeu').textContent = neu;
+  document.getElementById('simNeg').textContent = neg;
+
+  // 4-4-반반 규칙
+  let phase, phaseDesc, strategy, strategyDesc, score = pos - neg;
+  if (pos >= 6) { phase = '🟢 강한 강세장'; phaseDesc = '긍정 6+ 압도'; strategy = '공격적'; strategyDesc = '현금 5-10%, 위험자산 비중↑, 추격매수 OK'; }
+  else if (pos >= 4 && neg <= 2) { phase = '🟢 강세장'; phaseDesc = '긍정 4+ (4-4-반반 규칙)'; strategy = '낙관적'; strategyDesc = '현금 10-20%, 추세 추종, 분할 매수'; }
+  else if (neg >= 6) { phase = '🔴 강한 약세장'; phaseDesc = '부정 6+ 압도'; strategy = '방어적'; strategyDesc = '현금 50%+, TLT/GLD 헤지 강화'; }
+  else if (neg >= 4 && pos <= 2) { phase = '🔴 약세장'; phaseDesc = '부정 4+ (4-4-반반 규칙)'; strategy = '방어적'; strategyDesc = '현금 30-50%, 필수소비/유틸리티'; }
+  else if (Math.abs(pos - neg) <= 1 && (pos + neg) >= 4) { phase = '🟡 변동성 장세'; phaseDesc = '긍정·부정 반반'; strategy = '신중'; strategyDesc = '현금 20-30%, 양방향 헤지'; }
+  else if (pos >= 3 && pos > neg) { phase = '🟡 강세 우위 횡보'; phaseDesc = '긍정 우세 but 4축 미달'; strategy = '중립 + 방어'; strategyDesc = '현금 20-30%, 우량주 위주'; }
+  else if (neg >= 3 && neg > pos) { phase = '🟡 약세 우위 횡보'; phaseDesc = '부정 우세 but 4축 미달'; strategy = '방어 + 일부 매수'; strategyDesc = '현금 30-40%, VIX 30+ 시 분할매수'; }
+  else { phase = '🟡 횡보장'; phaseDesc = '명확한 방향성 없음'; strategy = '중립'; strategyDesc = '현금 20-30%, 관망'; }
+
+  document.getElementById('simPhase').textContent = phase;
+  document.getElementById('simPhaseDesc').textContent = phaseDesc;
+  document.getElementById('simStrategy').textContent = strategy;
+  document.getElementById('simStrategyDesc').textContent = strategyDesc;
+  document.getElementById('simScore').textContent = (score >= 0 ? '+' : '') + score;
+  document.getElementById('simScore').className = `text-3xl font-bold ${score > 0 ? 'text-emerald-400' : score < 0 ? 'text-rose-400' : 'text-amber-400'}`;
+
+  // 해석
+  let interp;
+  if (score >= 5) interp = '명확한 강세 — 추세 추종 유효';
+  else if (score >= 2) interp = '강세 우위, 변동성 잠복';
+  else if (score >= -1) interp = '균형 — 변곡점 가능성';
+  else if (score >= -4) interp = '약세 우위, 방어 준비';
+  else interp = '명확한 약세 — 자산 보호 최우선';
+  document.getElementById('simInterp').textContent = interp;
+}
+
+function resetSim() {
+  simState = { ...SIM_NOW };
+  SIM_AXES.forEach(a => {
+    const slider = document.querySelector(`.sim-slider[data-axis="${a.id}"]`);
+    if (slider) slider.value = simState[a.id];
+  });
+  updateAllSim();
+}
+
+// === B. 상관관계 매트릭스 ===
+// strength: 3=강한, 2=중간, 1=약함, 0=무관
+// direction: 'pos'=정상관, 'neg'=역상관, 'mixed'=상황별
+const CORR_MATRIX = {
+  1: { 2: { s: 3, d: 'neg', t: '금리↑ → 이자 비용↑ → 이익↓ (강한 부정)' },
+       3: { s: 3, d: 'neg', t: '금리↑ → 채권 매력↑ → 주식 유출 (강한 부정)' },
+       4: { s: 2, d: 'neg', t: '금리↑ → 경기 둔화 → 고용 둔화 (시차 6-12개월)' },
+       5: { s: 2, d: 'neg', t: '금리↑ → 대출/카드 부담 → 소비 위축' },
+       6: { s: 3, d: 'neg', t: '금리↑ → 이자 비용 → 마진 압박 (특히 부채 많은 기업)' },
+       7: { s: 3, d: 'pos', t: '금리↑ → 달러 강세 → 원자재 약세 (정상관)' },
+       8: { s: 2, d: 'neg', t: '금리↑ → 불확실성 → VIX 상승' } },
+  2: { 1: { s: 1, d: 'mixed', t: '실적은 금리에 거의 영향 없음 (역방향)' },
+       3: { s: 3, d: 'pos', t: '실적↑ → 자금 유입 (강한 정상관)' },
+       4: { s: 1, d: 'pos', t: '실적↑ → 채용 확대 (시차)' },
+       5: { s: 2, d: 'pos', t: '실적↑ → 임금/배당 → 소비 자극' },
+       6: { s: 3, d: 'pos', t: '실적과 마진은 동행 (강한 정상관)' },
+       7: { s: 0, d: 'mixed', t: '직접 영향 미미' },
+       8: { s: 2, d: 'neg', t: '실적 호조 → VIX 하락' } },
+  3: { 1: { s: 1, d: 'mixed', t: '자금흐름은 금리의 결과, 역방향 영향은 약함' },
+       2: { s: 2, d: 'pos', t: 'ETF 매수 = 주가 상승 = 실적 신뢰' },
+       4: { s: 0, d: 'mixed', t: '직접 영향 거의 없음' },
+       5: { s: 0, d: 'mixed', t: '직접 영향 없음' },
+       6: { s: 0, d: 'mixed', t: '직접 영향 없음' },
+       7: { s: 1, d: 'mixed', t: 'TLT 유입 시 달러 약세 압력' },
+       8: { s: 2, d: 'neg', t: 'SQQQ 유입 → 공포 → VIX↑' } },
+  4: { 1: { s: 2, d: 'pos', t: '고용 과열 → Fed 금리 인상 (PDF p.28)' },
+       2: { s: 2, d: 'pos', t: '고용↑ → 소비↑ → 매출↑ (시차)' },
+       3: { s: 1, d: 'pos', t: '고용 안정 → 위험자산 자금 유입' },
+       5: { s: 3, d: 'pos', t: '고용 → 소득 → 소비 (PDF 명시 강력 인과)' },
+       6: { s: 2, d: 'neg', t: '고용 타이트 → 임금 상승 → 마진 압박' },
+       7: { s: 0, d: 'mixed', t: '직접 영향 미미' },
+       8: { s: 2, d: 'mixed', t: 'NFP 발표일 = 변동성 폭발일' } },
+  5: { 1: { s: 1, d: 'pos', t: '소비 과열 → 인플레 → 금리 상승 압력' },
+       2: { s: 3, d: 'pos', t: '소비가 매출의 본질 (강한 정상관)' },
+       3: { s: 1, d: 'pos', t: '소비주 ETF 유입 영향' },
+       4: { s: 1, d: 'pos', t: '소비↑ → 채용↑ (피드백 루프)' },
+       6: { s: 2, d: 'pos', t: '소비 강세 → 가격 결정력 강화' },
+       7: { s: 0, d: 'mixed', t: '직접 영향 없음' },
+       8: { s: 1, d: 'neg', t: '소비 둔화 신호 → VIX 반응' } },
+  6: { 1: { s: 0, d: 'mixed', t: '직접 영향 없음 (역방향)' },
+       2: { s: 3, d: 'pos', t: '마진 = 이익의 핵심, 실적과 동행' },
+       3: { s: 2, d: 'pos', t: '마진 확장 기업으로 자금 집중' },
+       4: { s: 1, d: 'neg', t: '마진 압박 시 감원 (역방향)' },
+       5: { s: 0, d: 'mixed', t: '직접 영향 없음' },
+       7: { s: 0, d: 'mixed', t: '역방향 영향 약함' },
+       8: { s: 1, d: 'neg', t: '마진 압박 → 실적 우려 → VIX' } },
+  7: { 1: { s: 2, d: 'pos', t: '유가↑ → 인플레↑ → Fed 인상 (PDF p.49)' },
+       2: { s: 2, d: 'neg', t: '원자재↑ → 비용↑ → 실적 압박 (섹터별 차이)' },
+       3: { s: 1, d: 'mixed', t: '에너지 ETF로 자금 이동' },
+       4: { s: 1, d: 'neg', t: '유가 급등 → 경기 둔화 → 고용 압박' },
+       5: { s: 2, d: 'neg', t: '유가↑ → 휘발유/난방 → 소비 부담 (PDF p.49)' },
+       6: { s: 3, d: 'neg', t: '원자재↑ → 마진 직격탄 (PDF p.41-42)' },
+       8: { s: 2, d: 'neg', t: '지정학/유가 충격 → VIX 급등' } },
+  8: { 1: { s: 0, d: 'mixed', t: 'VIX는 결과지, 원인이 아님' },
+       2: { s: 1, d: 'mixed', t: 'VIX 급등 시 실적 발표 회피 심리' },
+       3: { s: 3, d: 'neg', t: 'VIX↑ → SQQQ/TLT 유입, 주식 유출' },
+       4: { s: 0, d: 'mixed', t: '직접 영향 없음' },
+       5: { s: 1, d: 'neg', t: 'VIX 30+ 지속 시 소비 심리 위축' },
+       6: { s: 0, d: 'mixed', t: '직접 영향 없음' },
+       7: { s: 2, d: 'pos', t: 'VIX↑ → 안전자산 → 금↑ + 달러↑' } }
+};
+
+function corrCellClass(s, d) {
+  if (s === 0) return 'bg-slate-50 text-slate-300';
+  if (d === 'pos') {
+    if (s === 3) return 'bg-emerald-500 text-white font-bold';
+    if (s === 2) return 'bg-emerald-300';
+    return 'bg-emerald-100';
+  }
+  if (d === 'neg') {
+    if (s === 3) return 'bg-rose-500 text-white font-bold';
+    if (s === 2) return 'bg-rose-300';
+    return 'bg-rose-100';
+  }
+  return 'bg-amber-100';
+}
+function corrCellSymbol(s, d) {
+  if (s === 0) return '○';
+  if (d === 'pos') return s === 3 ? '↑↑' : s === 2 ? '↑' : '+';
+  if (d === 'neg') return s === 3 ? '↓↓' : s === 2 ? '↓' : '-';
+  return '~';
+}
+
+function renderCorrMatrix() {
+  // 헤더
+  let headHtml = '<th class="border p-2 bg-slate-100 text-xs">영향↓ / 받음→</th>';
+  SIM_AXES.forEach(a => {
+    headHtml += `<th class="border p-2 bg-slate-100 text-xs"><div>${a.emoji}</div><div class="text-xs">${a.id}.${a.name}</div></th>`;
+  });
+  document.getElementById('corrHead').innerHTML = headHtml;
+
+  // 본문
+  let bodyHtml = '';
+  SIM_AXES.forEach(rowAxis => {
+    bodyHtml += `<tr><th class="border p-2 bg-slate-100 text-left text-xs"><div>${rowAxis.emoji} ${rowAxis.id}.${rowAxis.name}</div></th>`;
+    SIM_AXES.forEach(colAxis => {
+      if (rowAxis.id === colAxis.id) {
+        bodyHtml += `<td class="border p-2 bg-slate-200 text-center text-xs">—</td>`;
+      } else {
+        const rel = CORR_MATRIX[rowAxis.id]?.[colAxis.id] || { s: 0, d: 'mixed', t: '데이터 없음' };
+        const cls = corrCellClass(rel.s, rel.d);
+        const sym = corrCellSymbol(rel.s, rel.d);
+        bodyHtml += `<td class="border p-2 text-center cursor-pointer hover:ring-2 hover:ring-indigo-400 ${cls}"
+          onmouseenter="showCorrDetail(${rowAxis.id},${colAxis.id})"
+          onclick="showCorrDetail(${rowAxis.id},${colAxis.id})">${sym}</td>`;
+      }
+    });
+    bodyHtml += '</tr>';
+  });
+  document.getElementById('corrBody').innerHTML = bodyHtml;
+}
+
+function showCorrDetail(rowId, colId) {
+  const row = SIM_AXES.find(a => a.id === rowId);
+  const col = SIM_AXES.find(a => a.id === colId);
+  const rel = CORR_MATRIX[rowId]?.[colId];
+  if (!rel) return;
+  const dirText = rel.d === 'pos' ? '🟢 정상관' : rel.d === 'neg' ? '🔴 역상관' : '🟡 혼합';
+  const strText = rel.s === 3 ? '⚡ 강함' : rel.s === 2 ? '⚙️ 중간' : rel.s === 1 ? '🌬️ 약함' : '⚪ 무관';
+  const el = document.getElementById('corrDetail');
+  el.classList.remove('hidden');
+  document.getElementById('corrDetailHead').textContent = `${row.emoji} ${row.id}.${row.name} → ${col.emoji} ${col.id}.${col.name}`;
+  document.getElementById('corrDetailBody').innerHTML = `<div class="mb-1"><b>${dirText} · ${strText}</b></div><div>${rel.t}</div>`;
+}
+
+// === C. 연쇄 반응 시뮬레이터 ===
+function renderChain() {
+  const startId = parseInt(document.getElementById('chainAxis').value);
+  const dir = document.getElementById('chainDir').value;
+  const startAxis = SIM_AXES.find(a => a.id === startId);
+  const dirSym = dir === 'up' ? '↑' : '↓';
+  const dirText = dir === 'up' ? '상승/강화' : '하락/약화';
+
+  // 1차 영향: 직접 연결된 강력한 관계
+  const primary = [];
+  const secondary = [];
+  Object.entries(CORR_MATRIX[startId] || {}).forEach(([targetId, rel]) => {
+    if (rel.s >= 2) primary.push({ id: parseInt(targetId), rel });
+    else if (rel.s === 1) secondary.push({ id: parseInt(targetId), rel });
+  });
+
+  // 3차: 1차에서 다시 파급
+  const tertiary = new Set();
+  primary.forEach(p => {
+    Object.entries(CORR_MATRIX[p.id] || {}).forEach(([tid, r]) => {
+      if (r.s === 3 && parseInt(tid) !== startId && !primary.find(pp => pp.id === parseInt(tid))) {
+        tertiary.add(parseInt(tid));
+      }
+    });
+  });
+
+  function impactCard(targetId, rel, level) {
+    const target = SIM_AXES.find(a => a.id === targetId);
+    let effectDir;
+    if (rel.d === 'pos') effectDir = dir; // 같은 방향
+    else if (rel.d === 'neg') effectDir = dir === 'up' ? 'down' : 'up';
+    else effectDir = 'mixed';
+    const effectSym = effectDir === 'up' ? '↑' : effectDir === 'down' ? '↓' : '~';
+    const effectColor = effectDir === 'up' ? 'text-emerald-600' : effectDir === 'down' ? 'text-rose-600' : 'text-amber-600';
+    const bgColor = level === 1 ? 'bg-indigo-50 border-indigo-300' : level === 2 ? 'bg-purple-50 border-purple-300' : 'bg-slate-50 border-slate-300';
+    return `<div class="border-2 ${bgColor} rounded-lg p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">${target.emoji}</span>
+          <span class="font-semibold text-sm">${target.id}.${target.name}</span>
+        </div>
+        <span class="text-2xl font-bold ${effectColor}">${effectSym}</span>
+      </div>
+      <div class="text-xs text-slate-700">${rel.t}</div>
+    </div>`;
+  }
+
+  let html = `
+    <div class="bg-slate-900 text-white rounded-xl p-4 text-center">
+      <div class="text-xs text-slate-400">시작점</div>
+      <div class="text-2xl font-bold mt-1">${startAxis.emoji} ${startAxis.name} ${dirSym} (${dirText})</div>
+    </div>
+
+    <div class="flex items-center justify-center"><div class="text-3xl text-slate-300">⬇️</div></div>
+
+    <div>
+      <h4 class="font-bold mb-2 text-base flex items-center gap-2">🔥 1차 영향 (강·중)</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+        ${primary.length ? primary.map(p => impactCard(p.id, p.rel, 1)).join('') : '<div class="text-slate-400 text-sm">없음</div>'}
+      </div>
+    </div>
+
+    <div class="flex items-center justify-center"><div class="text-3xl text-slate-300">⬇️</div></div>
+
+    <div>
+      <h4 class="font-bold mb-2 text-base flex items-center gap-2">💧 2차 영향 (약)</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+        ${secondary.length ? secondary.map(s => impactCard(s.id, s.rel, 2)).join('') : '<div class="text-slate-400 text-sm">없음</div>'}
+      </div>
+    </div>
+
+    <div class="flex items-center justify-center"><div class="text-3xl text-slate-300">⬇️</div></div>
+
+    <div>
+      <h4 class="font-bold mb-2 text-base flex items-center gap-2">🌊 3차 파급 (1차 → 다음)</h4>
+      <div class="text-xs text-slate-600 mb-2">1차 영향받은 축들이 다시 영향을 주는 축</div>
+      <div class="flex flex-wrap gap-2">
+        ${[...tertiary].map(tid => {
+          const t = SIM_AXES.find(a => a.id === tid);
+          return `<span class="bg-slate-100 px-3 py-1 rounded-lg text-sm">${t.emoji} ${t.name}</span>`;
+        }).join('') || '<div class="text-slate-400 text-sm">없음</div>'}
+      </div>
+    </div>
+
+    <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded mt-4 text-sm">
+      <b class="text-emerald-900">💡 인사이트:</b> ${startAxis.name} 하나가 움직이면 ${primary.length + secondary.length}개 축이 연쇄적으로 흔들립니다.
+      <b>"이게 8축을 함께 봐야 하는 이유"</b> (PDF p.62).
+    </div>
+  `;
+  document.getElementById('chainResult').innerHTML = html;
+}
+
+// === D. 역사 시나리오 프리셋 ===
+const SCENARIOS = [
+  { id: 'covid', emoji: '😷', name: '코로나 폭락 (2020.3)', color: 'rose',
+    values: { 1: 80, 2: -80, 3: -90, 4: -100, 5: -90, 6: -70, 7: -50, 8: -100 },
+    desc: 'Fed 긴급 인하(+) but 모든 다른 축 붕괴. VIX 80+. 실업수당 300만 건. SPY -200억$ 유출. → 4-4-반반에서 부정 6+ = 강한 약세장.'},
+  { id: 'recovery', emoji: '🚀', name: 'V자 반등 (2020.6)', color: 'amber',
+    values: { 1: 100, 2: 30, 3: 80, 4: -30, 5: 30, 6: 20, 7: 30, 8: -20 },
+    desc: 'Fed 0% + 무제한 QE. 자금이 위험자산으로 폭주. 고용은 회복 중이지만 아직 약함. → 변동성 높지만 강세 우위.'},
+  { id: 'bullpeak', emoji: '🐂', name: '강세장 정점 (2021.11)', color: 'emerald',
+    values: { 1: 90, 2: 90, 3: 80, 4: 70, 5: 80, 6: 80, 7: 40, 8: 60 },
+    desc: '실질금리 마이너스 6%대. ARKK 폭등. 비트코인 6.9만$. Beat Rate 80%+. 모든 축 긍정 → 강한 강세장 정점. <b>이때가 매도 타이밍이었음.</b>'},
+  { id: 'bear22', emoji: '🐻', name: '베어마켓 (2022.6)', color: 'rose',
+    values: { 1: -90, 2: -30, 3: -60, 4: 40, 5: -10, 6: -30, 7: -80, 8: -50 },
+    desc: 'CPI 9%, Fed 0.75% 인상 가속. 금리 역전 시작. 빅테크 -30~50%. but 고용은 강함 → 침체는 안 옴. → 약세 우위 횡보.'},
+  { id: 'invert', emoji: '🔄', name: '역전 절정 (2023.7)', color: 'amber',
+    values: { 1: -70, 2: 40, 3: 30, 4: 60, 5: 20, 6: 30, 7: -20, 8: 20 },
+    desc: '2s10s -1.05%p 사상 최대 역전. 침체 경고 일색. but Mag7 AI 붐 시작. 실적·고용 강세. → "역전인데 안 떨어지는" 이상 시장.'},
+  { id: 'softland', emoji: '🛬', name: '소프트랜딩 (2024.5)', color: 'emerald',
+    values: { 1: 30, 2: 70, 3: 60, 4: 20, 5: 20, 6: 60, 7: 30, 8: 40 },
+    desc: 'CPI 3%대 진입. Fed 인하 기대. NFP 15-20만. Mag7 실적 폭발. → 강세장 재진입.'},
+  { id: 'now', emoji: '⭐', name: '현재 (2026.05.24)', color: 'indigo',
+    values: { ...SIM_NOW },
+    desc: '실적·마진 강세, but 유가 $100+ / 호르무즈 갈등. 카드 연체율 3.3%. K자 소비. → 강세 우위 횡보, 변동성 잠복.'},
+];
+
+function renderScenarios() {
+  document.getElementById('scenarioBtns').innerHTML = SCENARIOS.map(s => `
+    <button onclick="loadScenario('${s.id}')" class="bg-${s.color}-50 hover:bg-${s.color}-100 border-2 border-${s.color}-300 rounded-xl p-4 text-left transition">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="text-2xl">${s.emoji}</span>
+        <span class="font-bold text-${s.color}-900">${s.name}</span>
+      </div>
+      <div class="text-xs text-${s.color}-700">클릭 → 슬라이더 자동 세팅</div>
+    </button>
+  `).join('');
+}
+
+function loadScenario(id) {
+  const sc = SCENARIOS.find(s => s.id === id);
+  if (!sc) return;
+  simState = { ...sc.values };
+  SIM_AXES.forEach(a => {
+    const slider = document.querySelector(`.sim-slider[data-axis="${a.id}"]`);
+    if (slider) slider.value = simState[a.id];
+  });
+  updateAllSim();
+  const ctx = document.getElementById('scenarioContext');
+  ctx.classList.remove('hidden');
+  document.getElementById('scenarioTitle').textContent = sc.emoji + ' ' + sc.name;
+  document.getElementById('scenarioDesc').innerHTML = sc.desc;
+  // 시뮬레이터로 스크롤
+  document.getElementById('sim-slider').scrollIntoView({ behavior: 'smooth' });
+}
+
+// === E. 실전 퀴즈 ===
+const QUIZZES = [
+  {
+    q: '🛢️ 유가가 갑자기 $80 → $130으로 50% 급등했다. 어떤 축이 어떻게 변할까? 가장 큰 영향을 받는 축 3개를 골라보자.',
+    answers: [
+      { axis: 7, dir: 'down', why: '본인 축. 골디락스 초과 → 부정' },
+      { axis: 1, dir: 'down', why: '인플레 재점화 → Fed 매파 회귀 → 금리 인상 압력' },
+      { axis: 6, dir: 'down', why: '항공·운송·소비재 마진 직격탄 (PDF p.42)' },
+      { axis: 5, dir: 'down', why: '휘발유/난방 부담 → 재량 소비 위축 (PDF p.49)' }
+    ],
+    insight: '유가 충격은 <b>4개 축에 동시 부정 영향</b>. 단 에너지 섹터(XLE) 실적은 오히려 호조. 헤지로 XLE 5-10% 편입 효과적.'
+  },
+  {
+    q: '👷 NFP가 +30만 (예상 +15만)으로 서프라이즈. 시장 반응은? 직관과 다를 수 있다.',
+    answers: [
+      { axis: 4, dir: 'up', why: '고용 자체는 강함' },
+      { axis: 1, dir: 'up', why: '⚠️ 함정! "고용 너무 좋다 → Fed 인상 우려" → 시장 종합적 부정 반응' },
+      { axis: 3, dir: 'down', why: '금리 인상 우려 → 주식 유출 → SPY/QQQ 약세' }
+    ],
+    insight: 'PDF p.28 "맥락"의 핵심. <b>고용이 너무 좋으면 오히려 악재</b>가 될 수 있다. 같은 +30만도 회복기엔 호재, 과열기엔 악재. <b>4가지 맥락 매트릭스를 봐야 한다.</b>'
+  },
+  {
+    q: '😨 VIX가 18 → 35로 하루 만에 95% 급등. 어떻게 대응?',
+    answers: [
+      { axis: 8, dir: 'down', why: '공포 정점 도달' },
+      { axis: 3, dir: 'down', why: 'SQQQ/TLT 유입 폭발, SPY 유출' }
+    ],
+    insight: 'PDF p.54 "VIX 30+ 역설적 매수 기회". 단, "떨어지는 칼날 잡기" 주의 → 분할 매수로 접근. VIX 40+ 패닉 시 본격 매수 검토. <b>역사적으로 VIX 극단 고점 = 시장 바닥.</b>'
+  },
+  {
+    q: '💸 SQQQ(나스닥 -3배 인버스)에 일주일 만에 $50억 유입. 의미는?',
+    answers: [
+      { axis: 3, dir: 'down', why: '하락 베팅 급증 = 자금흐름 부정' },
+      { axis: 8, dir: 'down', why: '공포 누적 → VIX 상승 압력' }
+    ],
+    insight: 'PDF p.23 "패턴 4: SQQQ 자금 유입 급증 → 공포 정점 → 역발상 매수 신호". 즉, 직관적으로는 부정이지만, <b>극단치에서는 컨트래리언 신호</b>. VIX, 풋콜비율 함께 봐서 종합 판단.'
+  },
+  {
+    q: '💰 Fed가 갑자기 0.5% 인하 발표 (예상 0.25%). 무조건 호재?',
+    answers: [
+      { axis: 1, dir: 'up', why: '금리 자체는 호재' },
+      { axis: 7, dir: 'up', why: '달러 약세 → 신흥국·원자재 호재' },
+      { axis: 2, dir: 'mixed', why: '⚠️ 함정! 0.5% = "경기 더 안 좋다는 뜻 아니야?" 의심' }
+    ],
+    insight: 'PDF p.10 "같은 행동, 다른 결과". <b>인플레 안정 인하 = 소프트랜딩 호재 / 경기 급랭 인하 = 침체 신호 악재</b>. 0.5% 같은 큰 폭은 "긴급함"의 신호로 읽힐 수 있어 단기 충격 가능. <b>맥락(왜 인하?)을 봐야 한다.</b>'
+  },
+  {
+    q: '🏢 NVDA가 매출·EPS 모두 어닝 비트했는데, 가이던스가 "예상 부합"에 그쳤다. 주가는?',
+    answers: [
+      { axis: 2, dir: 'down', why: '⚠️ 함정! 가이던스가 "압도적"이지 못해서 → 실망 매도' }
+    ],
+    insight: 'PDF p.15-16 "실적보다 가이던스가 중요". <b>NVDA 2023 Q4 실제 사례</b>: 매출·이익 역대 최고였으나 가이던스 부족으로 조정. AI 같은 고성장주는 "예상 부합"도 실망으로 받아들여짐. <b>EPS Beat ≠ 주가 상승</b>.'
+  }
+];
+
+function renderQuizzes() {
+  document.getElementById('quizList').innerHTML = QUIZZES.map((q, idx) => `
+    <details class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+      <summary class="cursor-pointer font-semibold text-sm flex items-center justify-between">
+        <span><b class="text-fuchsia-600">Q${idx+1}.</b> ${q.q}</span>
+        <svg class="chev w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="mt-3 pt-3 border-t border-slate-200">
+        <div class="text-xs text-slate-500 mb-2">📋 정답 (영향 축 + 방향)</div>
+        <div class="space-y-2 mb-4">
+          ${q.answers.map(a => {
+            const ax = SIM_AXES.find(x => x.id === a.axis);
+            const dirSym = a.dir === 'up' ? '↑' : a.dir === 'down' ? '↓' : '~';
+            const dirColor = a.dir === 'up' ? 'text-emerald-600' : a.dir === 'down' ? 'text-rose-600' : 'text-amber-600';
+            return `<div class="bg-white rounded-lg p-2 flex items-start gap-3 text-sm">
+              <span class="text-xl">${ax.emoji}</span>
+              <div class="flex-1">
+                <b>${ax.id}. ${ax.name}</b> <span class="${dirColor} font-bold text-lg">${dirSym}</span>
+                <div class="text-xs text-slate-600 mt-1">${a.why}</div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded text-sm">
+          <b class="text-emerald-900">💡 인사이트:</b> ${q.insight}
+        </div>
+      </div>
+    </details>
+  `).join('');
+}
+
+// =====================================================
+// === 금리 곡선 (Yield Curve) - Chart.js ===
+// =====================================================
+const yieldData = {
+  // 만기 라벨
+  maturities: ['1M', '3M', '6M', '1Y', '2Y', '3Y', '5Y', '7Y', '10Y', '20Y', '30Y'],
+  // 현재 (2026.05.24)
+  current: [3.65, 3.70, 3.85, 4.00, 4.13, 4.20, 4.30, 4.45, 4.56, 4.85, 4.90],
+  // 1년 전 (2025.05) - 인하 사이클 시작 직전
+  oneYearAgo: [5.30, 5.25, 5.15, 4.95, 4.80, 4.60, 4.40, 4.45, 4.55, 4.85, 4.90],
+  // 역전 절정기 (2023.07) - 2s10s 가장 깊은 역전
+  inverted: [5.45, 5.50, 5.55, 5.40, 4.90, 4.60, 4.30, 4.20, 4.05, 4.35, 4.10],
+};
+
+// 2s10s 스프레드 역사 데이터 (월별)
+const spreadHistory = {
+  labels: ['2022.01', '2022.04', '2022.07', '2022.10', '2023.01', '2023.04', '2023.07', '2023.10', '2024.01', '2024.04', '2024.07', '2024.10', '2025.01', '2025.04', '2025.07', '2025.10', '2026.01', '2026.04', '2026.05'],
+  values: [0.85, 0.20, -0.05, -0.45, -0.65, -0.55, -1.05, -0.35, -0.30, -0.40, -0.20, 0.12, 0.25, 0.32, 0.38, 0.40, 0.42, 0.41, 0.43]
+};
+
+let yieldChart = null;
+let currentYCMode = 'current';
+
+function renderYieldCurve(mode) {
+  const ctx = document.getElementById('yieldCurveChart');
+  if (!ctx) return;
+  if (yieldChart) yieldChart.destroy();
+
+  let datasets, labels;
+
+  if (mode === 'spread') {
+    labels = spreadHistory.labels;
+    datasets = [{
+      label: '10Y - 2Y 스프레드 (%p)',
+      data: spreadHistory.values,
+      borderColor: '#6366f1',
+      backgroundColor: (ctx) => {
+        const value = ctx.parsed?.y;
+        return value < 0 ? 'rgba(239,68,68,0.15)' : 'rgba(99,102,241,0.15)';
+      },
+      borderWidth: 2.5,
+      tension: 0.3,
+      pointRadius: 4,
+      pointBackgroundColor: spreadHistory.values.map(v => v < 0 ? '#ef4444' : '#10b981'),
+      fill: true
+    }];
+    yieldChart = new Chart(ctx, {
+      type: 'line',
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: { display: true, text: '2s10s 스프레드 추이 — 0 아래 = 금리 역전 (침체 선행)', font: { size: 13 } },
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              afterLabel: (ctx) => ctx.parsed.y < 0 ? '⚠️ 금리 역전 상태' : '✅ 정상'
+            }
+          }
+        },
+        scales: {
+          y: {
+            title: { display: true, text: '스프레드 (%p)' },
+            grid: {
+              color: (ctx) => ctx.tick.value === 0 ? '#ef4444' : '#e2e8f0',
+              lineWidth: (ctx) => ctx.tick.value === 0 ? 2 : 1
+            }
+          },
+          x: { ticks: { maxRotation: 45, minRotation: 45 } }
+        }
+      }
+    });
+    return;
+  }
+
+  labels = yieldData.maturities;
+  if (mode === 'current') {
+    datasets = [{
+      label: '현재 (2026.05.24) - 정상 우상향',
+      data: yieldData.current,
+      borderColor: '#10b981',
+      backgroundColor: 'rgba(16,185,129,0.1)',
+      borderWidth: 3,
+      tension: 0.3,
+      pointRadius: 5,
+      pointBackgroundColor: '#10b981',
+      fill: true
+    }];
+  } else if (mode === 'compare') {
+    datasets = [
+      {
+        label: '현재 (2026.05) — 정상',
+        data: yieldData.current,
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16,185,129,0.05)',
+        borderWidth: 3,
+        tension: 0.3,
+        pointRadius: 4,
+        fill: false
+      },
+      {
+        label: '1년 전 (2025.05) — 인하 직전',
+        data: yieldData.oneYearAgo,
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245,158,11,0.05)',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        tension: 0.3,
+        pointRadius: 3,
+        fill: false
+      },
+      {
+        label: '역전 절정 (2023.07) — 침체 경고',
+        data: yieldData.inverted,
+        borderColor: '#ef4444',
+        backgroundColor: 'rgba(239,68,68,0.05)',
+        borderWidth: 2,
+        borderDash: [2, 4],
+        tension: 0.3,
+        pointRadius: 3,
+        fill: false
+      }
+    ];
+  }
+
+  yieldChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: '만기별 미국 국채 수익률', font: { size: 13 } },
+        legend: { position: 'top' },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}%`
+          }
+        }
+      },
+      scales: {
+        y: {
+          title: { display: true, text: '수익률 (%)' },
+          beginAtZero: false,
+          suggestedMin: 3.5,
+          suggestedMax: 5.6
+        },
+        x: { title: { display: true, text: '만기' } }
+      }
+    }
+  });
+}
+
+function toggleYieldCompare(mode) {
+  currentYCMode = mode;
+  document.querySelectorAll('.yc-btn').forEach(b => {
+    if (b.dataset.yc === mode) {
+      b.className = 'yc-btn bg-indigo-500 text-white px-3 py-1 rounded-lg text-xs font-semibold active';
+    } else {
+      b.className = 'yc-btn bg-slate-200 text-slate-700 px-3 py-1 rounded-lg text-xs font-semibold';
+    }
+  });
+  renderYieldCurve(mode);
+}
+
+// =====================================================
+// === 평가 신호 갱신 버튼 (클립보드 복사) ===
+// =====================================================
+const PROMPTS = {
+  quick: `오늘 날짜 기준으로 다음 8축 핵심 숫자만 빠르게 검색해서 업데이트해줘:
+
+1. Fed 기준금리, 10Y 국채금리, 실질금리
+2. 최근 분기 Beat Rate, S&P500 EPS 성장률
+3. 주요 ETF (QQQ/SPY/IWM/TLT/SQQQ) 자금흐름
+4. 최근 NFP, 실업률, 임금 상승률
+5. 카드 연체율, 주요 소비 기업(WMT/SBUX) 매출
+6. S&P500 순이익률
+7. DXY, WTI, 구리, 금 시세
+8. VIX 현재값, 선물 구조 (콘탱고/백워데이션)
+
+각 축에 대해 [긍정/중립/부정] 평가도 새로 매겨줘. 변동된 부분만 짧게 요약.`,
+
+  full: `오늘 날짜 기준으로 미국 시장 8축 전체를 다시 진단해줘.
+
+자산네제곱 1단계 8축 프레임워크 기준:
+1. 금리, 2. 기업실적, 3. 자금흐름, 4. 고용, 5. 소비, 6. 마진, 7. 달러/원자재, 8. VIX
+
+각 축마다:
+- 현재 핵심 숫자 + 적정 범위 대비 평가
+- 긍정/중립/부정 신호
+- 한 줄 해석
+
+종합:
+- 신호 집계 (4-4-반반 규칙)
+- 현재 시장 국면 (강세/약세/횡보/변동성)
+- 권장 전략 (공격/중립/방어)
+- 주의 변수 5개
+- 3개월 시나리오 3개 (강세/기본/약세 + 확률)
+- 초보자용 3줄 요약
+
+마지막에 대시보드 index.html의 axes 배열, metrics, summary 값을 어떻게 수정해야 하는지 코드로 알려줘.`,
+
+  event: `방금 발표된 [FOMC/CPI/NFP/실적/지정학] 이벤트를 8축 진단에 반영해줘.
+
+체크 사항:
+- 어떤 축이 직접 영향받았나?
+- 평가가 바뀔만한 정도인가? (긍정→중립, 중립→부정 등)
+- 다른 축으로의 연쇄 효과는?
+- 즉각 대응이 필요한가?
+- 새로운 시나리오 확률 재계산
+
+대시보드 어디를 어떻게 업데이트해야 하는지 구체적으로 알려줘.`
+};
+
+function copyPrompt(type) {
+  const text = PROMPTS[type];
+  navigator.clipboard.writeText(text).then(() => {
+    const status = document.getElementById('copyStatus');
+    status.classList.remove('hidden');
+    const labels = { quick: '⚡ 빠른 갱신', full: '📊 전체 재진단', event: '🚨 이벤트 점검' };
+    status.innerHTML = `<b>${labels[type]}</b> 프롬프트가 복사되었습니다! Claude 채팅창에 <b>Cmd+V</b>로 붙여넣으세요.`;
+    setTimeout(() => status.classList.add('hidden'), 8000);
+  }).catch(() => {
+    // Fallback: textarea 방식
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('프롬프트 복사 완료! Claude에 붙여넣으세요.');
+  });
+}
+
+// === 마지막 분석 일자 표시 ===
+function updateAnalysisDate() {
+  const lastDate = new Date('2026-05-24');
+  const today = new Date();
+  const days = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+  const el = document.getElementById('daysAgo');
+  if (el) {
+    if (days === 0) el.textContent = '오늘';
+    else if (days === 1) el.textContent = '어제';
+    else if (days < 7) el.textContent = `${days}일 전`;
+    else if (days < 30) el.textContent = `${days}일 전 — 갱신 권장`;
+    else el.textContent = `${days}일 전 — ⚠️ 갱신 필요`;
+
+    if (days >= 7) {
+      el.classList.add('text-rose-600', 'font-bold');
+    }
+  }
+}
+
+// === INIT ===
+renderAxisGrid();
+renderStudy8();
+renderSources();
+renderGlossary();
+// 시뮬레이션 렌더
+renderSimSliders();
+renderCorrMatrix();
+renderChain();
+renderScenarios();
+renderQuizzes();
+
+// 종목 분석 (2-3단계) 렌더
+renderForces();
+attachTurningHandlers();
+renderMoats();
+renderChecklist();
+// 저장된 시나리오 자동 로드
+try {
+  const data = JSON.parse(localStorage.getItem('myScenario') || '{}');
+  if (data.posEnv || data.negEnv) {
+    if (document.getElementById('scPosEnv')) document.getElementById('scPosEnv').value = data.posEnv || '';
+    if (document.getElementById('scNegEnv')) document.getElementById('scNegEnv').value = data.negEnv || '';
+    if (data.signals) {
+      document.querySelectorAll('.sc-signal').forEach(s => {
+        if (data.signals[s.dataset.type]) s.value = data.signals[s.dataset.type];
+      });
+    }
+  }
+} catch(e) {}
+
+window.addEventListener('load', () => {
+  const txt = localStorage.getItem('myNote_8axis');
+  if (txt) document.getElementById('myNote').value = txt;
+  // Chart.js 렌더링은 DOM 준비 후
+  if (typeof Chart !== 'undefined') {
+    renderYieldCurve('current');
+  }
+  updateAnalysisDate();
+});
+</script>
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-05-25T12:48:32.692372+00:00",
-  "last_updated_kst": "2026-05-25 21:48 KST",
+  "last_updated": "2026-05-25T14:41:23.053006+00:00",
+  "last_updated_kst": "2026-05-25 23:41 KST",
   "prices": {
     "sp500": {
       "value": 7473.4702,
@@ -39,11 +39,11 @@
       "low_1m": 2722.8501
     },
     "vix": {
-      "value": 16.61,
+      "value": 16.69,
       "prev": 16.7,
-      "change_pct": -0.54,
-      "change_5d_pct": -6.79,
-      "change_1m_pct": -7.82,
+      "change_pct": -0.06,
+      "change_5d_pct": -6.34,
+      "change_1m_pct": -7.38,
       "high_1m": 19.44,
       "low_1m": 16.18
     },
@@ -75,11 +75,11 @@
       "low_1m": 3.55
     },
     "dxy": {
-      "value": 98.945,
+      "value": 99.0,
       "prev": 99.32,
-      "change_pct": -0.38,
-      "change_5d_pct": -0.03,
-      "change_1m_pct": 0.47,
+      "change_pct": -0.32,
+      "change_5d_pct": 0.03,
+      "change_1m_pct": 0.53,
       "high_1m": 99.52,
       "low_1m": 97.63
     },
@@ -129,11 +129,11 @@
       "low_1m": 70.885
     },
     "btc": {
-      "value": 77218.5312,
+      "value": 77475.2109,
       "prev": 76981.125,
-      "change_pct": 0.31,
-      "change_5d_pct": -0.31,
-      "change_1m_pct": -0.51,
+      "change_pct": 0.64,
+      "change_5d_pct": 0.02,
+      "change_1m_pct": -0.18,
       "high_1m": 82792.2109,
       "low_1m": 74255.2344
     },
@@ -345,28 +345,101 @@
       "low_1m": 364.02
     }
   },
+  "fred": {
+    "DFF": {
+      "value": 3.62,
+      "date": "2026-05-21",
+      "series_id": "DFF",
+      "label": "Fed 실효금리",
+      "unit": "%"
+    },
+    "UNRATE": {
+      "value": 4.3,
+      "date": "2026-04-01",
+      "series_id": "UNRATE",
+      "label": "실업률",
+      "unit": "%"
+    },
+    "PAYEMS": {
+      "value": 115.0,
+      "date": "2026-04-01",
+      "unit_note": "천명 (전월 대비)",
+      "series_id": "PAYEMS",
+      "label": "비농업 고용",
+      "unit": "K"
+    },
+    "CES0500000003": {
+      "value": 3.57,
+      "date": "2026-04-01",
+      "level": 37.41,
+      "series_id": "CES0500000003",
+      "label": "시간당 임금",
+      "unit": "%"
+    },
+    "CPIAUCSL": {
+      "value": 3.78,
+      "date": "2026-04-01",
+      "level": 332.41,
+      "series_id": "CPIAUCSL",
+      "label": "CPI (YoY)",
+      "unit": "%"
+    },
+    "DRCCLACBS": {
+      "value": 2.92,
+      "date": "2026-01-01",
+      "series_id": "DRCCLACBS",
+      "label": "카드 연체율",
+      "unit": "%"
+    },
+    "DFII10": {
+      "value": 2.18,
+      "date": "2026-05-21",
+      "series_id": "DFII10",
+      "label": "10Y 실질금리",
+      "unit": "%"
+    },
+    "ICSA": {
+      "value": 209.0,
+      "date": "2026-05-16",
+      "unit_note": "천명",
+      "series_id": "ICSA",
+      "label": "주간 실업수당청구",
+      "unit": "K"
+    },
+    "RSAFS": {
+      "value": 4.87,
+      "date": "2026-04-01",
+      "level": 757085.0,
+      "series_id": "RSAFS",
+      "label": "소매판매 (YoY)",
+      "unit": "%"
+    }
+  },
   "auto_axes": {
     "interest": {
       "rating": "중립",
       "metrics": [
         {
+          "k": "Fed 금리",
+          "v": "3.62%",
+          "tone": "neu",
+          "source": "FRED:DFF"
+        },
+        {
           "k": "10Y 국채",
           "v": "4.56%",
-          "tone": "neg"
+          "tone": "neg",
+          "source": "Yahoo:^TNX"
         },
         {
-          "k": "3M 국채",
-          "v": "3.58%",
-          "tone": "neu"
-        },
-        {
-          "k": "역전 여부",
-          "v": "정상",
-          "tone": "pos"
+          "k": "실질금리",
+          "v": "2.18%",
+          "tone": "neg",
+          "source": "FRED:DFII10 (10Y TIPS)"
         }
       ],
-      "summary": "10Y 4.56% — 채권 매력 ↑, 주식 압박 시작",
-      "pdfTip": "실질금리(10Y - CPI)가 +2% 넘으면 주식 부담. CME FedWatch로 다음 회의 인하 확률 매주 체크."
+      "summary": "실질금리 2.18% — 주식에 약간 부담",
+      "pdfTip": "FRED DFII10 = 10Y TIPS = 실질금리. 2%+ 부담, 마이너스면 위험자산 폭등기."
     },
     "flow": {
       "rating": "긍정",
@@ -374,65 +447,124 @@
         {
           "k": "QQQ 5일",
           "v": "+1.2%",
-          "tone": "pos"
+          "tone": "pos",
+          "source": "Yahoo:QQQ"
         },
         {
           "k": "IWM 5일",
           "v": "+2.7%",
-          "tone": "pos"
+          "tone": "pos",
+          "source": "Yahoo:IWM"
         },
         {
           "k": "TLT 5일",
           "v": "+1.2%",
-          "tone": "neu"
+          "tone": "neu",
+          "source": "Yahoo:TLT"
         }
       ],
-      "summary": "패턴 2 (IWM > QQQ) — 중소형 선호, 위험 선호↑",
-      "pdfTip": "SQQQ 유입 급증 = 역발상 매수 기회. 13F 분기 체크, 내부자 매수 신호 추적."
+      "summary": "패턴 2 (IWM > QQQ) — 중소형 선호",
+      "pdfTip": "SQQQ 유입 급증 = 역발상 매수. 13F 분기 체크."
+    },
+    "employment": {
+      "rating": "중립",
+      "metrics": [
+        {
+          "k": "실업률",
+          "v": "4.3%",
+          "tone": "neu",
+          "source": "FRED:UNRATE"
+        },
+        {
+          "k": "NFP",
+          "v": "+115K",
+          "tone": "neu",
+          "source": "FRED:PAYEMS (MoM)"
+        },
+        {
+          "k": "임금 YoY",
+          "v": "+3.6%",
+          "tone": "pos",
+          "source": "FRED:CES0500000003"
+        }
+      ],
+      "summary": "실업률 4.3%, NFP +115K — 연착륙 중",
+      "pdfTip": "PDF p.28-29 4맥락 매트릭스. Sahm Rule: 실업률 3MA 12M 최저 대비 +0.5%p → 침체."
+    },
+    "consumption": {
+      "rating": "중립",
+      "metrics": [
+        {
+          "k": "카드 연체율",
+          "v": "2.92%",
+          "tone": "neu",
+          "source": "FRED:DRCCLACBS"
+        },
+        {
+          "k": "소매판매 YoY",
+          "v": "+4.9%",
+          "tone": "pos",
+          "source": "FRED:RSAFS"
+        },
+        {
+          "k": "실질 소매 (-CPI)",
+          "v": "+1.1%",
+          "tone": "pos",
+          "source": "계산값"
+        }
+      ],
+      "summary": "연체율 2.92%, 실질소매 +1.1% — 혼재",
+      "pdfTip": "연체율 4%+ = 침체 임박. 실질소매(명목-CPI) > 0이면 진짜 성장."
     },
     "dollar": {
       "rating": "중립",
       "metrics": [
         {
           "k": "DXY",
-          "v": "98.94",
-          "tone": "neu"
+          "v": "99.00",
+          "tone": "neu",
+          "source": "Yahoo:DX-Y.NYB"
         },
         {
           "k": "WTI",
           "v": "$96.60",
-          "tone": "neu"
+          "tone": "neu",
+          "source": "Yahoo:CL=F"
         },
         {
           "k": "구리",
           "v": "$6.38/lb",
-          "tone": "pos"
+          "tone": "pos",
+          "source": "Yahoo:HG=F"
         }
       ],
-      "summary": "DXY 98.9, WTI $97 — 혼재",
-      "pdfTip": "유가 $100+ 지속 시 Fed 매파 회귀. 구리=닥터 코퍼(중국 50%). 금↑ = 불확실성."
+      "summary": "DXY 99.0, WTI $97 — 혼재",
+      "pdfTip": "유가 $100+ 지속 시 Fed 매파 회귀. 구리=닥터 코퍼."
     },
     "vix": {
       "rating": "긍정",
       "metrics": [
         {
           "k": "VIX",
-          "v": "16.61",
-          "tone": "pos"
+          "v": "16.69",
+          "tone": "pos",
+          "source": "Yahoo:^VIX"
         },
         {
           "k": "1일 변화",
-          "v": "-0.5%",
-          "tone": "neu"
+          "v": "-0.1%",
+          "tone": "neu",
+          "source": "계산값"
         },
         {
           "k": "5일 변화",
-          "v": "-6.8%",
-          "tone": "neu"
+          "v": "-6.3%",
+          "tone": "neu",
+          "source": "계산값"
         }
       ],
-      "summary": "VIX 16.6 — 정상 범위, 시장 건강",
-      "pdfTip": "VIX 너무 낮으면(<10) 자만, 너무 높으면(>30) 공포. 백워데이션 발생 시 즉시 방어 모드."
+      "summary": "VIX 16.7 — 정상 범위, 시장 건강",
+      "pdfTip": "VIX <10 자만, >30 공포. 백워데이션 발생 시 즉시 방어."
     }
   },
   "manual_axes": {
@@ -442,68 +574,26 @@
         {
           "k": "Beat Rate",
           "v": "84%",
-          "tone": "pos"
+          "tone": "pos",
+          "source": "FactSet (Q1)"
         },
         {
           "k": "EPS YoY",
           "v": "+15.1%",
-          "tone": "pos"
+          "tone": "pos",
+          "source": "FactSet (Q1)"
         },
         {
           "k": "Mag7 CAPEX",
           "v": "$725B",
-          "tone": "pos"
+          "tone": "pos",
+          "source": "분기 발표 합산"
         }
       ],
-      "summary": "기업들은 여전히 돈을 잘 번다. AI 투자에 돈을 쏟아붓는데 실적까지 좋다.",
-      "pdfTip": "실적보다 가이던스가 중요. NVDA 2023 — 실적 좋았으나 가이던스 부족으로 조정.",
-      "last_manual": "2026-05-24"
-    },
-    "employment": {
-      "rating": "중립",
-      "metrics": [
-        {
-          "k": "4월 NFP",
-          "v": "+115K",
-          "tone": "neu"
-        },
-        {
-          "k": "실업률",
-          "v": "4.3%",
-          "tone": "neu"
-        },
-        {
-          "k": "임금 YoY",
-          "v": "+3.6%",
-          "tone": "pos"
-        }
-      ],
-      "summary": "고용시장이 '연착륙' 중. 식고 있지만 망가지진 않았다.",
-      "pdfTip": "4맥락 매트릭스 중 ③ 소프트 랜딩. Sahm Rule 0.3%p (경계 단계).",
-      "last_manual": "2026-05-08"
-    },
-    "consumption": {
-      "rating": "중립",
-      "metrics": [
-        {
-          "k": "카드 연체율",
-          "v": "3.3%",
-          "tone": "neg"
-        },
-        {
-          "k": "Walmart",
-          "v": "+7.1%",
-          "tone": "pos"
-        },
-        {
-          "k": "Starbucks",
-          "v": "+7.1%",
-          "tone": "pos"
-        }
-      ],
-      "summary": "부자 소비자는 잘 쓰는데, 저소득층은 신용카드로 버티는 'K자 양극화'.",
-      "pdfTip": "경기 사이클 '둔화 초입' — 재량 ↓, 필수 유지.",
-      "last_manual": "2026-05-22"
+      "summary": "Q1 84% Beat, 6분기 연속 두자리 EPS. AI 캐펙스 +77%.",
+      "pdfTip": "실적보다 가이던스. NVDA 2023 — Beat에도 가이던스 부족으로 조정.",
+      "last_manual": "2026-05-24",
+      "last_source": "FactSet Earnings Insight (Q1 잠정치)"
     },
     "margin": {
       "rating": "긍정",
@@ -511,22 +601,26 @@
         {
           "k": "순이익률",
           "v": "13.4%",
-          "tone": "pos"
+          "tone": "pos",
+          "source": "FactSet (Q1)"
         },
         {
           "k": "기록",
           "v": "2009년래 최고",
-          "tone": "pos"
+          "tone": "pos",
+          "source": "FactSet"
         },
         {
           "k": "IT 섹터",
           "v": "선두",
-          "tone": "pos"
+          "tone": "pos",
+          "source": "FactSet"
         }
       ],
-      "summary": "비용 압박을 뚫고 사상 최고 마진. '효율의 끝판왕' 모드.",
-      "pdfTip": "4대 비용 압박 중 유가만 압박. 에너지 빼고 마진 견조.",
-      "last_manual": "2026-05-22"
+      "summary": "S&P500 Q1 순이익률 13.4% — FactSet 추적 이래 최고.",
+      "pdfTip": "4대 비용 압박 중 유가만. 에너지 빼고 마진 견조.",
+      "last_manual": "2026-05-22",
+      "last_source": "FactSet (Q1 분기 발표)"
     }
   },
   "summary": {
@@ -536,5 +630,10 @@
     "score": 4,
     "phase": "강세장",
     "strategy": "공격적"
+  },
+  "data_sources": {
+    "yahoo_finance": "yfinance (비공식 Yahoo API) — 시세 38개",
+    "fred": "FRED St. Louis Fed (공식) — 거시 9개",
+    "factset": "FactSet (정적, 분기 발표 시 수동)"
   }
 }

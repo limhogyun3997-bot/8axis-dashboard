@@ -47,7 +47,7 @@
       <div>
         <div class="flex items-center gap-3">
           <span class="pulse-dot inline-block w-3 h-3 bg-emerald-400 rounded-full"></span>
-          <span class="text-xs tracking-widest text-emerald-300 uppercase" id="headerLiveBadge">Live · 로딩 중... · v4.1</span>
+          <span class="text-xs tracking-widest text-emerald-300 uppercase" id="headerLiveBadge">Live · 로딩 중... · v4.2</span>
         </div>
         <h1 class="text-4xl font-extrabold mt-2">시장 8축 진단 대시보드</h1>
         <p class="text-slate-300 mt-1">자산네제곱 1-3단계 통합판 · 매일 자동 갱신</p>
@@ -123,16 +123,16 @@
       <div class="flex-1">
         <h3 class="font-bold text-amber-900 mb-2">데이터 갱신 안내 — 어떤 게 자동? 어떤 게 수동?</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
-          <div class="bg-white border border-amber-200 rounded-lg p-3">
-            <div class="font-bold text-emerald-700 mb-1">🟢 자동 (실시간)</div>
-            <div class="text-xs text-slate-700">상단 티커 테이프 · <b>📈 실시간 차트 탭</b> (TradingView)</div>
+          <div class="bg-white border border-emerald-200 rounded-lg p-3">
+            <div class="font-bold text-emerald-700 mb-1">🟢 자동 라이브 (KST 08:00 매일)</div>
+            <div class="text-xs text-slate-700">시세 8 (Yahoo) + 거시 9 (FRED) = <b>17개 카드</b> · 자동 6축 평가</div>
           </div>
           <div class="bg-white border border-amber-200 rounded-lg p-3">
-            <div class="font-bold text-amber-700 mb-1">🟡 스냅샷 (수동)</div>
-            <div class="text-xs text-slate-700"><b>핵심 숫자 카드</b> · 8축 평가 · 종합 점수<br>기준일: <b id="lastAnalysisDate">2026.05.24</b> (<span id="daysAgo">오늘</span>)</div>
+            <div class="font-bold text-amber-700 mb-1">🟡 정적 (분기성 4개)</div>
+            <div class="text-xs text-slate-700">Beat Rate · 순이익률 · PER · 버핏지수<br>+ 2축 평가 (실적·마진)</div>
           </div>
-          <div class="bg-white border border-amber-200 rounded-lg p-3">
-            <div class="font-bold text-rose-700 mb-1">🔄 갱신 방법</div>
+          <div class="bg-white border border-rose-200 rounded-lg p-3">
+            <div class="font-bold text-rose-700 mb-1">🔄 강제 갱신 / 재진단</div>
             <div class="text-xs text-slate-700">아래 버튼 클릭 → Claude에 붙여넣기</div>
           </div>
         </div>
@@ -3613,77 +3613,153 @@ function updateAnalysisDate() {
 // === 🔴 LIVE 데이터 fetch + 자동 갱신 ===
 // =====================================================
 
-// 핵심 숫자 카드 정의 (라이브 + 정적 통합)
+// 핵심 숫자 카드 정의 (라이브 Yahoo + 라이브 FRED + 정적)
 const KEY_NUMBERS_CONFIG = [
-  // 라이브 카드 (data.json prices에서 가져옴)
-  { live: true, priceKey: 'sp500', label: 'S&P 500', format: (v) => Math.round(v).toLocaleString(), ctx: (p) => p.change_pct >= 0 ? '강세' : '약세' },
-  { live: false, label: 'Fed 금리', value: '3.50~3.75%', ctx: '동결 · FOMC 발표 갱신', tone: 'amber' },
-  { live: true, priceKey: 'us10y', label: '10Y 국채', format: (v) => v.toFixed(2) + '%', ctx: (p) => p.value >= 4.5 ? '4.5% 초과' : (p.value >= 4 ? '4% 초과' : '4% 미만'), threshold: (v) => v >= 4.5 ? 'neg' : (v >= 4 ? 'neu' : 'pos') },
-  { live: true, priceKey: 'vix', label: 'VIX', format: (v) => v.toFixed(2), ctx: (p) => p.value >= 30 ? '공포' : (p.value >= 20 ? '불안' : (15 <= p.value && p.value <= 20 ? '정상' : '안정/자만')), threshold: (v) => v >= 30 || v <= 10 ? 'neg' : (15 <= v && v <= 20 ? 'pos' : 'neu') },
-  { live: true, priceKey: 'dxy', label: 'DXY 달러', format: (v) => v.toFixed(2), ctx: (p) => p.value > 105 ? '강세' : (p.value < 95 ? '약세' : '중립'), threshold: (v) => v > 110 ? 'neg' : (95 <= v && v <= 105 ? 'neu' : 'pos') },
-  { live: true, priceKey: 'wti', label: 'WTI 유가', format: (v) => '$' + v.toFixed(2), ctx: (p) => p.value >= 100 ? '위협 수준' : (70 <= p.value && p.value <= 85 ? '골디락스' : '주의'), threshold: (v) => v >= 100 || v <= 60 ? 'neg' : (70 <= v && v <= 85 ? 'pos' : 'neu') },
-  { live: true, priceKey: 'copper', label: '구리 (닥터)', format: (v) => '$' + v.toFixed(2) + '/lb', ctx: (p) => p.value >= 4 ? '경기 회복' : '둔화 신호', threshold: (v) => v >= 4 ? 'pos' : (v <= 3.5 ? 'neg' : 'neu') },
-  { live: true, priceKey: 'gold', label: '금', format: (v) => '$' + Math.round(v).toLocaleString(), ctx: (p) => p.change_5d_pct > 2 ? '불확실성 ↑' : '안정', threshold: (v) => 'neu' },
-  { live: false, label: '실업률', value: '4.3%', ctx: '3.8~4.2% 적정 · BLS 월간', tone: 'amber' },
-  { live: false, label: 'NFP', value: '+11.5만', ctx: '15-20만 골디락스 · 매월 첫 금', tone: 'amber' },
-  { live: false, label: '임금 YoY', value: '3.6%', ctx: '3~4% 적정 · BLS 월간', tone: 'amber' },
-  { live: false, label: 'CPI', value: '4~5%', ctx: 'Fed 목표 2% · 월간', tone: 'amber' },
-  { live: false, label: '실질금리', value: '+0.1%', ctx: '명목 - CPI · 0% 부근 중립', tone: 'amber' },
-  { live: false, label: 'Beat Rate', value: '84%', ctx: '70%+ 건강 · 분기', tone: 'amber' },
-  { live: false, label: 'S&P 순이익률', value: '13.4%', ctx: '10-12% 정상 · 분기', tone: 'amber' },
-  { live: false, label: 'PER', value: '26.97', ctx: '역사 평균 16-18배 · 일간', tone: 'amber' },
-  { live: false, label: '버핏지수', value: '232.9%', ctx: '80-100% 정상 · 일간', tone: 'amber' },
-  { live: false, label: '카드 연체율', value: '3.3%', ctx: '2% 정상 · 분기', tone: 'amber' }
+  // === Yahoo Finance 라이브 (8개) ===
+  { live: 'yahoo', priceKey: 'sp500', label: 'S&P 500', source: 'Yahoo ^GSPC',
+    format: (v) => Math.round(v).toLocaleString(), ctx: (p) => p.change_pct >= 0 ? '강세' : '약세' },
+  { live: 'yahoo', priceKey: 'us10y', label: '10Y 국채', source: 'Yahoo ^TNX',
+    format: (v) => v.toFixed(2) + '%',
+    ctx: (p) => p.value >= 4.5 ? '4.5% 초과' : (p.value >= 4 ? '4% 초과' : '4% 미만'),
+    threshold: (v) => v >= 4.5 ? 'neg' : (v >= 4 ? 'neu' : 'pos') },
+  { live: 'yahoo', priceKey: 'vix', label: 'VIX', source: 'Yahoo ^VIX',
+    format: (v) => v.toFixed(2),
+    ctx: (p) => p.value >= 30 ? '공포' : (p.value >= 20 ? '불안' : (15 <= p.value && p.value <= 20 ? '정상' : '안정/자만')),
+    threshold: (v) => v >= 30 || v <= 10 ? 'neg' : (15 <= v && v <= 20 ? 'pos' : 'neu') },
+  { live: 'yahoo', priceKey: 'dxy', label: 'DXY 달러', source: 'Yahoo DX-Y.NYB',
+    format: (v) => v.toFixed(2),
+    ctx: (p) => p.value > 105 ? '강세' : (p.value < 95 ? '약세' : '중립'),
+    threshold: (v) => v > 110 ? 'neg' : (95 <= v && v <= 105 ? 'neu' : 'pos') },
+  { live: 'yahoo', priceKey: 'wti', label: 'WTI 유가', source: 'Yahoo CL=F (NYMEX 선물)',
+    format: (v) => '$' + v.toFixed(2),
+    ctx: (p) => p.value >= 100 ? '위협 수준' : (70 <= p.value && p.value <= 85 ? '골디락스' : '주의'),
+    threshold: (v) => v >= 100 || v <= 60 ? 'neg' : (70 <= v && v <= 85 ? 'pos' : 'neu') },
+  { live: 'yahoo', priceKey: 'copper', label: '구리 (닥터)', source: 'Yahoo HG=F (COMEX 선물)',
+    format: (v) => '$' + v.toFixed(2) + '/lb',
+    ctx: (p) => p.value >= 4 ? '경기 회복' : '둔화 신호',
+    threshold: (v) => v >= 4 ? 'pos' : (v <= 3.5 ? 'neg' : 'neu') },
+  { live: 'yahoo', priceKey: 'gold', label: '금', source: 'Yahoo GC=F (COMEX 선물)',
+    format: (v) => '$' + Math.round(v).toLocaleString(),
+    ctx: (p) => p.change_5d_pct > 2 ? '불확실성 ↑' : '안정',
+    threshold: (v) => 'neu' },
+
+  // === FRED 라이브 (9개 거시 지표) ===
+  { live: 'fred', fredKey: 'DFF', label: 'Fed 실효금리', source: 'FRED DFF (공식)',
+    format: (v) => v.toFixed(2) + '%',
+    ctx: () => '연준 공식 일일 갱신',
+    threshold: (v) => 'neu' },
+  { live: 'fred', fredKey: 'UNRATE', label: '실업률', source: 'FRED UNRATE (BLS)',
+    format: (v) => v.toFixed(1) + '%',
+    ctx: (f) => 3.8 <= f.value && f.value <= 4.2 ? '골디락스' : (f.value > 5 ? '침체 영역' : '중립'),
+    threshold: (v) => 3.8 <= v && v <= 4.2 ? 'pos' : (v > 5 ? 'neg' : 'neu') },
+  { live: 'fred', fredKey: 'PAYEMS', label: 'NFP (월간 변화)', source: 'FRED PAYEMS (BLS)',
+    format: (v) => (v >= 0 ? '+' : '') + Math.round(v).toLocaleString() + 'K',
+    ctx: (f) => 150 <= f.value && f.value <= 250 ? '골디락스' : (f.value < 50 ? '둔화' : '범위 외'),
+    threshold: (v) => 150 <= v && v <= 250 ? 'pos' : (v < 50 ? 'neg' : 'neu') },
+  { live: 'fred', fredKey: 'CES0500000003', label: '임금 YoY', source: 'FRED CES0500000003',
+    format: (v) => '+' + v.toFixed(2) + '%',
+    ctx: (f) => 3 <= f.value && f.value <= 4 ? '적정' : (f.value > 5 ? '인플레 압박' : '약함'),
+    threshold: (v) => 3 <= v && v <= 4 ? 'pos' : (v > 5 ? 'neg' : 'neu') },
+  { live: 'fred', fredKey: 'CPIAUCSL', label: 'CPI YoY', source: 'FRED CPIAUCSL (BLS)',
+    format: (v) => '+' + v.toFixed(2) + '%',
+    ctx: (f) => f.value <= 2.5 ? 'Fed 목표 부근' : (f.value > 4 ? '목표 2배+' : '목표 초과'),
+    threshold: (v) => v <= 2.5 ? 'pos' : (v > 4 ? 'neg' : 'neu') },
+  { live: 'fred', fredKey: 'DFII10', label: '실질금리 (10Y)', source: 'FRED DFII10 (TIPS)',
+    format: (v) => (v >= 0 ? '+' : '') + v.toFixed(2) + '%',
+    ctx: (f) => f.value > 2 ? '주식 부담' : (f.value < 0 ? '위험자산 호재' : '중립'),
+    threshold: (v) => v > 2 ? 'neg' : (v < 0 ? 'pos' : 'neu') },
+  { live: 'fred', fredKey: 'DRCCLACBS', label: '카드 연체율', source: 'FRED DRCCLACBS (Fed)',
+    format: (v) => v.toFixed(2) + '%',
+    ctx: (f) => f.value < 2.5 ? '정상' : (f.value > 4 ? '침체 임박' : '둔화 신호'),
+    threshold: (v) => v < 2.5 ? 'pos' : (v > 4 ? 'neg' : 'neu') },
+  { live: 'fred', fredKey: 'ICSA', label: '주간 실업수당', source: 'FRED ICSA (DOL)',
+    format: (v) => v.toFixed(0) + 'K',
+    ctx: (f) => f.value <= 250 ? '정상' : (f.value > 400 ? '침체' : '둔화'),
+    threshold: (v) => v <= 250 ? 'pos' : (v > 400 ? 'neg' : 'neu') },
+  { live: 'fred', fredKey: 'RSAFS', label: '소매판매 YoY', source: 'FRED RSAFS (Census)',
+    format: (v) => '+' + v.toFixed(2) + '%',
+    ctx: (f) => f.value > 4 ? '강세' : (f.value < 1 ? '둔화' : '보통'),
+    threshold: (v) => v > 4 ? 'pos' : (v < 1 ? 'neg' : 'neu') },
+
+  // === 정적 (분기 발표만, 4개) ===
+  { live: false, label: 'Beat Rate', value: '84%', source: 'FactSet (Q1 잠정)',
+    ctx: '70%+ 건강 · 분기', tone: 'amber' },
+  { live: false, label: 'S&P 순이익률', value: '13.4%', source: 'FactSet (Q1)',
+    ctx: '10-12% 정상 · 분기', tone: 'amber' },
+  { live: false, label: 'PER', value: '26.97', source: 'GuruFocus (5/22)',
+    ctx: '역사 평균 16-18배', tone: 'amber' },
+  { live: false, label: '버핏지수', value: '232.9%', source: 'GuruFocus (5/23)',
+    ctx: '80-100% 정상 · 200%+ 거품', tone: 'amber' }
 ];
 
-function renderKeyNumbers(prices = {}) {
+function renderKeyNumbers(prices = {}, fred = {}) {
   document.getElementById('liveNumbersGrid').innerHTML = KEY_NUMBERS_CONFIG.map(c => {
     let label = c.label;
-    let value, ctxText, ctxColor, dotColor;
-    if (c.live) {
+
+    // === Yahoo 라이브 ===
+    if (c.live === 'yahoo') {
       const p = prices[c.priceKey];
       if (p && p.value !== undefined) {
-        value = c.format(p.value);
-        ctxText = typeof c.ctx === 'function' ? c.ctx(p) : c.ctx;
+        const value = c.format(p.value);
+        const ctxText = typeof c.ctx === 'function' ? c.ctx(p) : c.ctx;
         const tone = c.threshold ? c.threshold(p.value) : 'neu';
-        ctxColor = tone === 'pos' ? 'text-emerald-600' : (tone === 'neg' ? 'text-rose-600' : 'text-amber-600');
-        // 변화율 표시
+        const ctxColor = tone === 'pos' ? 'text-emerald-600' : (tone === 'neg' ? 'text-rose-600' : 'text-amber-600');
         const chg = p.change_pct;
         const chgIcon = chg >= 0 ? '▲' : '▼';
         const chgColor = chg >= 0 ? 'text-emerald-600' : 'text-rose-600';
-        const chgText = `<span class="${chgColor} text-xs ml-1">${chgIcon}${Math.abs(chg).toFixed(2)}%</span>`;
-        dotColor = 'bg-emerald-500';
-        return `<div class="bg-slate-50 rounded-xl p-4 border-l-2 border-emerald-400">
+        return `<div class="bg-slate-50 rounded-xl p-4 border-l-2 border-emerald-400 group relative">
           <div class="flex justify-between items-baseline">
-            <span class="text-xs text-slate-500 flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 ${dotColor} rounded-full"></span>${label}</span>
+            <span class="text-xs text-slate-500 flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>${label}</span>
             <span class="text-xs ${ctxColor}">${ctxText}</span>
           </div>
-          <div class="text-xl font-bold mt-1">${value}${chgText}</div>
-          <div class="text-xs text-slate-400 mt-1">전일 대비 / 5일: ${p.change_5d_pct >= 0 ? '+' : ''}${p.change_5d_pct.toFixed(1)}%</div>
-        </div>`;
-      } else {
-        // 라이브 카드인데 데이터 없음 → 로딩 표시
-        return `<div class="bg-slate-50 rounded-xl p-4 border-l-2 border-slate-300">
-          <div class="flex justify-between items-baseline">
-            <span class="text-xs text-slate-500">${label}</span>
-            <span class="text-xs text-slate-400">데이터 로딩...</span>
-          </div>
-          <div class="text-xl font-bold text-slate-300 mt-1">--</div>
-          <div class="text-xs text-slate-400 mt-1">data.json 대기</div>
+          <div class="text-xl font-bold mt-1">${value}<span class="${chgColor} text-xs ml-1">${chgIcon}${Math.abs(chg).toFixed(2)}%</span></div>
+          <div class="text-xs text-slate-400 mt-1">5일: ${p.change_5d_pct >= 0 ? '+' : ''}${p.change_5d_pct.toFixed(1)}% · 📊 ${c.source}</div>
         </div>`;
       }
-    } else {
-      // 정적 카드
-      return `<div class="bg-slate-50 rounded-xl p-4 border-l-2 border-amber-300">
-        <div class="flex justify-between items-baseline">
-          <span class="text-xs text-slate-500 flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 bg-amber-500 rounded-full"></span>${label}</span>
-          <span class="text-xs text-${c.tone}-600">정적</span>
-        </div>
-        <div class="text-xl font-bold mt-1">${c.value}</div>
-        <div class="text-xs text-slate-400 mt-1">${c.ctx}</div>
-      </div>`;
+      return loadingCard(label, c.source);
     }
+
+    // === FRED 라이브 ===
+    if (c.live === 'fred') {
+      const f = fred[c.fredKey];
+      if (f && f.value !== undefined) {
+        const value = c.format(f.value);
+        const ctxText = typeof c.ctx === 'function' ? c.ctx(f) : c.ctx;
+        const tone = c.threshold ? c.threshold(f.value) : 'neu';
+        const ctxColor = tone === 'pos' ? 'text-emerald-600' : (tone === 'neg' ? 'text-rose-600' : 'text-amber-600');
+        return `<div class="bg-slate-50 rounded-xl p-4 border-l-2 border-blue-400 group relative">
+          <div class="flex justify-between items-baseline">
+            <span class="text-xs text-slate-500 flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 bg-blue-500 rounded-full"></span>${label}</span>
+            <span class="text-xs ${ctxColor}">${ctxText}</span>
+          </div>
+          <div class="text-xl font-bold mt-1">${value}</div>
+          <div class="text-xs text-slate-400 mt-1">기준일: ${f.date} · 🏛️ ${c.source}</div>
+        </div>`;
+      }
+      return loadingCard(label, c.source);
+    }
+
+    // === 정적 ===
+    return `<div class="bg-slate-50 rounded-xl p-4 border-l-2 border-amber-300 group relative">
+      <div class="flex justify-between items-baseline">
+        <span class="text-xs text-slate-500 flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 bg-amber-500 rounded-full"></span>${label}</span>
+        <span class="text-xs text-amber-600">정적</span>
+      </div>
+      <div class="text-xl font-bold mt-1">${c.value}</div>
+      <div class="text-xs text-slate-400 mt-1">${c.ctx} · 📌 ${c.source}</div>
+    </div>`;
   }).join('');
+}
+
+function loadingCard(label, source) {
+  return `<div class="bg-slate-50 rounded-xl p-4 border-l-2 border-slate-300">
+    <div class="flex justify-between items-baseline">
+      <span class="text-xs text-slate-500">${label}</span>
+      <span class="text-xs text-slate-400">로딩...</span>
+    </div>
+    <div class="text-xl font-bold text-slate-300 mt-1">--</div>
+    <div class="text-xs text-slate-400 mt-1">${source || 'data.json 대기'}</div>
+  </div>`;
 }
 
 // data.json fetch + 모든 자동 갱신 가능 영역 업데이트
@@ -3706,8 +3782,15 @@ async function loadLiveData() {
 }
 
 function applyLiveData(data) {
-  // 1. 자동 4축 axes 배열 덮어쓰기
-  const map = { 'interest': 1, 'flow': 3, 'dollar': 7, 'vix': 8 };
+  // 1. 자동 6축 axes 배열 덮어쓰기 (FRED 추가로 employment, consumption 자동화)
+  const map = {
+    'interest': 1,
+    'flow': 3,
+    'employment': 4,
+    'consumption': 5,
+    'dollar': 7,
+    'vix': 8
+  };
   for (const [key, axisId] of Object.entries(map)) {
     const live = data.auto_axes && data.auto_axes[key];
     if (!live) continue;
@@ -3720,8 +3803,8 @@ function applyLiveData(data) {
     }
   }
 
-  // 2. 수동 4축 (현재값) 업데이트
-  const manualMap = { 'earnings': 2, 'employment': 4, 'consumption': 5, 'margin': 6 };
+  // 2. 수동 2축 (실적, 마진 — 분기 발표) 업데이트
+  const manualMap = { 'earnings': 2, 'margin': 6 };
   for (const [key, axisId] of Object.entries(manualMap)) {
     const m = data.manual_axes && data.manual_axes[key];
     if (!m) continue;
@@ -3738,8 +3821,8 @@ function applyLiveData(data) {
   renderAxisGrid();
   renderStudy8();
 
-  // 4. 핵심 숫자 카드 렌더
-  renderKeyNumbers(data.prices || {});
+  // 4. 핵심 숫자 카드 렌더 (Yahoo + FRED)
+  renderKeyNumbers(data.prices || {}, data.fred || {});
 
   // 5. 신호 집계 카드 업데이트
   if (data.summary) {
@@ -3767,12 +3850,12 @@ function applyLiveData(data) {
 function showLiveBadge(data) {
   const t = data.last_updated_kst || data.last_updated || '';
   document.getElementById('liveBadge').innerHTML = `<span class="inline-block w-2 h-2 bg-emerald-500 rounded-full pulse-dot"></span> <span class="text-emerald-700 font-semibold">LIVE</span> · 마지막 갱신 ${t}`;
-  document.getElementById('headerLiveBadge').innerHTML = `Live · ${t} · v4.1 (auto)`;
+  document.getElementById('headerLiveBadge').innerHTML = `Live · ${t} · v4.2 (auto)`;
 }
 
 function showStaleBadge() {
   document.getElementById('liveBadge').innerHTML = `<span class="inline-block w-2 h-2 bg-amber-500 rounded-full"></span> <span class="text-amber-700">정적 데이터 사용 중</span>`;
-  document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v4.1';
+  document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v4.2';
 }
 
 // === INIT ===
@@ -3781,7 +3864,7 @@ renderStudy8();
 renderSources();
 renderGlossary();
 // 핵심 숫자는 일단 빈 상태로 렌더 후 fetch
-renderKeyNumbers({});
+renderKeyNumbers({}, {});
 // 시뮬레이션 렌더
 renderSimSliders();
 renderCorrMatrix();

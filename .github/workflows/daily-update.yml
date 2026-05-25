@@ -17,6 +17,11 @@ on:
 permissions:
   contents: write
 
+# 동시 실행 방지 (push trigger + cron + manual 충돌 방지)
+concurrency:
+  group: daily-update-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   update-data:
     runs-on: ubuntu-latest
@@ -53,16 +58,27 @@ jobs:
           print(f\"수집: {sum(1 for v in d['prices'].values() if v)}/{len(d['prices'])}\")
           "
 
-      - name: 💾 Commit & push
+      - name: 💾 Commit & push (with retry)
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add data.json
           if git diff --staged --quiet; then
             echo "📭 변경사항 없음"
-          else
-            TIMESTAMP=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
-            git commit -m "🤖 자동 갱신: ${TIMESTAMP}"
-            git push
-            echo "✅ data.json 갱신 푸시 완료"
+            exit 0
           fi
+          TIMESTAMP=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
+          git commit -m "🤖 자동 갱신: ${TIMESTAMP}"
+
+          # Race condition 대응: 최대 3회 재시도
+          for i in 1 2 3; do
+            if git push 2>&1; then
+              echo "✅ data.json 갱신 푸시 완료 (시도 $i회)"
+              exit 0
+            fi
+            echo "⚠️ Push 충돌 (시도 $i회) — pull --rebase 후 재시도"
+            git pull --rebase origin main || true
+            sleep $((i * 3))
+          done
+          echo "❌ 3회 재시도 후에도 push 실패"
+          exit 1

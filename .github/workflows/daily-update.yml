@@ -58,27 +58,41 @@ jobs:
           print(f\"수집: {sum(1 for v in d['prices'].values() if v)}/{len(d['prices'])}\")
           "
 
-      - name: 💾 Commit & push (with retry)
+      - name: 💾 Commit & push (robust)
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add data.json
-          if git diff --staged --quiet; then
+
+          # 변경사항 확인
+          if git diff --quiet data.json; then
             echo "📭 변경사항 없음"
             exit 0
           fi
-          TIMESTAMP=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
-          git commit -m "🤖 자동 갱신: ${TIMESTAMP}"
 
-          # Race condition 대응: 최대 3회 재시도
+          # 새 data.json 백업
+          cp data.json /tmp/data_new.json
+          TIMESTAMP=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
+
+          # 3회 재시도 with reset 전략
           for i in 1 2 3; do
-            if git push 2>&1; then
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/data_new.json data.json
+            git add data.json
+
+            if git diff --staged --quiet; then
+              echo "📭 변경사항 없음 (remote가 이미 최신)"
+              exit 0
+            fi
+
+            git commit -m "🤖 자동 갱신: ${TIMESTAMP}"
+
+            if git push origin main 2>&1; then
               echo "✅ data.json 갱신 푸시 완료 (시도 $i회)"
               exit 0
             fi
-            echo "⚠️ Push 충돌 (시도 $i회) — pull --rebase 후 재시도"
-            git pull --rebase origin main || true
-            sleep $((i * 3))
+            echo "⚠️ Push 실패 (시도 $i회) — 대기 후 재시도"
+            sleep $((i * 5))
           done
           echo "❌ 3회 재시도 후에도 push 실패"
           exit 1

@@ -59,27 +59,44 @@ jobs:
           print(f\"평균 점수: {d['stats']['overall']['avg_score']}\")
           "
 
-      - name: 💾 Commit & push (with retry)
+      - name: 💾 Commit & push (robust)
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add backtest.json
-          if git diff --staged --quiet; then
+
+          # 변경사항 확인
+          if git diff --quiet backtest.json; then
             echo "📭 변경사항 없음 (시장이 휴장 또는 데이터 동일)"
             exit 0
           fi
-          TS=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
-          git commit -m "🔬 백테스트 자동 갱신: ${TS}"
 
-          # Race condition 대응: 3회 재시도
+          # 새 backtest.json 백업
+          cp backtest.json /tmp/backtest_new.json
+
+          TS=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
+
+          # 3회 재시도 with reset 전략
           for i in 1 2 3; do
-            if git push 2>&1; then
+            # Remote의 최신 상태로 강제 동기화
+            git fetch origin main
+            git reset --hard origin/main
+            # 새 backtest.json 다시 적용
+            cp /tmp/backtest_new.json backtest.json
+            git add backtest.json
+
+            if git diff --staged --quiet; then
+              echo "📭 변경사항 없음 (remote가 이미 최신)"
+              exit 0
+            fi
+
+            git commit -m "🔬 백테스트 자동 갱신: ${TS}"
+
+            if git push origin main 2>&1; then
               echo "✅ backtest.json 갱신 푸시 완료 (시도 $i회)"
               exit 0
             fi
-            echo "⚠️ Push 충돌 (시도 $i회) — pull --rebase 후 재시도"
-            git pull --rebase origin main || true
-            sleep $((i * 3))
+            echo "⚠️ Push 실패 (시도 $i회) — 잠시 대기 후 재시도"
+            sleep $((i * 5))
           done
           echo "❌ 3회 재시도 후에도 push 실패"
           exit 1

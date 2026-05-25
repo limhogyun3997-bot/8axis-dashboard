@@ -1,0 +1,85 @@
+name: 🔬 Weekly Backtest
+
+# 매주 월요일 KST 08:00 (UTC 일요일 23:00)
+# 한 주의 시작 시점에 5년 백테스트 재실행 → backtest.json 갱신
+on:
+  schedule:
+    - cron: '0 23 * * 0'  # UTC 일요일 23:00 = KST 월요일 08:00
+  # 수동 실행
+  workflow_dispatch:
+  # backtest_run.py 변경 시 자동 실행
+  push:
+    paths:
+      - 'backtest_run.py'
+      - '.github/workflows/weekly-backtest.yml'
+
+permissions:
+  contents: write
+
+# 다른 워크플로우와의 push 충돌 방지
+concurrency:
+  group: weekly-backtest-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    # 백테스트는 시간이 더 걸리므로 타임아웃 늘림
+    timeout-minutes: 15
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yfinance pandas
+
+      - name: 🔬 Run 5-year backtest
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python backtest_run.py
+
+      - name: 📊 Summary
+        run: |
+          python -c "
+          import json
+          d = json.load(open('backtest.json'))
+          print(f\"갱신: {d['last_updated'][:19]}\")
+          print(f\"기간: {d['period_start']} ~ {d['period_end']}\")
+          print(f\"시점: {d['total_points']}\")
+          print(f\"Hit Rate (강세→3M+): {d['stats']['overall']['bull_hit_3m']}%\")
+          print(f\"Hit Rate (약세→3M-): {d['stats']['overall']['bear_hit_3m']}%\")
+          print(f\"평균 점수: {d['stats']['overall']['avg_score']}\")
+          "
+
+      - name: 💾 Commit & push (with retry)
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add backtest.json
+          if git diff --staged --quiet; then
+            echo "📭 변경사항 없음 (시장이 휴장 또는 데이터 동일)"
+            exit 0
+          fi
+          TS=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
+          git commit -m "🔬 백테스트 자동 갱신: ${TS}"
+
+          # Race condition 대응: 3회 재시도
+          for i in 1 2 3; do
+            if git push 2>&1; then
+              echo "✅ backtest.json 갱신 푸시 완료 (시도 $i회)"
+              exit 0
+            fi
+            echo "⚠️ Push 충돌 (시도 $i회) — pull --rebase 후 재시도"
+            git pull --rebase origin main || true
+            sleep $((i * 3))
+          done
+          echo "❌ 3회 재시도 후에도 push 실패"
+          exit 1

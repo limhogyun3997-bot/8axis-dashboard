@@ -105,6 +105,7 @@
       <button onclick="showTab('philosophy')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="philosophy">🧠 핵심 철학</button>
       <button onclick="showTab('tools')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="tools">🔗 도구상자</button>
       <button onclick="showTab('workbook')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="workbook">✍️ 실전 워크북</button>
+      <button onclick="showTab('backtest')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="backtest">🔬 백테스트</button>
     </div>
   </div>
 </nav>
@@ -1868,6 +1869,131 @@
       <span id="saveStatus" class="text-xs text-slate-500 self-center"></span>
     </div>
   </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- ============== TAB BACKTEST: 5년 백테스트 ===================== -->
+<!-- ============================================================= -->
+<section id="tab-backtest" class="tab-content hidden">
+  <div class="bg-gradient-to-r from-cyan-50 to-teal-50 border-l-4 border-cyan-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold flex items-center gap-2">🔬 5년 백테스트 — 룰의 정직한 검증</h2>
+    <p class="text-sm text-slate-700 mt-2">2021-01-04 ~ 현재, 매주 월요일 시점 253개. <b>look-ahead bias 방지</b> (FRED 월간은 +14~17일 발표 지연 보정).</p>
+    <p class="text-xs text-slate-500 mt-1">💡 룰을 그 시점에 알 수 있었던 데이터만으로 적용 → 이후 1/3/6개월 S&P 수익률 측정 → 정확도 계산.</p>
+  </div>
+
+  <!-- 핵심 통계 카드 -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" id="backtestStats">
+    <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-cyan-500">
+      <div class="text-xs text-slate-500">총 시점</div>
+      <div class="text-3xl font-bold" id="btTotalPoints">-</div>
+      <div class="text-xs text-slate-500">5년 매주 월요일</div>
+    </div>
+    <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-emerald-500">
+      <div class="text-xs text-slate-500">강세 신호 적중률 (3M)</div>
+      <div class="text-3xl font-bold text-emerald-600" id="btBullHit">-</div>
+      <div class="text-xs text-slate-500">긍정 4+ → 3M 후 상승</div>
+    </div>
+    <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-rose-500">
+      <div class="text-xs text-slate-500">약세 신호 적중률 (3M)</div>
+      <div class="text-3xl font-bold text-rose-600" id="btBearHit">-</div>
+      <div class="text-xs text-slate-500">부정 4+ → 3M 후 하락</div>
+    </div>
+    <div class="bg-slate-900 text-white rounded-2xl p-5 shadow-sm">
+      <div class="text-xs text-slate-400">평균 점수</div>
+      <div class="text-3xl font-bold text-emerald-400" id="btAvgScore">-</div>
+      <div class="text-xs text-slate-400">긍정 - 부정 5년 평균</div>
+    </div>
+  </div>
+
+  <!-- 시계열 차트: 점수 + S&P 500 -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-2">📈 시계열: 종합 점수 vs S&P 500 (5년)</h3>
+    <p class="text-xs text-slate-500 mb-4">파란선 = 8축 종합 점수 / 주황선 = S&P 500 종가. 점수 변화와 시장 움직임의 상관관계 확인.</p>
+    <div style="height:400px"><canvas id="btTimeChart"></canvas></div>
+  </div>
+
+  <!-- 신호별 평균 수익률 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h3 class="text-lg font-bold mb-2">📊 신호별 평균 미래 수익률</h3>
+      <p class="text-xs text-slate-500 mb-4">각 신호 카테고리에서 발생한 1/3/6개월 후 S&P 평균 수익률</p>
+      <div style="height:340px"><canvas id="btSignalChart"></canvas></div>
+    </div>
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h3 class="text-lg font-bold mb-2">🥧 신호 빈도 분포</h3>
+      <p class="text-xs text-slate-500 mb-4">5년간 각 신호가 발생한 비율</p>
+      <div style="height:340px"><canvas id="btDistChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 신호별 상세 통계 표 -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-3">📋 신호별 상세 통계</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse" id="btSignalTable">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="border p-2 text-left">신호 카테고리</th>
+            <th class="border p-2">조건</th>
+            <th class="border p-2">발생 횟수</th>
+            <th class="border p-2">비율</th>
+            <th class="border p-2">평균 1M</th>
+            <th class="border p-2">평균 3M</th>
+            <th class="border p-2">평균 6M</th>
+          </tr>
+        </thead>
+        <tbody id="btSignalTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 정직한 해석 -->
+  <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl p-6 mb-6">
+    <h3 class="text-lg font-bold text-amber-900 mb-3">🎯 정직한 해석 — 룰의 강점과 한계</h3>
+    <div class="space-y-3 text-sm">
+      <div class="bg-white border border-emerald-200 rounded-lg p-3">
+        <b class="text-emerald-700">✅ 강점:</b> 강세 신호(긍정 4+) 적중률 약 70%. 강세장 식별엔 유의미한 우위.
+      </div>
+      <div class="bg-white border border-rose-200 rounded-lg p-3">
+        <b class="text-rose-700">⚠️ 한계 1:</b> 약세 신호(부정 4+)가 5년간 극히 드물게 발생. 룰이 너무 보수적이라 진짜 하락 시점을 놓침.
+      </div>
+      <div class="bg-white border border-amber-200 rounded-lg p-3">
+        <b class="text-amber-700">⚠️ 한계 2:</b> 2022 베어마켓 같은 명확한 하락기에도 fully부정 4+로 못 잡음. 정성 신호(Fed 발언, 지정학)가 빠져 있어서.
+      </div>
+      <div class="bg-white border border-blue-200 rounded-lg p-3">
+        <b class="text-blue-700">📌 균형 시점이 가장 안전:</b> balanced (긍정=부정) 시점이 1M +1.76%로 의외로 양호. 양극단보다 균형이 시장 평균 수익률에 가까움.
+      </div>
+      <div class="bg-white border border-purple-200 rounded-lg p-3">
+        <b class="text-purple-700">💡 활용 가이드:</b> 강세 신호는 신뢰하되, 약세 신호는 <b>다른 정성 정보와 결합</b>해야 함. PDF 1단계 원칙대로 "왜 그런지" 맥락을 봐야.
+      </div>
+    </div>
+  </div>
+
+  <!-- 시점별 데이터 테이블 (펼침) -->
+  <details class="bg-white rounded-2xl p-6 shadow-sm">
+    <summary class="cursor-pointer font-bold text-lg flex items-center justify-between">
+      <span>📜 전체 시점 데이터 (253개) — 클릭하여 펼치기</span>
+      <svg class="chev w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </summary>
+    <div class="mt-4 overflow-auto max-h-96">
+      <table class="w-full text-xs border-collapse" id="btDetailTable">
+        <thead class="bg-slate-100 sticky top-0">
+          <tr>
+            <th class="border p-2">날짜</th>
+            <th class="border p-2">점수</th>
+            <th class="border p-2">긍정</th>
+            <th class="border p-2">부정</th>
+            <th class="border p-2">국면</th>
+            <th class="border p-2">S&P</th>
+            <th class="border p-2">+1M</th>
+            <th class="border p-2">+3M</th>
+            <th class="border p-2">+6M</th>
+          </tr>
+        </thead>
+        <tbody id="btDetailTbody"></tbody>
+      </table>
+    </div>
+  </details>
 </section>
 
 </main>
@@ -3859,6 +3985,232 @@ function showStaleBadge() {
   document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v4.2';
 }
 
+// =====================================================
+// === 🔬 백테스트 로직 ===
+// =====================================================
+let backtestData = null;
+let btCharts = {};
+
+async function loadBacktestData() {
+  try {
+    const res = await fetch('./backtest.json?t=' + Date.now());
+    if (!res.ok) throw new Error('backtest.json not found');
+    backtestData = await res.json();
+    console.log('✅ 백테스트 데이터 로드', backtestData.total_points, '개 시점');
+    renderBacktest();
+  } catch (e) {
+    console.warn('⚠️ 백테스트 데이터 없음:', e.message);
+  }
+}
+
+function renderBacktest() {
+  if (!backtestData) return;
+  const d = backtestData;
+  const stats = d.stats;
+
+  // 1. 상단 통계 카드
+  document.getElementById('btTotalPoints').textContent = d.total_points;
+  document.getElementById('btBullHit').textContent = stats.overall.bull_hit_3m.toFixed(1) + '%';
+  document.getElementById('btBearHit').textContent = stats.overall.bear_hit_3m.toFixed(1) + '%';
+  document.getElementById('btAvgScore').textContent = (stats.overall.avg_score >= 0 ? '+' : '') + stats.overall.avg_score.toFixed(2);
+
+  // 2. 신호별 통계 표
+  const signalLabels = {
+    strong_bull: { name: '🟢 강한 강세', cond: '긍정 ≥4', color: 'bg-emerald-100' },
+    bull_lean: { name: '🟢 약한 강세', cond: '긍정 = 3', color: 'bg-emerald-50' },
+    balanced: { name: '🟡 균형', cond: '긍정 = 부정', color: 'bg-amber-50' },
+    bear_lean: { name: '🔴 약한 약세', cond: '부정 = 3', color: 'bg-rose-50' },
+    strong_bear: { name: '🔴 강한 약세', cond: '부정 ≥4', color: 'bg-rose-100' }
+  };
+
+  document.getElementById('btSignalTbody').innerHTML = Object.entries(stats.by_signal).map(([key, s]) => {
+    const info = signalLabels[key];
+    return `<tr class="${info.color}">
+      <td class="border p-2 font-bold">${info.name}</td>
+      <td class="border p-2 text-xs">${info.cond}</td>
+      <td class="border p-2 text-center">${s.count}회</td>
+      <td class="border p-2 text-center">${s.pct.toFixed(1)}%</td>
+      <td class="border p-2 text-center ${s.avg_1m >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${s.avg_1m >= 0 ? '+' : ''}${s.avg_1m.toFixed(2)}%</td>
+      <td class="border p-2 text-center ${s.avg_3m >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${s.avg_3m >= 0 ? '+' : ''}${s.avg_3m.toFixed(2)}%</td>
+      <td class="border p-2 text-center ${s.avg_6m >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${s.avg_6m >= 0 ? '+' : ''}${s.avg_6m.toFixed(2)}%</td>
+    </tr>`;
+  }).join('');
+
+  // 3. 시계열 차트 (점수 + S&P)
+  renderBacktestTimeChart();
+  // 4. 신호별 막대 차트
+  renderBacktestSignalChart();
+  // 5. 신호 분포 파이
+  renderBacktestDistChart();
+  // 6. 상세 표 (최근 50개)
+  renderBacktestDetailTable();
+}
+
+function renderBacktestTimeChart() {
+  const ctx = document.getElementById('btTimeChart');
+  if (!ctx || !backtestData) return;
+  if (btCharts.time) btCharts.time.destroy();
+
+  const labels = backtestData.results.map(r => r.date);
+  const scores = backtestData.results.map(r => r.score);
+  const sp500 = backtestData.results.map(r => r.sp500);
+
+  btCharts.time = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '8축 종합 점수 (긍정-부정)',
+          data: scores,
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59,130,246,0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          pointRadius: 0,
+          yAxisID: 'y',
+          fill: true
+        },
+        {
+          label: 'S&P 500',
+          data: sp500,
+          borderColor: '#f97316',
+          backgroundColor: 'rgba(249,115,22,0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          pointRadius: 0,
+          yAxisID: 'y1',
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        x: {
+          ticks: { maxTicksLimit: 12, autoSkip: true, maxRotation: 45, minRotation: 45 }
+        },
+        y: {
+          type: 'linear',
+          position: 'left',
+          title: { display: true, text: '8축 점수' },
+          grid: {
+            color: (ctx) => ctx.tick.value === 0 ? '#94a3b8' : '#e2e8f0',
+            lineWidth: (ctx) => ctx.tick.value === 0 ? 2 : 1
+          },
+          min: -6, max: 6
+        },
+        y1: {
+          type: 'linear',
+          position: 'right',
+          title: { display: true, text: 'S&P 500' },
+          grid: { drawOnChartArea: false }
+        }
+      }
+    }
+  });
+}
+
+function renderBacktestSignalChart() {
+  const ctx = document.getElementById('btSignalChart');
+  if (!ctx || !backtestData) return;
+  if (btCharts.signal) btCharts.signal.destroy();
+
+  const stats = backtestData.stats.by_signal;
+  const labels = ['🟢 강세 4+', '🟢 강세 3', '🟡 균형', '🔴 약세 3', '🔴 약세 4+'];
+  const keys = ['strong_bull', 'bull_lean', 'balanced', 'bear_lean', 'strong_bear'];
+
+  btCharts.signal = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: '1M 후', data: keys.map(k => stats[k].avg_1m), backgroundColor: 'rgba(59,130,246,0.7)' },
+        { label: '3M 후', data: keys.map(k => stats[k].avg_3m), backgroundColor: 'rgba(16,185,129,0.7)' },
+        { label: '6M 후', data: keys.map(k => stats[k].avg_6m), backgroundColor: 'rgba(245,158,11,0.7)' }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        y: {
+          title: { display: true, text: '평균 수익률 (%)' },
+          grid: {
+            color: (ctx) => ctx.tick.value === 0 ? '#94a3b8' : '#e2e8f0',
+            lineWidth: (ctx) => ctx.tick.value === 0 ? 2 : 1
+          }
+        }
+      }
+    }
+  });
+}
+
+function renderBacktestDistChart() {
+  const ctx = document.getElementById('btDistChart');
+  if (!ctx || !backtestData) return;
+  if (btCharts.dist) btCharts.dist.destroy();
+
+  const stats = backtestData.stats.by_signal;
+  btCharts.dist = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['🟢 강세 4+', '🟢 강세 3', '🟡 균형', '🔴 약세 3', '🔴 약세 4+'],
+      datasets: [{
+        data: [stats.strong_bull.count, stats.bull_lean.count, stats.balanced.count, stats.bear_lean.count, stats.strong_bear.count],
+        backgroundColor: ['#10b981', '#6ee7b7', '#fbbf24', '#fb7185', '#e11d48'],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right' },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `${ctx.label}: ${ctx.parsed}회 (${(ctx.parsed / backtestData.total_points * 100).toFixed(1)}%)`
+          }
+        }
+      }
+    }
+  });
+}
+
+function renderBacktestDetailTable() {
+  const tbody = document.getElementById('btDetailTbody');
+  if (!tbody || !backtestData) return;
+
+  // 최근 50개 (역순)
+  const results = backtestData.results.slice(-50).reverse();
+  tbody.innerHTML = results.map(r => {
+    const phaseColor = r.phase === '강세장' ? 'text-emerald-700 bg-emerald-50' :
+                      r.phase === '약세장' ? 'text-rose-700 bg-rose-50' :
+                      r.phase === '강세 우위' ? 'text-emerald-600' :
+                      r.phase === '약세 우위' ? 'text-rose-600' : 'text-amber-600';
+    const fmt = (v) => v === null || v === undefined ? '-' :
+                       `<span class="${v >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>`;
+    return `<tr class="hover:bg-slate-50">
+      <td class="border p-1 text-xs">${r.date}</td>
+      <td class="border p-1 text-center font-bold">${r.score >= 0 ? '+' : ''}${r.score}</td>
+      <td class="border p-1 text-center text-emerald-600">${r.positive}</td>
+      <td class="border p-1 text-center text-rose-600">${r.negative}</td>
+      <td class="border p-1 text-center text-xs ${phaseColor}">${r.phase}</td>
+      <td class="border p-1 text-right">${r.sp500 ? r.sp500.toFixed(0) : '-'}</td>
+      <td class="border p-1 text-right text-xs">${fmt(r.ret_1m)}</td>
+      <td class="border p-1 text-right text-xs">${fmt(r.ret_3m)}</td>
+      <td class="border p-1 text-right text-xs">${fmt(r.ret_6m)}</td>
+    </tr>`;
+  }).join('');
+}
+
 // === INIT ===
 renderAxisGrid();
 renderStudy8();
@@ -3902,6 +4254,8 @@ window.addEventListener('load', () => {
   updateAnalysisDate();
   // 🔴 라이브 데이터 fetch (data.json) — 자동 갱신
   loadLiveData();
+  // 🔬 백테스트 데이터 fetch
+  loadBacktestData();
 });
 </script>
 

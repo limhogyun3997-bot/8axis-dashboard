@@ -99,11 +99,11 @@
     <div class="flex gap-1 overflow-x-auto scrollbar-hide">
       <button onclick="showTab('dashboard')" class="tab-btn active px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="dashboard">📊 대시보드</button>
       <button onclick="showTab('charts')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="charts">📈 실시간 차트</button>
-      <button onclick="showTab('simulate')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="simulate">🎮 시뮬레이션 & 상관관계</button>
-      <button onclick="showTab('stockanalysis')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="stockanalysis">🔬 종목 분석 (2-3단계)</button>
-      <button onclick="showTab('study8')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="study8">📚 8축 통합 (분석+학습)</button>
+      <button onclick="showTab('simulate')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="simulate">🎮 시뮬레이션</button>
+      <button onclick="showTab('stockanalysis')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="stockanalysis">🔬 종목 분석</button>
+      <button onclick="showTab('study8')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="study8">📚 8축 학습</button>
       <button onclick="showTab('philosophy')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="philosophy">🧠 핵심 철학</button>
-      <button onclick="showTab('tools')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="tools">🔗 도구상자 (소스+용어)</button>
+      <button onclick="showTab('tools')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="tools">🔗 도구상자</button>
       <button onclick="showTab('workbook')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="workbook">✍️ 실전 워크북</button>
     </div>
   </div>
@@ -3713,7 +3713,8 @@ function renderKeyNumbers(prices = {}, fred = {}) {
             <span class="text-xs ${ctxColor}">${ctxText}</span>
           </div>
           <div class="text-xl font-bold mt-1">${value}<span class="${chgColor} text-xs ml-1">${chgIcon}${Math.abs(chg).toFixed(2)}%</span></div>
-          <div class="text-xs text-slate-400 mt-1">5일: ${p.change_5d_pct >= 0 ? '+' : ''}${p.change_5d_pct.toFixed(1)}% · 📊 ${c.source}</div>
+          <div class="text-xs text-slate-400 mt-1">종가 ${p.trade_date || '-'} · 5일 ${p.change_5d_pct >= 0 ? '+' : ''}${p.change_5d_pct.toFixed(1)}%</div>
+          <div class="text-xs text-slate-300 mt-0.5">📊 ${c.source}</div>
         </div>`;
       }
       return loadingCard(label, c.source);

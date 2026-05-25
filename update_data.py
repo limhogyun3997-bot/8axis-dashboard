@@ -149,6 +149,8 @@ def fetch_one(sym, period="1mo"):
         prev = float(hist["Close"].iloc[-2]) if len(hist) > 1 else close
         week_ago = float(hist["Close"].iloc[-6]) if len(hist) > 5 else close
         month_ago = float(hist["Close"].iloc[0]) if len(hist) > 0 else close
+        # 마지막 거래일 (Yahoo의 종가가 어느 시점인지)
+        last_trade_date = hist.index[-1].strftime("%Y-%m-%d")
         return {
             "value": round(close, 4),
             "prev": round(prev, 4),
@@ -157,6 +159,7 @@ def fetch_one(sym, period="1mo"):
             "change_1m_pct": round((close - month_ago) / month_ago * 100, 2) if month_ago else 0,
             "high_1m": round(float(hist["High"].max()), 4),
             "low_1m": round(float(hist["Low"].min()), 4),
+            "trade_date": last_trade_date,  # 종가 기준일
         }
     except Exception as e:
         print(f"  ⚠️  {sym}: {e}", file=sys.stderr)

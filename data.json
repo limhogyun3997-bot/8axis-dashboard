@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-05-25T15:14:04.645062+00:00",
-  "last_updated_kst": "2026-05-26 00:14 KST",
+  "last_updated": "2026-05-25T15:42:51.129254+00:00",
+  "last_updated_kst": "2026-05-26 00:42 KST",
   "prices": {
     "sp500": {
       "value": 7473.4702,
@@ -43,11 +43,11 @@
       "trade_date": "2026-05-22"
     },
     "vix": {
-      "value": 16.69,
+      "value": 16.58,
       "prev": 16.7,
-      "change_pct": -0.06,
-      "change_5d_pct": -6.34,
-      "change_1m_pct": -7.38,
+      "change_pct": -0.72,
+      "change_5d_pct": -6.96,
+      "change_1m_pct": -7.99,
       "high_1m": 19.44,
       "low_1m": 16.18,
       "trade_date": "2026-05-25"
@@ -83,11 +83,11 @@
       "trade_date": "2026-05-22"
     },
     "dxy": {
-      "value": 98.999,
+      "value": 98.964,
       "prev": 99.32,
-      "change_pct": -0.32,
-      "change_5d_pct": 0.03,
-      "change_1m_pct": 0.53,
+      "change_pct": -0.36,
+      "change_5d_pct": -0.01,
+      "change_1m_pct": 0.49,
       "high_1m": 99.52,
       "low_1m": 97.63,
       "trade_date": "2026-05-25"
@@ -143,11 +143,11 @@
       "trade_date": "2026-05-25"
     },
     "btc": {
-      "value": 77699.1016,
+      "value": 77554.25,
       "prev": 76981.125,
-      "change_pct": 0.93,
-      "change_5d_pct": 0.31,
-      "change_1m_pct": 0.11,
+      "change_pct": 0.74,
+      "change_5d_pct": 0.12,
+      "change_1m_pct": -0.07,
       "high_1m": 82792.2109,
       "low_1m": 74255.2344,
       "trade_date": "2026-05-25"
@@ -559,7 +559,7 @@
       "metrics": [
         {
           "k": "DXY",
-          "v": "99.00",
+          "v": "98.96",
           "tone": "neu",
           "source": "Yahoo:DX-Y.NYB"
         },
@@ -584,24 +584,24 @@
       "metrics": [
         {
           "k": "VIX",
-          "v": "16.69",
+          "v": "16.58",
           "tone": "pos",
           "source": "Yahoo:^VIX"
         },
         {
           "k": "1일 변화",
-          "v": "-0.1%",
+          "v": "-0.7%",
           "tone": "neu",
           "source": "계산값"
         },
         {
           "k": "5일 변화",
-          "v": "-6.3%",
+          "v": "-7.0%",
           "tone": "neu",
           "source": "계산값"
         }
       ],
-      "summary": "VIX 16.7 — 정상 범위, 시장 건강",
+      "summary": "VIX 16.6 — 정상 범위, 시장 건강",
       "pdfTip": "VIX <10 자만, >30 공포. 백워데이션 발생 시 즉시 방어."
     }
   },

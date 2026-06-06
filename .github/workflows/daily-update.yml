@@ -13,9 +13,10 @@ on:
       - 'update_data.py'
       - '.github/workflows/daily-update.yml'
 
-# data.json 자동 푸시 권한
+# data.json 자동 푸시 + 실패 시 issue 생성 권한
 permissions:
   contents: write
+  issues: write
 
 # 동시 실행 방지 (push trigger + cron + manual 충돌 방지)
 concurrency:
@@ -96,3 +97,18 @@ jobs:
           done
           echo "❌ 3회 재시도 후에도 push 실패"
           exit 1
+
+      - name: 🚨 Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const today = new Date().toISOString().slice(0,10);
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `❌ Daily Update 실패 (${today})`,
+              body: `워크플로우 \`📊 Daily Market Data Update\`가 실패했습니다.\n\n- Run #${context.runNumber}\n- [실행 로그 보기](${runUrl})\n\n주요 원인 후보:\n- Yahoo Finance rate limit (자주 발생 시 Stooq fallback 작동)\n- FRED API 키 만료\n- GitHub push race condition\n\n수동 재실행: Actions 탭 → Run workflow`,
+              labels: ['workflow-failure', 'auto-created']
+            });

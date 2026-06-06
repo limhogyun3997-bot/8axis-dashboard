@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 # 다른 워크플로우와의 push 충돌 방지
 concurrency:
@@ -100,3 +101,18 @@ jobs:
           done
           echo "❌ 3회 재시도 후에도 push 실패"
           exit 1
+
+      - name: 🚨 Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const today = new Date().toISOString().slice(0,10);
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `❌ Weekly Backtest 실패 (${today})`,
+              body: `워크플로우 \`🔬 Weekly Backtest\`가 실패했습니다.\n\n- Run #${context.runNumber}\n- [실행 로그](${runUrl})\n\n주요 원인 후보:\n- 백테스트 데이터 fetch 실패 (FRED rate limit)\n- 5년 yfinance 다운로드 타임아웃\n- push race condition\n\n수동 재실행: Actions 탭 → Run workflow`,
+              labels: ['workflow-failure', 'auto-created']
+            });

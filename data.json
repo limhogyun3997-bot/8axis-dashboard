@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-06T16:21:37.941285+00:00",
-  "last_updated_kst": "2026-06-07 01:21 KST",
+  "last_updated": "2026-06-06T16:27:27.226966+00:00",
+  "last_updated_kst": "2026-06-07 01:27 KST",
   "version": "v3.0",
   "prices": {
     "sp500": {
@@ -158,11 +158,11 @@
       "source": "Yahoo"
     },
     "btc": {
-      "value": 60660.0508,
+      "value": 60593.2812,
       "prev": 60922.668,
-      "change_pct": -0.43,
-      "change_5d_pct": -14.95,
-      "change_1m_pct": -25.5,
+      "change_pct": -0.54,
+      "change_5d_pct": -15.04,
+      "change_1m_pct": -25.59,
       "high_1m": 82792.2109,
       "low_1m": 59108.918,
       "trade_date": "2026-06-06",
@@ -1213,11 +1213,24 @@
     }
   },
   "inflection": {
+    "compared_to": "2026-06-07",
     "changed": [],
-    "summary": "이전 데이터 없음",
-    "first_run": true
+    "count": 0,
+    "is_inflection": false,
+    "summary": "0개 축 변동",
+    "first_run": false
   },
-  "history_timeline": [],
+  "history_timeline": [
+    {
+      "date": "2026-06-07",
+      "score": 1,
+      "positive": 2,
+      "negative": 1,
+      "spx": 7383.7402,
+      "vix": 21.51,
+      "yield_10y": 4.536
+    }
+  ],
   "summary": {
     "positive": 2,
     "neutral": 5,

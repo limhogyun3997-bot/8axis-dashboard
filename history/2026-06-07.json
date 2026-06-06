@@ -1,0 +1,63 @@
+{
+  "date": "2026-06-07",
+  "last_updated": "2026-06-06T16:21:37.941285+00:00",
+  "summary": {
+    "positive": 2,
+    "neutral": 5,
+    "negative": 1,
+    "score": 1,
+    "phase": "강세 우위 횡보",
+    "strategy": "중립 + 약공격"
+  },
+  "auto_axes": {
+    "interest": {
+      "rating": "중립",
+      "summary": "실질금리 2.11% — 주식 약간 부담"
+    },
+    "flow": {
+      "rating": "부정",
+      "summary": "패턴 4 공포 정점 — SQQQ 급증 → 역발상 매수 기회"
+    },
+    "employment": {
+      "rating": "중립",
+      "summary": "실업률 4.3%, NFP +172K — 연착륙 중"
+    },
+    "consumption": {
+      "rating": "중립",
+      "summary": "연체율 2.92%, 실질소매 +1.1% — 혼재"
+    },
+    "dollar": {
+      "rating": "중립",
+      "summary": "DXY 100.1, WTI $91 — 혼재"
+    },
+    "vix": {
+      "rating": "중립",
+      "summary": "VIX 21.5 — 불안 증가 · 하루 +40% 급등"
+    }
+  },
+  "manual_axes": {
+    "earnings": {
+      "rating": "긍정"
+    },
+    "margin": {
+      "rating": "긍정"
+    }
+  },
+  "sahm": {
+    "avg_3m": 4.3,
+    "min_12m": 4.1,
+    "diff_pp": 0.2,
+    "triggered": false,
+    "status": "안전",
+    "severity": "pos",
+    "last_date": "2026-05-01"
+  },
+  "sectors_top_3": [
+    "XLE",
+    "XLV",
+    "XLRE"
+  ],
+  "yield_10y": 4.536,
+  "vix": 21.51,
+  "spx": 7383.7402
+}

@@ -279,9 +279,63 @@
     </div>
   </div>
 
+  <!-- NEW v5: 변곡점 알람 (변동 있을 때만 표시) -->
+  <div id="inflectionAlert" class="hidden mb-6"></div>
+
+  <!-- NEW v5: Sahm Rule 라이브 게이지 -->
+  <div id="sahmCard" class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <div class="flex items-start justify-between mb-3">
+      <div>
+        <h2 class="text-lg font-bold flex items-center gap-2">🚨 Sahm Rule 게이지 <span class="text-xs text-emerald-600 font-normal">🟢 LIVE</span></h2>
+        <p class="text-xs text-slate-500 mt-1">실업률 3개월 평균 vs 12개월 최저. +0.5%p 이상 = 침체 시작 (50년 100% 적중)</p>
+      </div>
+      <div id="sahmStatusBadge" class="text-xs font-bold px-3 py-1 rounded-full">--</div>
+    </div>
+    <div id="sahmGaugeWrap" class="grid grid-cols-3 gap-3 mt-4">
+      <div class="bg-slate-50 rounded-lg p-3 text-center">
+        <div class="text-xs text-slate-500">3개월 평균</div>
+        <div class="text-2xl font-bold" id="sahm3m">--</div>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-3 text-center">
+        <div class="text-xs text-slate-500">12개월 최저</div>
+        <div class="text-2xl font-bold" id="sahm12m">--</div>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-3 text-center">
+        <div class="text-xs text-slate-500">차이 (트리거 기준 0.5%p)</div>
+        <div class="text-2xl font-bold" id="sahmDiff">--</div>
+      </div>
+    </div>
+    <div class="relative h-4 bg-gradient-to-r from-emerald-300 via-amber-300 to-rose-500 rounded-full mt-4">
+      <div id="sahmMarker" class="absolute top-0 bottom-0 w-1 bg-slate-900 rounded transition-all" style="left: 0%"></div>
+      <div class="absolute top-full pt-1 left-0 text-xs text-emerald-700">0%p</div>
+      <div class="absolute top-full pt-1 left-1/2 -translate-x-1/2 text-xs text-amber-700">0.3%p (경계)</div>
+      <div class="absolute top-full pt-1 right-0 text-xs text-rose-700">0.5%p (발동)</div>
+    </div>
+    <div class="mt-8 text-xs text-slate-400" id="sahmDate"></div>
+  </div>
+
   <!-- 5. 8축 카드 -->
   <h2 class="text-2xl font-bold mb-4">🎯 8축 한눈에 보기 + PDF 적용 팁</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="axisGrid"></div>
+
+  <!-- NEW v5: 섹터 자동 정렬 -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <div class="flex items-start justify-between mb-3 flex-wrap gap-2">
+      <div>
+        <h2 class="text-lg font-bold flex items-center gap-2">🏭 11개 섹터 자동 정렬 <span class="text-xs text-emerald-600 font-normal">🟢 LIVE</span></h2>
+        <p class="text-xs text-slate-500 mt-1">5일 변화율 기준 정렬. 어떤 섹터로 자금이 흐르는지 자동 감지.</p>
+      </div>
+      <div id="flowPatternBadge" class="text-sm font-bold px-3 py-2 rounded-lg">--</div>
+    </div>
+    <div id="sectorGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4"></div>
+  </div>
+
+  <!-- NEW v5: Mag7 카드 -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h2 class="text-lg font-bold flex items-center gap-2 mb-3">⚡ Mag7 자동 카드 <span class="text-xs text-emerald-600 font-normal">🟢 LIVE</span></h2>
+    <p class="text-xs text-slate-500 mb-4">미국 시가총액 7대 빅테크 — 시장의 ~30% 차지. 자금흐름 선행지표.</p>
+    <div id="mag7Grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2"></div>
+  </div>
 
   <!-- 5. 자금흐름 4패턴 매칭 (NEW - PDF p.23) -->
   <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
@@ -3484,16 +3538,37 @@ function renderQuizzes() {
 // =====================================================
 // === 금리 곡선 (Yield Curve) - Chart.js ===
 // =====================================================
-const yieldData = {
-  // 만기 라벨
-  maturities: ['1M', '3M', '6M', '1Y', '2Y', '3Y', '5Y', '7Y', '10Y', '20Y', '30Y'],
-  // 현재 (2026.05.24)
-  current: [3.65, 3.70, 3.85, 4.00, 4.13, 4.20, 4.30, 4.45, 4.56, 4.85, 4.90],
-  // 1년 전 (2025.05) - 인하 사이클 시작 직전
-  oneYearAgo: [5.30, 5.25, 5.15, 4.95, 4.80, 4.60, 4.40, 4.45, 4.55, 4.85, 4.90],
+// v5.0: 라이브 데이터 우선 (data.json.yield_curve), 폴백으로 정적 사용
+let yieldData = {
+  // 만기 라벨 (FRED 시리즈와 매칭)
+  maturities: ['1M', '3M', '6M', '1Y', '2Y', '5Y', '7Y', '10Y', '20Y', '30Y'],
+  // 라이브 (data.json fetch 시 덮어씀)
+  current: null,
+  // 1년 전 (2025) - 인하 사이클 시작 직전 (정적 참조)
+  oneYearAgo: [5.30, 5.25, 5.15, 4.95, 4.80, 4.40, 4.45, 4.55, 4.85, 4.90],
   // 역전 절정기 (2023.07) - 2s10s 가장 깊은 역전
-  inverted: [5.45, 5.50, 5.55, 5.40, 4.90, 4.60, 4.30, 4.20, 4.05, 4.35, 4.10],
+  inverted: [5.45, 5.50, 5.55, 5.40, 4.90, 4.30, 4.20, 4.05, 4.35, 4.10],
 };
+
+function applyLiveYieldCurve(yieldCurveData) {
+  if (!yieldCurveData) return;
+  // FRED 라벨로 현재 데이터 채우기
+  const order = ['1M', '3M', '6M', '1Y', '2Y', '5Y', '7Y', '10Y', '20Y', '30Y'];
+  yieldData.current = order.map(m => yieldCurveData[m] ?? null);
+  // 차트 다시 그리기
+  if (typeof renderYieldCurve === 'function') {
+    renderYieldCurve(currentYCMode || 'current');
+  }
+}
+
+function applyLive2s10sSpread(history) {
+  if (!history || !history.length) return;
+  spreadHistory.labels = history.map(d => d.date.slice(0, 7));
+  spreadHistory.values = history.map(d => d.spread);
+  if (currentYCMode === 'spread' && typeof renderYieldCurve === 'function') {
+    renderYieldCurve('spread');
+  }
+}
 
 // 2s10s 스프레드 역사 데이터 (월별)
 const spreadHistory = {
@@ -3558,10 +3633,13 @@ function renderYieldCurve(mode) {
   }
 
   labels = yieldData.maturities;
+  // 라이브 데이터 우선, 폴백으로 정적 사용
+  const currentData = yieldData.current || [3.65, 3.70, 3.85, 4.00, 4.13, 4.30, 4.45, 4.56, 4.85, 4.90];
+  const liveDate = window.__liveDataDate || '2026.05.24';
   if (mode === 'current') {
     datasets = [{
-      label: '현재 (2026.05.24) - 정상 우상향',
-      data: yieldData.current,
+      label: `현재 (${liveDate})${yieldData.current ? ' · 🟢 LIVE' : ''}`,
+      data: currentData,
       borderColor: '#10b981',
       backgroundColor: 'rgba(16,185,129,0.1)',
       borderWidth: 3,
@@ -3573,8 +3651,8 @@ function renderYieldCurve(mode) {
   } else if (mode === 'compare') {
     datasets = [
       {
-        label: '현재 (2026.05) — 정상',
-        data: yieldData.current,
+        label: `현재 (${liveDate})${yieldData.current ? ' · 🟢 LIVE' : ''}`,
+        data: currentData,
         borderColor: '#10b981',
         backgroundColor: 'rgba(16,185,129,0.05)',
         borderWidth: 3,
@@ -3951,6 +4029,16 @@ function applyLiveData(data) {
   // 4. 핵심 숫자 카드 렌더 (Yahoo + FRED)
   renderKeyNumbers(data.prices || {}, data.fred || {});
 
+  // 5. NEW v5: Sahm Rule, 섹터, Mag7, 변곡점 알람
+  if (typeof renderSahm === 'function') renderSahm(data.sahm);
+  if (typeof renderSectors === 'function') renderSectors(data.sectors);
+  if (typeof renderMag7 === 'function') renderMag7(data.mag7);
+  if (typeof renderInflectionAlert === 'function') renderInflectionAlert(data.inflection);
+
+  // 6. NEW v5: 금리 곡선 라이브 데이터 적용
+  if (data.yield_curve && typeof applyLiveYieldCurve === 'function') applyLiveYieldCurve(data.yield_curve);
+  if (data.spread_2s10s_history && typeof applyLive2s10sSpread === 'function') applyLive2s10sSpread(data.spread_2s10s_history);
+
   // 5. 신호 집계 카드 업데이트
   if (data.summary) {
     const s = data.summary;
@@ -3977,12 +4065,124 @@ function applyLiveData(data) {
 function showLiveBadge(data) {
   const t = data.last_updated_kst || data.last_updated || '';
   document.getElementById('liveBadge').innerHTML = `<span class="inline-block w-2 h-2 bg-emerald-500 rounded-full pulse-dot"></span> <span class="text-emerald-700 font-semibold">LIVE</span> · 마지막 갱신 ${t}`;
-  document.getElementById('headerLiveBadge').innerHTML = `Live · ${t} · v4.2 (auto)`;
+  document.getElementById('headerLiveBadge').innerHTML = `Live · ${t} · v5.0 (auto)`;
+  // 라이브 데이터 날짜 기억 (yield curve 라벨용)
+  window.__liveDataDate = (t.split(' ')[0] || '').replace(/-/g, '.');
 }
 
 function showStaleBadge() {
   document.getElementById('liveBadge').innerHTML = `<span class="inline-block w-2 h-2 bg-amber-500 rounded-full"></span> <span class="text-amber-700">정적 데이터 사용 중</span>`;
-  document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v4.2';
+  document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v5.0';
+}
+
+// === NEW v5: Sahm Rule, 섹터, Mag7, 변곡점 렌더 ===
+
+function renderSahm(sahm) {
+  const card = document.getElementById('sahmCard');
+  if (!card) return;
+  if (!sahm) {
+    card.classList.add('hidden');
+    return;
+  }
+  card.classList.remove('hidden');
+  document.getElementById('sahm3m').textContent = sahm.avg_3m + '%';
+  document.getElementById('sahm12m').textContent = sahm.min_12m + '%';
+  const diffEl = document.getElementById('sahmDiff');
+  diffEl.textContent = (sahm.diff_pp >= 0 ? '+' : '') + sahm.diff_pp + '%p';
+  const sevColor = sahm.severity === 'pos' ? 'text-emerald-600' : (sahm.severity === 'neg' ? 'text-rose-600' : 'text-amber-600');
+  diffEl.className = `text-2xl font-bold ${sevColor}`;
+
+  const badge = document.getElementById('sahmStatusBadge');
+  const badgeClass = sahm.severity === 'pos' ? 'bg-emerald-500 text-white' :
+                     sahm.severity === 'neg' ? 'bg-rose-500 text-white' :
+                     'bg-amber-500 text-white';
+  badge.className = `text-xs font-bold px-3 py-1 rounded-full ${badgeClass}`;
+  badge.textContent = sahm.status;
+
+  const pct = Math.min(100, Math.max(0, (sahm.diff_pp / 0.7) * 100));
+  document.getElementById('sahmMarker').style.left = pct + '%';
+  document.getElementById('sahmDate').textContent = `기준일: ${sahm.last_date} · 🏛️ FRED UNRATE`;
+}
+
+function renderSectors(sectors) {
+  if (!sectors || !sectors.sorted_by_5d) return;
+  const p = sectors.flow_pattern;
+  const patternColor = p.rating === 'pos' ? 'bg-emerald-500 text-white' :
+                       p.rating === 'neg' ? 'bg-rose-500 text-white' :
+                       p.rating === 'neg_or_contrarian' ? 'bg-rose-500 text-white' :
+                       'bg-amber-500 text-white';
+  const patternBadge = document.getElementById('flowPatternBadge');
+  if (patternBadge) {
+    patternBadge.className = `text-sm font-bold px-3 py-2 rounded-lg ${patternColor}`;
+    patternBadge.innerHTML = `패턴 ${p.id} · ${p.name}`;
+  }
+
+  const grid = document.getElementById('sectorGrid');
+  if (!grid) return;
+  grid.innerHTML = sectors.sorted_by_5d.map((s, idx) => {
+    const chgColor = s.chg_5d >= 0 ? 'text-emerald-600' : 'text-rose-600';
+    const bg = idx < 3 ? 'bg-emerald-50 border-emerald-300' :
+               idx >= sectors.sorted_by_5d.length - 3 ? 'bg-rose-50 border-rose-300' :
+               'bg-slate-50 border-slate-200';
+    return `<div class="border rounded-lg p-3 ${bg}">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs font-semibold text-slate-500">#${idx+1} ${s.key}</span>
+        <span class="text-xs ${chgColor} font-bold">${s.chg_5d >= 0 ? '+' : ''}${s.chg_5d.toFixed(1)}%</span>
+      </div>
+      <div class="font-semibold text-sm">${s.name}</div>
+      <div class="text-xs text-slate-400 mt-1">1일 ${s.chg_1d >= 0 ? '+' : ''}${s.chg_1d.toFixed(1)}% · 1M ${s.chg_1m >= 0 ? '+' : ''}${s.chg_1m.toFixed(1)}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderMag7(mag7) {
+  if (!mag7 || !mag7.length) return;
+  const grid = document.getElementById('mag7Grid');
+  if (!grid) return;
+  grid.innerHTML = mag7.map(m => {
+    const chgColor = m.chg_1d >= 0 ? 'text-emerald-600' : 'text-rose-600';
+    const chg1mColor = m.chg_1m >= 0 ? 'text-emerald-600' : 'text-rose-600';
+    return `<div class="border border-slate-200 rounded-lg p-3 hover:bg-slate-50 transition">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs font-bold text-slate-500">${m.ticker}</span>
+        <span class="text-xs ${chgColor} font-bold">${m.chg_1d >= 0 ? '+' : ''}${m.chg_1d.toFixed(2)}%</span>
+      </div>
+      <div class="text-lg font-bold">$${m.value.toFixed(2)}</div>
+      <div class="text-xs text-slate-500 truncate">${m.name}</div>
+      <div class="text-xs ${chg1mColor} mt-1">1M ${m.chg_1m >= 0 ? '+' : ''}${m.chg_1m.toFixed(1)}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderInflectionAlert(inflection) {
+  const el = document.getElementById('inflectionAlert');
+  if (!el) return;
+  if (!inflection || inflection.first_run || inflection.count === 0) {
+    el.classList.add('hidden');
+    return;
+  }
+  el.classList.remove('hidden');
+  const isInflection = inflection.is_inflection;
+  const bgClass = isInflection ?
+    'bg-gradient-to-r from-rose-500 to-pink-500 text-white' :
+    'bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300';
+  const titleClass = isInflection ? 'text-white' : 'text-amber-900';
+  const items = inflection.changed.map(c => {
+    const arrow = c.from === '부정' ? '🟢↑' : (c.from === '긍정' ? '🔴↓' : (c.to === '긍정' ? '🟢↑' : '🔴↓'));
+    return `<span class="inline-block ${isInflection ? 'bg-white/20' : 'bg-white'} rounded px-2 py-1 text-xs">${arrow} <b>${c.axis}</b>: ${c.from} → ${c.to}</span>`;
+  }).join(' ');
+
+  el.innerHTML = `<div class="${bgClass} rounded-2xl p-5 shadow-lg">
+    <div class="flex items-start gap-3">
+      <div class="text-3xl">${isInflection ? '🚨' : '⚠️'}</div>
+      <div class="flex-1">
+        <h3 class="text-lg font-bold ${titleClass}">${isInflection ? '🎯 구조적 변곡점 감지!' : `📊 ${inflection.count}개 축 신호 변동`}</h3>
+        <p class="text-xs ${isInflection ? 'text-white/80' : 'text-amber-700'} mt-1">이전 갱신(${inflection.compared_to}) 대비 다음 축들의 평가가 변동되었습니다:</p>
+        <div class="mt-3 flex flex-wrap gap-2">${items}</div>
+        ${isInflection ? '<p class="text-xs text-white/90 mt-3">⚡ PDF p.62: <b>절반 이상 동시 전환 = 시장 주요 전환점</b>. 즉각 대응 검토 필요.</p>' : ''}
+      </div>
+    </div>
+  </div>`;
 }
 
 // =====================================================

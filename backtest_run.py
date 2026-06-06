@@ -415,53 +415,188 @@ def main():
 
 
 def compute_statistics(results):
-    """백테스트 통계 계산."""
+    """백테스트 통계 계산 (v2.0 — Sharpe/MDD/OOS/Rolling)."""
+    import math
+
     def avg(lst):
         lst = [x for x in lst if x is not None]
         return sum(lst) / len(lst) if lst else 0
 
-    # 신호별 카테고리
-    strong_bull = [r for r in results if r["positive"] >= 4]
-    bull_lean = [r for r in results if r["positive"] >= 3 and r["positive"] < 4]
-    balanced = [r for r in results if r["positive"] == r["negative"] and r["positive"] <= 2]
-    bear_lean = [r for r in results if r["negative"] >= 3 and r["negative"] < 4]
-    strong_bear = [r for r in results if r["negative"] >= 4]
+    def std(lst):
+        lst = [x for x in lst if x is not None]
+        if len(lst) < 2:
+            return 0
+        m = sum(lst) / len(lst)
+        return math.sqrt(sum((x - m) ** 2 for x in lst) / (len(lst) - 1))
+
+    def hit_rate(returns, direction='positive'):
+        valid = [r for r in returns if r is not None]
+        if not valid:
+            return 0
+        if direction == 'positive':
+            return len([r for r in valid if r > 0]) / len(valid) * 100
+        return len([r for r in valid if r < 0]) / len(valid) * 100
 
     def category_stats(cat):
+        rets_3m = [r.get("ret_3m") for r in cat if r.get("ret_3m") is not None]
         return {
             "count": len(cat),
             "avg_1m": round(avg([r.get("ret_1m") for r in cat]), 2),
             "avg_3m": round(avg([r.get("ret_3m") for r in cat]), 2),
             "avg_6m": round(avg([r.get("ret_6m") for r in cat]), 2),
+            "std_3m": round(std([r.get("ret_3m") for r in cat]), 2),
+            "hit_3m_positive": round(hit_rate(rets_3m, 'positive'), 1),
             "pct": round(len(cat) / len(results) * 100, 1) if results else 0,
         }
 
-    # Hit rate
-    bull_results = [r.get("ret_3m") for r in results if r["positive"] >= 4]
-    bull_positive = [r for r in bull_results if r is not None and r > 0]
-    bull_hit_3m = len(bull_positive) / len([r for r in bull_results if r is not None]) * 100 \
-        if [r for r in bull_results if r is not None] else 0
+    # === 신호별 카테고리 ===
+    strong_bull = [r for r in results if r["positive"] >= 4]
+    bull_lean = [r for r in results if r["positive"] == 3]
+    balanced = [r for r in results if r["positive"] == r["negative"]]
+    bear_lean = [r for r in results if r["negative"] == 3]
+    strong_bear = [r for r in results if r["negative"] >= 4]
 
-    bear_results = [r.get("ret_3m") for r in results if r["negative"] >= 4]
-    bear_negative = [r for r in bear_results if r is not None and r < 0]
-    bear_hit_3m = len(bear_negative) / len([r for r in bear_results if r is not None]) * 100 \
-        if [r for r in bear_results if r is not None] else 0
+    by_signal = {
+        "strong_bull": category_stats(strong_bull),
+        "bull_lean": category_stats(bull_lean),
+        "balanced": category_stats(balanced),
+        "bear_lean": category_stats(bear_lean),
+        "strong_bear": category_stats(strong_bear),
+    }
+
+    # === Hit rate ===
+    bull_3m = [r.get("ret_3m") for r in results if r["positive"] >= 4]
+    bear_3m = [r.get("ret_3m") for r in results if r["negative"] >= 4]
+    bull_hit_3m = hit_rate(bull_3m, 'positive')
+    bear_hit_3m = hit_rate(bear_3m, 'negative')
+
+    # === 전략 시뮬레이션: 신호 따라 포지션 조정 ===
+    # 강세 4+: 100% / 강세 3: 75% / 균형: 50% / 약세 3: 25% / 약세 4+: 0%
+    def position_weight(r):
+        if r["positive"] >= 4: return 1.0
+        if r["positive"] == 3: return 0.75
+        if r["negative"] >= 4: return 0.0
+        if r["negative"] == 3: return 0.25
+        return 0.5
+
+    # 매 시점에 다음 주(7일) 수익률 (close 데이터에서 직접 안 받았으니 1M으로 4로 나눠 근사)
+    # 더 정확하게: ret_1m / 4.33 (주간 수익률 근사)
+    portfolio_returns = []
+    bnh_returns = []
+    for r in results:
+        weight = position_weight(r)
+        # 주간 수익률 = 월간 / 4.33
+        ret_w = (r.get("ret_1m") or 0) / 4.33 / 100  # 소수점 표현
+        port_ret = weight * ret_w
+        portfolio_returns.append(port_ret)
+        bnh_returns.append(ret_w)  # 100% 항상 매수
+
+    # 누적 자산 (1.0에서 시작)
+    portfolio_equity = [1.0]
+    bnh_equity = [1.0]
+    for pr, br in zip(portfolio_returns, bnh_returns):
+        portfolio_equity.append(portfolio_equity[-1] * (1 + pr))
+        bnh_equity.append(bnh_equity[-1] * (1 + br))
+
+    # 최종 수익률
+    portfolio_total_return = (portfolio_equity[-1] - 1) * 100
+    bnh_total_return = (bnh_equity[-1] - 1) * 100
+
+    # Max drawdown
+    def max_drawdown(equity):
+        peak = equity[0]
+        mdd = 0
+        for v in equity:
+            if v > peak:
+                peak = v
+            dd = (peak - v) / peak * 100
+            if dd > mdd:
+                mdd = dd
+        return mdd
+
+    port_mdd = max_drawdown(portfolio_equity)
+    bnh_mdd = max_drawdown(bnh_equity)
+
+    # Sharpe ratio (연환산, 무위험 수익률 0 가정)
+    # 주간 수익률 × 52주
+    def annualized_sharpe(weekly_returns):
+        valid = [r for r in weekly_returns if r is not None]
+        if len(valid) < 2:
+            return 0
+        m = sum(valid) / len(valid)
+        s = math.sqrt(sum((r - m) ** 2 for r in valid) / (len(valid) - 1))
+        if s == 0:
+            return 0
+        return (m * 52) / (s * math.sqrt(52))
+
+    port_sharpe = annualized_sharpe(portfolio_returns)
+    bnh_sharpe = annualized_sharpe(bnh_returns)
+
+    # === 누적 자산 곡선 (시계열 차트용, 매주 데이터) ===
+    equity_curve = []
+    for i, r in enumerate(results):
+        equity_curve.append({
+            "date": r["date"],
+            "portfolio": round(portfolio_equity[i + 1] * 100, 2),  # 100 = base
+            "bnh": round(bnh_equity[i + 1] * 100, 2),
+        })
+
+    # === Out-of-sample 분할 (2021-2023 vs 2024-현재) ===
+    in_sample = [r for r in results if r["date"] < "2024-01-01"]
+    oos_sample = [r for r in results if r["date"] >= "2024-01-01"]
+
+    def oos_stats(sample, label):
+        if not sample:
+            return None
+        bull = [r.get("ret_3m") for r in sample if r["positive"] >= 4]
+        bear = [r.get("ret_3m") for r in sample if r["negative"] >= 4]
+        return {
+            "period": label,
+            "total_points": len(sample),
+            "bull_count": sum(1 for r in sample if r["positive"] >= 4),
+            "bear_count": sum(1 for r in sample if r["negative"] >= 4),
+            "bull_hit_3m": round(hit_rate(bull, 'positive'), 1),
+            "bear_hit_3m": round(hit_rate(bear, 'negative'), 1),
+            "avg_score": round(avg([r["score"] for r in sample]), 2),
+        }
+
+    # === 롤링 6개월 hit rate ===
+    rolling_window = 26  # 약 6개월 (주간 단위)
+    rolling_hits = []
+    for i in range(rolling_window, len(results)):
+        window = results[i - rolling_window:i]
+        bull_window = [r.get("ret_3m") for r in window if r["positive"] >= 4]
+        if bull_window:
+            rolling_hits.append({
+                "date": results[i]["date"],
+                "bull_hit_3m": round(hit_rate(bull_window, 'positive'), 1),
+            })
 
     return {
-        "by_signal": {
-            "strong_bull": category_stats(strong_bull),
-            "bull_lean": category_stats(bull_lean),
-            "balanced": category_stats(balanced),
-            "bear_lean": category_stats(bear_lean),
-            "strong_bear": category_stats(strong_bear),
-        },
+        "by_signal": by_signal,
         "overall": {
             "total_points": len(results),
             "bull_hit_3m": round(bull_hit_3m, 1),
             "bear_hit_3m": round(bear_hit_3m, 1),
             "avg_score": round(avg([r["score"] for r in results]), 2),
             "avg_3m_all": round(avg([r.get("ret_3m") for r in results]), 2),
-        }
+        },
+        "strategy": {
+            "description": "신호 기반 포지션 조정: 강세4+ 100%, 강세3 75%, 균형 50%, 약세3 25%, 약세4+ 0%",
+            "portfolio_total_return": round(portfolio_total_return, 2),
+            "bnh_total_return": round(bnh_total_return, 2),
+            "portfolio_sharpe_annualized": round(port_sharpe, 3),
+            "bnh_sharpe_annualized": round(bnh_sharpe, 3),
+            "portfolio_max_drawdown": round(port_mdd, 2),
+            "bnh_max_drawdown": round(bnh_mdd, 2),
+            "outperformance": round(portfolio_total_return - bnh_total_return, 2),
+        },
+        "equity_curve": equity_curve,
+        "out_of_sample": {
+            "in_sample (2021-2023)": oos_stats(in_sample, "2021-01 ~ 2023-12"),
+            "out_of_sample (2024-)": oos_stats(oos_sample, "2024-01 ~ 현재"),
+        },
+        "rolling_hit_rate_6m": rolling_hits,
     }
 
 

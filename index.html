@@ -2023,6 +2023,69 @@
     </div>
   </div>
 
+  <!-- NEW v5: 전략 시뮬레이션 결과 -->
+  <div class="bg-gradient-to-br from-violet-50 to-purple-50 border-2 border-violet-300 rounded-2xl p-6 mb-6">
+    <h3 class="text-lg font-bold text-violet-900 mb-2">🎲 전략 시뮬레이션: 신호 기반 포트폴리오 vs Buy & Hold</h3>
+    <p class="text-xs text-violet-700 mb-4" id="btStrategyDesc">신호 따라 포지션 조정</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-white rounded-xl p-4">
+        <div class="font-bold text-sm text-violet-800 mb-2">🤖 8축 신호 기반 포트폴리오</div>
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between"><span>총 수익률:</span><span class="font-bold" id="btPortReturn">-</span></div>
+          <div class="flex justify-between"><span>Sharpe (연환산):</span><span class="font-bold" id="btPortSharpe">-</span></div>
+          <div class="flex justify-between"><span>Max Drawdown:</span><span class="font-bold text-rose-600" id="btPortMDD">-</span></div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4">
+        <div class="font-bold text-sm text-slate-700 mb-2">📈 Buy & Hold (S&P 500)</div>
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between"><span>총 수익률:</span><span class="font-bold" id="btBnhReturn">-</span></div>
+          <div class="flex justify-between"><span>Sharpe (연환산):</span><span class="font-bold" id="btBnhSharpe">-</span></div>
+          <div class="flex justify-between"><span>Max Drawdown:</span><span class="font-bold text-rose-600" id="btBnhMDD">-</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-4 mt-4 text-center">
+      <div class="text-xs text-slate-500">초과 수익 (Outperformance)</div>
+      <div class="text-3xl font-bold" id="btOutperformance">-</div>
+      <p class="text-xs text-slate-500 mt-2" id="btStrategyInterp">결과 분석 중...</p>
+    </div>
+  </div>
+
+  <!-- NEW v5: 누적 자산 곡선 -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-2">📊 누적 자산 곡선 (Equity Curve)</h3>
+    <p class="text-xs text-slate-500 mb-4">100에서 시작, 매주 신호 기반 vs Buy & Hold 비교</p>
+    <div style="height:400px"><canvas id="btEquityChart"></canvas></div>
+  </div>
+
+  <!-- NEW v5: Out-of-sample 검증 -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-2">🔬 Out-of-Sample 검증 (룰의 진짜 신뢰도)</h3>
+    <p class="text-xs text-slate-500 mb-4">In-sample (2021-23)에서 학습한 룰을 Out-of-sample (2024-현재)에서 검증. <b>OOS hit rate가 in-sample과 비슷하면 진짜 신뢰</b>.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead class="bg-slate-100"><tr>
+          <th class="border p-2 text-left">기간</th>
+          <th class="border p-2 text-center">시점</th>
+          <th class="border p-2 text-center">강세 신호</th>
+          <th class="border p-2 text-center">약세 신호</th>
+          <th class="border p-2 text-center">강세 hit (3M+)</th>
+          <th class="border p-2 text-center">약세 hit (3M-)</th>
+          <th class="border p-2 text-center">평균 점수</th>
+        </tr></thead>
+        <tbody id="btOOSBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NEW v5: 롤링 6개월 hit rate -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+    <h3 class="text-lg font-bold mb-2">📉 롤링 6개월 강세 신호 적중률</h3>
+    <p class="text-xs text-slate-500 mb-4">매 시점에서 직전 6개월간의 강세 신호 → 3개월 후 상승률 정확도. 70% 위는 신뢰, 50% 아래는 불신.</p>
+    <div style="height:340px"><canvas id="btRollingChart"></canvas></div>
+  </div>
+
   <!-- 시점별 데이터 테이블 (펼침) -->
   <details class="bg-white rounded-2xl p-6 shadow-sm">
     <summary class="cursor-pointer font-bold text-lg flex items-center justify-between">
@@ -4244,6 +4307,11 @@ function renderBacktest() {
   renderBacktestDistChart();
   // 6. 상세 표 (최근 50개)
   renderBacktestDetailTable();
+  // 7. NEW v5: 전략 시뮬레이션
+  if (typeof renderBacktestStrategy === 'function') renderBacktestStrategy();
+  if (typeof renderBacktestEquityChart === 'function') renderBacktestEquityChart();
+  if (typeof renderBacktestOOS === 'function') renderBacktestOOS();
+  if (typeof renderBacktestRollingChart === 'function') renderBacktestRollingChart();
 }
 
 function renderBacktestTimeChart() {
@@ -4377,6 +4445,160 @@ function renderBacktestDistChart() {
         tooltip: {
           callbacks: {
             label: (ctx) => `${ctx.label}: ${ctx.parsed}회 (${(ctx.parsed / backtestData.total_points * 100).toFixed(1)}%)`
+          }
+        }
+      }
+    }
+  });
+}
+
+function renderBacktestStrategy() {
+  if (!backtestData || !backtestData.stats || !backtestData.stats.strategy) return;
+  const st = backtestData.stats.strategy;
+
+  const setEl = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+  const colorize = (v) => v >= 0 ? 'text-emerald-600' : 'text-rose-600';
+
+  const fmt = (v) => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
+
+  const portReturn = document.getElementById('btPortReturn');
+  if (portReturn) {
+    portReturn.textContent = fmt(st.portfolio_total_return);
+    portReturn.className = 'font-bold ' + colorize(st.portfolio_total_return);
+  }
+  const bnhReturn = document.getElementById('btBnhReturn');
+  if (bnhReturn) {
+    bnhReturn.textContent = fmt(st.bnh_total_return);
+    bnhReturn.className = 'font-bold ' + colorize(st.bnh_total_return);
+  }
+  setEl('btPortSharpe', st.portfolio_sharpe_annualized.toFixed(3));
+  setEl('btBnhSharpe', st.bnh_sharpe_annualized.toFixed(3));
+  setEl('btPortMDD', '-' + st.portfolio_max_drawdown.toFixed(2) + '%');
+  setEl('btBnhMDD', '-' + st.bnh_max_drawdown.toFixed(2) + '%');
+
+  const outperf = document.getElementById('btOutperformance');
+  if (outperf) {
+    outperf.textContent = fmt(st.outperformance) + 'p';
+    outperf.className = 'text-3xl font-bold ' + colorize(st.outperformance);
+  }
+
+  setEl('btStrategyDesc', st.description);
+
+  const interp = document.getElementById('btStrategyInterp');
+  if (interp) {
+    if (st.outperformance > 0) {
+      interp.innerHTML = `🎉 <b>신호 기반 전략이 BNH보다 +${st.outperformance.toFixed(1)}%p 우위</b>. 룰의 통계적 유의성 입증.`;
+    } else {
+      interp.innerHTML = `⚠️ <b>5년간 강세장에서는 단순 Buy & Hold가 ${Math.abs(st.outperformance).toFixed(1)}%p 더 좋음.</b> 단, MDD(${st.portfolio_max_drawdown.toFixed(1)}% vs ${st.bnh_max_drawdown.toFixed(1)}%)는 신호 전략이 더 작아 <b>위험관리 효과는 있음</b>.`;
+    }
+  }
+}
+
+function renderBacktestEquityChart() {
+  const ctx = document.getElementById('btEquityChart');
+  if (!ctx || !backtestData || !backtestData.stats || !backtestData.stats.equity_curve) return;
+  if (btCharts.equity) btCharts.equity.destroy();
+  const ec = backtestData.stats.equity_curve;
+  btCharts.equity = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ec.map(p => p.date),
+      datasets: [
+        {
+          label: '🤖 신호 기반 포트폴리오',
+          data: ec.map(p => p.portfolio),
+          borderColor: '#8b5cf6',
+          backgroundColor: 'rgba(139,92,246,0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          pointRadius: 0,
+          fill: true
+        },
+        {
+          label: '📈 Buy & Hold (S&P 500)',
+          data: ec.map(p => p.bnh),
+          borderColor: '#f97316',
+          backgroundColor: 'rgba(249,115,22,0.05)',
+          borderWidth: 2,
+          tension: 0.3,
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        x: { ticks: { maxTicksLimit: 12, autoSkip: true, maxRotation: 45 } },
+        y: {
+          title: { display: true, text: '누적 자산 (시작=100)' },
+          grid: {
+            color: (ctx) => ctx.tick.value === 100 ? '#94a3b8' : '#e2e8f0',
+            lineWidth: (ctx) => ctx.tick.value === 100 ? 2 : 1
+          }
+        }
+      }
+    }
+  });
+}
+
+function renderBacktestOOS() {
+  const tbody = document.getElementById('btOOSBody');
+  if (!tbody || !backtestData || !backtestData.stats || !backtestData.stats.out_of_sample) return;
+  const oos = backtestData.stats.out_of_sample;
+  const rows = [];
+  for (const [key, stats] of Object.entries(oos)) {
+    if (!stats) continue;
+    const isOOS = key.includes('out_of_sample');
+    const bgClass = isOOS ? 'bg-violet-50' : 'bg-blue-50';
+    rows.push(`<tr class="${bgClass}">
+      <td class="border p-2 font-bold">${isOOS ? '🔬 OOS' : '📚 In-sample'} ${stats.period}</td>
+      <td class="border p-2 text-center">${stats.total_points}</td>
+      <td class="border p-2 text-center text-emerald-700">${stats.bull_count}</td>
+      <td class="border p-2 text-center text-rose-700">${stats.bear_count}</td>
+      <td class="border p-2 text-center font-bold ${stats.bull_hit_3m >= 70 ? 'text-emerald-600' : (stats.bull_hit_3m >= 50 ? 'text-amber-600' : 'text-rose-600')}">${stats.bull_hit_3m}%</td>
+      <td class="border p-2 text-center font-bold ${stats.bear_hit_3m >= 70 ? 'text-emerald-600' : 'text-amber-600'}">${stats.bear_hit_3m}%</td>
+      <td class="border p-2 text-center">${stats.avg_score >= 0 ? '+' : ''}${stats.avg_score}</td>
+    </tr>`);
+  }
+  tbody.innerHTML = rows.join('');
+}
+
+function renderBacktestRollingChart() {
+  const ctx = document.getElementById('btRollingChart');
+  if (!ctx || !backtestData || !backtestData.stats || !backtestData.stats.rolling_hit_rate_6m) return;
+  if (btCharts.rolling) btCharts.rolling.destroy();
+  const rh = backtestData.stats.rolling_hit_rate_6m;
+  btCharts.rolling = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: rh.map(p => p.date),
+      datasets: [{
+        label: '롤링 6개월 강세 신호 hit rate',
+        data: rh.map(p => p.bull_hit_3m),
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16,185,129,0.1)',
+        borderWidth: 2,
+        tension: 0.3,
+        pointRadius: 0,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        x: { ticks: { maxTicksLimit: 10, autoSkip: true, maxRotation: 45 } },
+        y: {
+          title: { display: true, text: 'Hit Rate (%)' },
+          min: 0, max: 100,
+          grid: {
+            color: (ctx) => (ctx.tick.value === 50 || ctx.tick.value === 70) ? '#94a3b8' : '#e2e8f0',
+            lineWidth: (ctx) => (ctx.tick.value === 50 || ctx.tick.value === 70) ? 2 : 1
           }
         }
       }

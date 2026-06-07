@@ -962,15 +962,15 @@ def main():
 
     manual_axes = {
         "earnings": {
-            "rating": "긍정",
+            "rating": "중립",
             "metrics": [
                 {"k": "Beat Rate", "v": "84%", "tone": "pos", "source": "FactSet (Q1)"},
-                {"k": "EPS YoY", "v": "+15.1%", "tone": "pos", "source": "FactSet"},
-                {"k": "Mag7 CAPEX", "v": "$725B", "tone": "pos", "source": "분기 합산"}
+                {"k": "Broadcom 가이던스", "v": "상향 실패 ⚠️", "tone": "neg", "source": "2026-06-04"},
+                {"k": "반도체", "v": "Micron -17% AMD -13%", "tone": "neg", "source": "2026-06-05"}
             ],
-            "summary": "Q1 84% Beat, 6분기 연속 두자리 EPS.",
-            "pdfTip": "실적보다 가이던스. NVDA 2023 사례.",
-            "last_manual": "2026-05-24"
+            "summary": "Q1 Beat 84%는 유효하나, Broadcom AI 가이던스 실패로 반도체 급락 — '실적보다 가이던스' 실전 사례.",
+            "pdfTip": "실적보다 가이던스. Broadcom 2026.06 사례 = NVDA 2023과 동일 패턴.",
+            "last_manual": "2026-06-05"
         },
         "margin": {
             "rating": "긍정",

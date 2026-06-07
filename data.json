@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-07T04:11:10.077365+00:00",
-  "last_updated_kst": "2026-06-07 13:11 KST",
+  "last_updated": "2026-06-07T04:19:36.425344+00:00",
+  "last_updated_kst": "2026-06-07 13:19 KST",
   "version": "v3.0",
   "prices": {
     "sp500": {
@@ -158,11 +158,11 @@
       "source": "Yahoo"
     },
     "btc": {
-      "value": 61498.1719,
+      "value": 61602.7305,
       "prev": 60922.668,
-      "change_pct": 0.94,
-      "change_5d_pct": -13.77,
-      "change_1m_pct": -23.14,
+      "change_pct": 1.12,
+      "change_5d_pct": -13.62,
+      "change_1m_pct": -23.01,
       "high_1m": 82430.1719,
       "low_1m": 59108.918,
       "trade_date": "2026-06-07",
@@ -1172,7 +1172,7 @@
   },
   "manual_axes": {
     "earnings": {
-      "rating": "긍정",
+      "rating": "중립",
       "metrics": [
         {
           "k": "Beat Rate",
@@ -1181,22 +1181,22 @@
           "source": "FactSet (Q1)"
         },
         {
-          "k": "EPS YoY",
-          "v": "+15.1%",
-          "tone": "pos",
-          "source": "FactSet"
+          "k": "Broadcom 가이던스",
+          "v": "상향 실패 ⚠️",
+          "tone": "neg",
+          "source": "2026-06-04"
         },
         {
-          "k": "Mag7 CAPEX",
-          "v": "$725B",
-          "tone": "pos",
-          "source": "분기 합산"
+          "k": "반도체",
+          "v": "Micron -17% AMD -13%",
+          "tone": "neg",
+          "source": "2026-06-05"
         }
       ],
-      "summary": "Q1 84% Beat, 6분기 연속 두자리 EPS.",
-      "pdfTip": "실적보다 가이던스. NVDA 2023 사례.",
-      "last_manual": "2026-05-24",
-      "as_of": "2026-05-24",
+      "summary": "Q1 Beat 84%는 유효하나, Broadcom AI 가이던스 실패로 반도체 급락 — '실적보다 가이던스' 실전 사례.",
+      "pdfTip": "실적보다 가이던스. Broadcom 2026.06 사례 = NVDA 2023과 동일 패턴.",
+      "last_manual": "2026-06-05",
+      "as_of": "2026-06-05",
       "freq": "분기"
     },
     "margin": {
@@ -1230,20 +1230,27 @@
   },
   "inflection": {
     "compared_to": "2026-06-07",
-    "changed": [],
-    "count": 0,
+    "changed": [
+      {
+        "axis": "earnings",
+        "from": "긍정",
+        "to": "중립",
+        "direction": "down"
+      }
+    ],
+    "count": 1,
     "is_inflection": false,
-    "summary": "0개 축 변동",
+    "summary": "1개 축 변동",
     "first_run": false
   },
   "action": {
-    "signal": "약한 강세 관망",
-    "level": "neutral_bull",
+    "signal": "중립 관망",
+    "level": "neutral",
     "confidence": "낮음",
-    "cash_ratio": "25~35%",
-    "reason": "긍정 2 / 부정 1 — 약한 강세 (4축 미달, 정적 축 의존)",
-    "backtest_note": "강세 신호 부족 — 자동 6축 중 추가 긍정 전환 대기",
-    "allocation": "대형 우량주 45% + 방어주 25% + 현금 25~35%",
+    "cash_ratio": "30~40%",
+    "reason": "긍정 1 = 부정 1 — 균형 (변동성 장세)",
+    "backtest_note": "백테스트: 균형 시 의외로 1M +1.76% (시장 평균에 가까움)",
+    "allocation": "대형주 40% + 채권/금 20% + 현금 30~40%",
     "contrarian": null,
     "buy_triggers": [
       "자금흐름 부정→중립 전환"
@@ -1263,12 +1270,12 @@
     }
   ],
   "summary": {
-    "positive": 2,
-    "neutral": 5,
+    "positive": 1,
+    "neutral": 6,
     "negative": 1,
-    "score": 1,
-    "phase": "강세 우위 횡보",
-    "strategy": "중립 + 약공격"
+    "score": 0,
+    "phase": "변동성 장세",
+    "strategy": "신중"
   },
   "data_sources": {
     "yahoo": "yfinance + Stooq fallback — 시세 38개",

@@ -65,6 +65,9 @@
   .strat-subbtn { background: #f1f5f9; color: #475569; transition: all .2s; border: 1px solid #e2e8f0; }
   .strat-subbtn:hover { background: #e2e8f0; }
   .strat-subbtn.active { background: linear-gradient(135deg, #e11d48, #ec4899); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(225,29,72,0.30); }
+  .tech-subbtn { background: #f1f5f9; color: #475569; transition: all .2s; border: 1px solid #e2e8f0; }
+  .tech-subbtn:hover { background: #e2e8f0; }
+  .tech-subbtn.active { background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(124,58,237,0.30); }
   .pulse-dot { animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
   .card-hover { transition: transform .2s, box-shadow .2s; }
@@ -2133,20 +2136,224 @@
 <!-- 기술적 분석 프로젝트 -->
 <section id="tab-technical" class="tab-content hidden">
   <div class="bg-gradient-to-r from-purple-50 to-fuchsia-50 border-l-4 border-purple-500 rounded-xl p-6 mb-6">
-    <h2 class="text-xl font-bold">📐 기술적 분석 프로젝트</h2>
-    <p class="text-sm text-slate-600 mt-1">차트·추세·지표 기반의 매매 타이밍 분석 체계가 들어갈 공간입니다.</p>
+    <h2 class="text-xl font-bold">📐 기술적 분석 프로젝트 — 분석의 4대 축</h2>
+    <p class="text-sm text-slate-600 mt-1">지표를 외우지 않는다. <b>가격·시간·구조·유동성</b> 4개의 렌즈로 시장 그 자체를 읽는다. (기술적 분석 2강 기반)</p>
+    <p class="text-xs text-purple-500 mt-1">💡 8축 "무엇을 살까(거시)" + 기술 "언제 살까(타이밍)" = 완성</p>
   </div>
-  <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
-    <div class="text-5xl mb-4">📐</div>
-    <h3 class="text-lg font-bold mb-2">콘텐츠 준비 중</h3>
-    <p class="text-sm text-slate-500 max-w-lg mx-auto">이 카테고리의 PDF를 추가하면 여기에 자동으로 학습 콘텐츠가 채워집니다.<br>예상 구성: 추세·지지/저항, 캔들·차트 패턴, 이동평균·MACD·RSI, 거래량 분석, 진입/청산 규칙</p>
-    <div class="flex flex-wrap gap-2 justify-center mt-5 text-xs">
-      <span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full">추세 분석</span>
-      <span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full">차트 패턴</span>
-      <span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full">보조지표</span>
-      <span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full">매매 타이밍</span>
+
+  <!-- 서브탭 -->
+  <div class="flex flex-wrap gap-2 mb-6">
+    <button onclick="switchTechSub('axes')" class="tech-subbtn active px-4 py-2 rounded-lg text-sm font-semibold" data-tech="axes">📐 4대 축</button>
+    <button onclick="switchTechSub('process')" class="tech-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-tech="process">🎯 통합 5단계 + 진단</button>
+    <button onclick="switchTechSub('indicator')" class="tech-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-tech="indicator">🛠️ 트레이딩뷰 지표</button>
+  </div>
+
+  <!-- ===== 4대 축 ===== -->
+  <div id="tech-axes" class="tech-sub space-y-4">
+    <div class="bg-white rounded-2xl p-5 shadow-sm">
+      <p class="text-sm text-slate-600">시장의 모든 현상은 <b>4가지 질문</b>으로 설명된다. 무엇이 일어났나(<b>가격</b>) · 얼마나 걸렸나(<b>시간</b>) · 어떤 패턴인가(<b>구조</b>) · 왜 그랬나(<b>유동성</b>). 이 4개는 분석 도구가 아니라 <b>시장의 본질적 속성</b>이다.</p>
     </div>
-    <p class="text-xs text-slate-400 mt-5">💡 8축의 "거시 진단"과 결합하면 <b>"무엇을 살까(거시) + 언제 살까(기술)"</b>가 완성됩니다.</p>
+
+    <details class="bg-white rounded-2xl shadow-sm overflow-hidden" open>
+      <summary class="cursor-pointer p-5 font-bold flex items-center justify-between"><span>① 가격 — 충돌의 기록</span><span class="chev">▾</span></summary>
+      <div class="px-5 pb-5 study-content text-sm">
+        <div class="quote">가격은 합의가 아니라 <b>불균형의 해소</b>다. 한쪽이 더 버티지 못하고 굴복하는 지점. 그래서 모든 가격엔 긴장이 내재한다.</div>
+        <h4>지지·저항 = 집단 기억의 물리적 발현</h4>
+        <ul>
+          <li>"저번에 여기서 반등/막혔지"라는 <b>집단 기억</b>이 같은 행동을 부른다 → 자기실현적 예언</li>
+          <li class="text-rose-700"><b>함정:</b> "모두가 아는" 지지선은 오히려 깨진다 — 그 아래 손절이 쌓여 큰손의 사냥 표적이 됨</li>
+          <li>그래서 초보는 <b>선이 아닌 '면'</b>으로 보고 <b>분할 매수</b>로 접근 (우린 청산 위험 있는 선물이 아니다)</li>
+        </ul>
+        <h4>가격의 상대성 — 절대가격은 환상</h4>
+        <ul>
+          <li>가격은 항상 상대적: ①과거 대비 ②현재 범위 내 위치 ③변동성 대비</li>
+          <li><b>앵커링 효과</b> 주의 — 내가 처음 본 가격(임의적)이 아니라 <b>역사적 범위</b>가 기준</li>
+        </ul>
+        <h4>3상태 전이 + 갭</h4>
+        <ul>
+          <li>상승/하락(지속적 불균형) ↔ 횡보(균형). 전이는 점진적이 아니라 <b>갑자기</b> 터진다 (물 99→100도)</li>
+          <li><b>돌파 갭</b> = 강한 신호, 잘 안 채워짐 / <b>소진 갭</b> = 추세 말기, 빠르게 채워짐 → 맥락이 전부</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <summary class="cursor-pointer p-5 font-bold flex items-center justify-between"><span>② 시간 — 에너지의 축적과 소모</span><span class="chev">▾</span></summary>
+      <div class="px-5 pb-5 study-content text-sm">
+        <div class="quote">시간은 <b>에너지의 대리 지표</b>다. 급등은 미래 에너지를 당겨 쓴 '빚' → 급락으로 갚는다. 완만한 상승은 빚이 없어 조정도 얕다.</div>
+        <h4>평단 분포 (시간이 결정)</h4>
+        <ul>
+          <li><b>빠른 상승</b> = 거래가 상단에 몰림 = 취약 (조금만 빠져도 다수가 손실)</li>
+          <li><b>느린 상승</b> = 분산형 평단 = 튼튼 (조정 나와도 수익 구간 많음)</li>
+        </ul>
+        <h4>횡보 = 에너지 축적 (스프링)</h4>
+        <ul>
+          <li>지루한 횡보 동안 포지션 축적·의견 양극화·에너지 압축 → 오래 횡보할수록 브레이크아웃이 강함</li>
+          <li>충분 조건: <b>최소 4주, 가능하면 2~3개월+</b> (6개월이면 터지면 크게)</li>
+        </ul>
+        <h4>시간 대칭성 / 시간 비율</h4>
+        <ul>
+          <li>건강한 추세 = 상승:조정 <b>2:1 ~ 3:1</b>. 조정은 보통 상승 기간의 25~50%</li>
+          <li>하락이 더 빠름 — <b>공포 &gt; 욕심</b> (천천히 사고 빠르게 판다)</li>
+          <li>시간 비율 12:1(조정 부족) → 곧 긴 조정 위험 / 1:2(과도 조정) → 곧 강한 상승 가능</li>
+        </ul>
+        <h4>확신 필터 + 프랙탈</h4>
+        <ul>
+          <li>긴 시간 = 촘촘한 필터 → 확신 있는 <b>강한 손</b>만 남아 추세가 믿을 만함</li>
+          <li>여러 타임프레임에서 같은 패턴(3:1 등) 확인되면 신뢰도↑ → <b>다중 TF 분석 필수</b></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <summary class="cursor-pointer p-5 font-bold flex items-center justify-between"><span>③ 구조 — 질서와 무질서의 언어</span><span class="chev">▾</span></summary>
+      <div class="px-5 pb-5 study-content text-sm">
+        <div class="quote">구조의 본질은 패턴 암기가 아니라 <b>시장의 상태</b> 파악이다. 질서(추세)냐 무질서(횡보)냐 → 전략이 갈린다.</div>
+        <h4>상태별 전략</h4>
+        <table>
+          <tr><th>상태</th><th>전략</th><th>실수 시</th></tr>
+          <tr><td>질서(추세)</td><td>추세 추종 (오르는 걸 산다)</td><td>역추세 쓰면 계속 손절</td></tr>
+          <tr><td>무질서(횡보)</td><td>역추세 (하단 매수·상단 매도)</td><td>추세추종 쓰면 가짜 돌파에 속음</td></tr>
+        </table>
+        <h4>고점·저점 = 집단 의사결정의 흔적</h4>
+        <ul><li>추세 = <b>집단 심리의 일관된 방향성</b>. 유지되는 한 추세는 계속 — 심리가 바뀔 때까지</li></ul>
+        <h4 class="text-rose-700">추세 전환 3단계 (이걸 모두 확인해야 진짜)</h4>
+        <ul>
+          <li><b>1. 경고</b> — 고점 갱신 '폭'이 작아짐</li>
+          <li><b>2. 균열</b> — 고점 갱신 실패 + 횡보</li>
+          <li><b>3. 전환</b> — 저점 돌파(붕괴)</li>
+          <li>앞 2단계 없이 저점만 깨지면 → 가짜·유동성 사냥 가능성 높음</li>
+        </ul>
+        <h4>구조 강도 + 공백 구간</h4>
+        <ul>
+          <li>테스트 <b>2~3번</b>이 최적 — 4번+부터는 피로 누적으로 오히려 약해져 깨짐</li>
+          <li>큰 타임프레임(주봉·월봉) 구조가 더 중요. 작은 TF 붕괴는 노이즈</li>
+          <li><b>공백 구간</b>(과거 거래 적은 곳) = 지지 없어 쭉 빠짐 → 손절은 공백 너머 구조에, 진입은 손익비 좋음</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <summary class="cursor-pointer p-5 font-bold flex items-center justify-between"><span>④ 유동성 — 시장을 움직이는 진짜 힘</span><span class="chev">▾</span></summary>
+      <div class="px-5 pb-5 study-content text-sm">
+        <div class="quote">유동성 = 거래량이 아니라 <b>강제된 주문</b>(손절·청산·마진콜)이 쌓인 곳. 큰손은 이 확정 물량을 노린다.</div>
+        <h4>유동성 사냥 메커니즘</h4>
+        <ul>
+          <li>큰손이 대량 매수하려면 반대편 물량 필요 → 가격을 <b>일부러 떨어뜨려 손절 유발</b> → 싸게 대량 확보 → 다시 올림</li>
+          <li>그래서 가격은 직선이 아니라 지그재그 — <b>비효율은 랜덤이 아니라 구조적</b>(예측 가능)</li>
+          <li class="text-rose-700">같은 고점/저점이 여러 개 = 유동성 극도 집중 = 사냥 표적</li>
+        </ul>
+        <h4>유동성 사냥 vs 진짜 붕괴 구분</h4>
+        <table>
+          <tr><th></th><th>유동성 사냥</th><th>진짜 붕괴</th></tr>
+          <tr><td>꼬리</td><td>긴 꼬리</td><td>짧거나 없음</td></tr>
+          <tr><td>회복</td><td>빠름(몇시간~하루)</td><td>느림(며칠+) 또는 없음</td></tr>
+          <tr><td>거래량</td><td>순간 터지고 줄어듦</td><td>지속 증가</td></tr>
+        </table>
+        <h4>스탑로스의 역설 + 위계</h4>
+        <ul>
+          <li>손절은 "여기서 포기한다"는 <b>정보 제공</b> → 뻔한 곳(지지선 바로 아래)은 사냥당함</li>
+          <li>스마트하게: 모두 거는 곳 피하기 + <b>시간 조건</b> 추가("깨고 1시간+ 머물면 손절")</li>
+          <li><b>위계</b>: 주봉·월봉 유동성이 큼 — 드물게 깨지지만 깨지면 큰 움직임. 일봉 사냥은 노이즈</li>
+          <li>사냥 후 반대로 강하게 감 (아래 사냥→위). 단 여러 번 가능 → <b>침투 깊이·시간(규모)</b>로 판단</li>
+        </ul>
+        <div class="danger">제로섬: 돈은 정보 비대칭으로 <b>개인 → 기관</b>으로 이동. 개인은 차트·과거·패턴을 보고, 기관은 <b>유동성·미래·심리</b>를 본다. 살아남으려면 대중의 반대편에 서라.</div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 통합 5단계 + 진단 ===== -->
+  <div id="tech-process" class="tech-sub hidden space-y-4">
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h3 class="font-bold text-lg mb-3">🎯 4대 축 통합 — 5단계 분석 프로세스</h3>
+      <div class="space-y-2 text-sm">
+        <div class="flex gap-3 bg-slate-50 rounded-lg p-3"><span class="font-bold text-purple-600 w-7">1</span><div><b>구조 파악(큰 그림)</b> — 주봉·일봉에서 추세/횡보? 상승/하락? 범위는?</div></div>
+        <div class="flex gap-3 bg-slate-50 rounded-lg p-3"><span class="font-bold text-purple-600 w-7">2</span><div><b>가격 분석(현재 위치)</b> — 추세 초/중/말기? 범위 상/중/하단? 맥락 속 비싼가 싼가?</div></div>
+        <div class="flex gap-3 bg-slate-50 rounded-lg p-3"><span class="font-bold text-purple-600 w-7">3</span><div><b>시간 분석(에너지)</b> — 얼마나 지속? 에너지 소진/잔존? 시간 비율 정상? 조정 충분?</div></div>
+        <div class="flex gap-3 bg-slate-50 rounded-lg p-3"><span class="font-bold text-purple-600 w-7">4</span><div><b>유동성 분석(위험 지점)</b> — 유동성이 위/아래 어디? 최근 사냥 있었나?</div></div>
+        <div class="flex gap-3 bg-purple-50 rounded-lg p-3"><span class="font-bold text-purple-700 w-7">5</span><div><b>통합 판단(전략)</b> — 4축이 같은 방향 = 확신 진입. 하나라도 엇갈리면 신중·소액</div></div>
+      </div>
+      <p class="text-xs text-slate-500 mt-3">4개 축은 톱니바퀴처럼 연결: 가격→시간→구조→유동성→가격. 하나가 움직이면 나머지도 움직인다.</p>
+    </div>
+
+    <!-- 인터랙티브 4축 진단 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h3 class="font-bold text-lg mb-1">🧭 4축 통합 진단기</h3>
+      <p class="text-xs text-slate-500 mb-4">현재 차트의 4개 축 상태를 고르면 진입 적합도를 종합 판정합니다 (확신 ≠ 예측).</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+        <label class="block">구조
+          <select class="tech-input w-full border rounded p-2 mt-1" onchange="calcTechSignal()"><option value="2">상승 추세(질서)</option><option value="1" selected>횡보(무질서)</option><option value="0">하락 추세</option></select></label>
+        <label class="block">가격(위치)
+          <select class="tech-input w-full border rounded p-2 mt-1" onchange="calcTechSignal()"><option value="2">범위 하단·싸다</option><option value="1" selected>중간</option><option value="0">범위 상단·비싸다</option></select></label>
+        <label class="block">시간(에너지)
+          <select class="tech-input w-full border rounded p-2 mt-1" onchange="calcTechSignal()"><option value="2">조정 충분·에너지 축적</option><option value="1" selected>보통</option><option value="0">과열·에너지 소진</option></select></label>
+        <label class="block">유동성
+          <select class="tech-input w-full border rounded p-2 mt-1" onchange="calcTechSignal()"><option value="2">사냥 완료·반등 신호(긴 꼬리)</option><option value="1" selected>중립</option><option value="0">위에 쌓임·사냥 대기</option></select></label>
+      </div>
+      <div id="techSignalOut" class="mt-4 rounded-xl p-4 bg-slate-50 text-center">
+        <div class="text-xs text-slate-500">진입 적합도</div>
+        <div class="text-3xl font-extrabold my-1" id="techScore">4</div>
+        <div class="font-bold" id="techVerdict">신중 / 관망</div>
+        <div class="text-sm text-slate-600 mt-1" id="techAdvice"></div>
+      </div>
+    </div>
+
+    <!-- 시나리오 기반 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
+        <h4 class="font-bold text-emerald-800 mb-2">시나리오 A — 지지선 반등</h4>
+        <div class="text-sm study-content"><ul>
+          <li>긴 아래꼬리 + 빠른 회복 = 유동성 사냥 완료</li>
+          <li>→ 진입 · 손절은 사냥 저점 아래 · 목표는 이전 고점/저항</li>
+        </ul></div>
+      </div>
+      <div class="bg-rose-50 border border-rose-200 rounded-2xl p-5">
+        <h4 class="font-bold text-rose-800 mb-2">시나리오 B — 지지선 붕괴</h4>
+        <div class="text-sm study-content"><ul>
+          <li>지지선 깨고 오래 머묾 = 진짜 붕괴 (추세 전환 가능)</li>
+          <li>→ 관망/청산 · 주봉 저점 확인 후 재진입 고려</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="bg-indigo-50 border-l-4 border-indigo-500 rounded-lg p-4 text-sm text-indigo-900">
+      <b>확률적 사고:</b> "이렇게 될 것이다"라고 예측하지 않는다. "이러면 이렇게, 저러면 저렇게" <b>미리 시나리오</b>를 짜서 감정 개입을 차단한다. 100%는 없다 → 틀렸을 때 대비책(손절)이 더 중요.
+    </div>
+  </div>
+
+  <!-- ===== 트레이딩뷰 지표 ===== -->
+  <div id="tech-indicator" class="tech-sub hidden space-y-4">
+    <div class="bg-white rounded-2xl p-5 shadow-sm">
+      <p class="text-sm text-slate-600">자산제곱 자체 제작 트레이딩뷰 지표 2종. <b>매수/매도를 알려주는 도구가 아니라</b>, 여러 공개 보조지표가 겹치는 구간을 시각화하는 도구다. 기준이 선 사람에게만 의미가 있다.</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="bg-white rounded-2xl p-6 shadow-sm border-t-4 border-emerald-500">
+        <h3 class="font-bold text-lg">🟢 Trend Vision <span class="text-xs text-slate-400">(주봉 · 큰 추세)</span></h3>
+        <div class="text-sm study-content mt-2"><ul>
+          <li><b>배경색</b>: 초록=상승 추세 / 빨강=하락 추세</li>
+          <li><b>UP</b>: 상승 추세 내 단기 조정 마무리·재상승 / <b>BOTTOM</b>: 하락 중 단기 반등 가능 / <b>DOWN</b>: 위→아래 전환</li>
+          <li><b>우측 하단 패널</b>: 추세 방향·단기 신호·RSI·장기 평균선·보조지표·매물 부담</li>
+          <li>용도: <b>큰 추세 방향을 먼저</b> 파악</li>
+        </ul></div>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-sm border-t-4 border-indigo-500">
+        <h3 class="font-bold text-lg">🔵 Multi Lens <span class="text-xs text-slate-400">(일봉 · 다중신호)</span></h3>
+        <div class="text-sm study-content mt-2"><ul>
+          <li><b>배경색</b>: 초록=상승 / 빨강=하락</li>
+          <li><b>UP/DOWN</b> + <b>라벨 크기 = 신호 강도</b> (큰 라벨 = 더 많은 지표가 같은 방향 = 근거 겹침)</li>
+          <li>용도: Trend Vision으로 큰 추세 확인 후 <b>변화 시점</b> 참고</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h3 class="font-bold mb-2">🎁 받는 방법 & 추가 방법</h3>
+      <div class="text-sm study-content"><ul>
+        <li>장기 구독자 선물 — <b>구독 2개월차부터</b> 제공 (해지 시 권한 회수)</li>
+        <li>신청: 해당 글 하단 <b>비밀 댓글</b>에 "스레드 아이디 + 트레이딩뷰 닉네임" 작성 → 순차 권한 부여</li>
+        <li>트레이딩뷰(무료 버전 가능) → 차트 상단 <b>지표</b> 버튼 → <b>초대 전용</b> 탭 → Trend Vision / Multi Lens 추가</li>
+        <li>주봉=Trend Vision, 일봉=Multi Lens</li>
+      </ul></div>
+      <div class="danger text-sm mt-2">⚠️ 지표 맹신 금지. 봉 마감 후 확정 신호 기준으로 볼 것(미마감 봉은 신호가 사라질 수 있음). 자산마다 특성이 달라 과거 차트에서 잘 작동하는지 먼저 검증.</div>
+    </div>
   </div>
 </section><!-- /tab-technical -->
 
@@ -5122,6 +5329,46 @@ function renderScoresTable() {
     </tbody></table>`;
 }
 
+// ============================================================
+// === 기술적 분석: 서브탭 + 4축 통합 진단 ===
+// ============================================================
+function switchTechSub(name) {
+  document.querySelectorAll('.tech-sub').forEach(el => el.classList.add('hidden'));
+  const p = document.getElementById('tech-' + name);
+  if (p) p.classList.remove('hidden');
+  document.querySelectorAll('.tech-subbtn').forEach(b => b.classList.remove('active'));
+  const b = document.querySelector(`.tech-subbtn[data-tech="${name}"]`);
+  if (b) b.classList.add('active');
+}
+
+function calcTechSignal() {
+  const inputs = document.querySelectorAll('#tech-process .tech-input');
+  let total = 0;
+  inputs.forEach(s => { total += Number(s.value) || 0; });
+  const scoreEl = document.getElementById('techScore');
+  const vEl = document.getElementById('techVerdict');
+  const aEl = document.getElementById('techAdvice');
+  const out = document.getElementById('techSignalOut');
+  let label, advice, cls, bg;
+  if (total >= 7) {
+    label='🚀 4축 정렬 — 적극 진입'; cls='text-emerald-600'; bg='bg-emerald-50';
+    advice='4개 축이 같은 방향. 확신을 갖고 진입(분할 3~4단계). 손절은 유동성 사냥 저점 아래.';
+  } else if (total >= 5) {
+    label='✅ 우호적 — 분할 진입'; cls='text-teal-600'; bg='bg-teal-50';
+    advice='다수 축 우호적. 시험매수로 진입 시작, 나머지 축 개선 시 비중 확대.';
+  } else if (total >= 3) {
+    label='🟡 혼조 — 신중 / 관망'; cls='text-amber-600'; bg='bg-amber-50';
+    advice='축이 엇갈림. 한 축이라도 어긋나면 소액 또는 대기. 시나리오 A/B를 미리 준비.';
+  } else {
+    label='🔴 부정 — 회피'; cls='text-rose-600'; bg='bg-rose-50';
+    advice='대부분 불리. 신규 진입 보류. 추세 전환 3단계(경고→균열→전환) 확인 전까지 관망.';
+  }
+  if (scoreEl) { scoreEl.textContent = total; scoreEl.className = 'text-3xl font-extrabold my-1 ' + cls; }
+  if (vEl) { vEl.textContent = label; vEl.className = 'font-bold ' + cls; }
+  if (aEl) aEl.textContent = advice;
+  if (out) out.className = 'mt-4 rounded-xl p-4 text-center ' + bg;
+}
+
 // === NEW v5.1: 종합 액션 신호 배너 ===
 function renderActionBanner(action) {
   const el = document.getElementById('actionBanner');
@@ -5734,6 +5981,8 @@ window.addEventListener('load', () => {
   if (document.getElementById('ssScore')) calcStockScore();
   if (typeof renderSavedScores === 'function') renderSavedScores();
   if (typeof loadScores === 'function') loadScores();
+  // 기술적 분석 4축 진단 초기화
+  if (document.getElementById('techScore')) calcTechSignal();
   // 해시 변경 감지 (사용자 back/forward)
   window.addEventListener('hashchange', initTabFromHash);
 });

@@ -2309,10 +2309,10 @@
     <!-- 워치리스트 자동 기술 점수표 -->
     <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
-        <h3 class="font-bold text-lg">📈 워치리스트 자동 4축 진단표</h3>
+        <h3 class="font-bold text-lg">📈 S&P 500 자동 4축 진단표</h3>
         <input id="techTableSearch" oninput="renderTechTable()" placeholder="티커/이름 검색…" class="border rounded-lg px-3 py-1.5 text-sm w-44">
       </div>
-      <p class="text-xs text-slate-500 mb-3">매일 일봉 데이터로 4축을 자동 채점합니다. 행을 누르면 위 진단기에 반영됩니다. (유동성은 캔들 프록시 ★)</p>
+      <p class="text-xs text-slate-500 mb-3">S&P 500 약 500종목을 매일 일봉으로 자동 채점. 행을 누르면 위 진단기에 반영됩니다. (유동성은 캔들 프록시 ★) · 목록 밖 임의 티커는 위 검색창에서 조회(Worker 연결 시).</p>
       <div id="techTableWrap" class="overflow-x-auto"><div class="text-center text-slate-400 py-8 text-sm">tech.json 로딩 중…</div></div>
       <p class="text-xs text-slate-400 mt-3" id="techTableAsOf"></p>
     </div>
@@ -5388,7 +5388,9 @@ function calcTechSignal() {
   if (out) out.className = 'mt-4 rounded-xl p-4 text-center ' + bg;
 }
 
-// --- 종목별 자동 기술분석 (tech.json) ---
+// --- 종목별 자동 기술분석 (tech.json + 서버리스 fallback) ---
+// 임의 티커(S&P500 밖) 검색용 Cloudflare Worker 주소. 배포 후 입력 (worker/README.md)
+const TECH_API = '';
 let __techData = null;
 async function loadTech() {
   try {
@@ -5407,18 +5409,14 @@ async function loadTech() {
   }
 }
 
-function applyTechAuto(ticker) {
-  if (!__techData) { return; }
-  ticker = (ticker||'').toUpperCase().trim();
-  const s = (__techData.stocks||[]).find(x => (x.ticker||'').toUpperCase() === ticker);
-  const meta = document.getElementById('techAutoMeta');
-  const detail = document.getElementById('techAutoDetail');
-  if (!s) { if (meta) meta.textContent = ticker ? `'${ticker}' 워치리스트에 없음 — 수동 입력하세요` : ''; if (detail) detail.classList.add('hidden'); return; }
-  // 셀렉트 자동 채움
+function renderTechStock(s) {
   const setSel = (id, v) => { const el = document.getElementById(id); if (el) el.value = String(v); };
   setSel('techStruct', s.struct); setSel('techPrice', s.price); setSel('techTime', s.time); setSel('techLiq', s.liq);
   calcTechSignal();
-  if (meta) meta.innerHTML = `<b>${s.ticker}</b> ${s.name||''} · $${s.close??'-'}`;
+  const meta = document.getElementById('techAutoMeta');
+  const detail = document.getElementById('techAutoDetail');
+  const live = s.source === 'worker' ? ' · <span class="text-emerald-600">실시간</span>' : '';
+  if (meta) meta.innerHTML = `<b>${s.ticker}</b> ${s.name||''} · $${s.close??'-'}${live}`;
   if (detail) {
     detail.classList.remove('hidden');
     detail.innerHTML = `
@@ -5427,6 +5425,34 @@ function applyTechAuto(ticker) {
       <div>⏳ 시간: ${s.d_time||'-'} <span class="text-slate-400">(${s.time}/2)</span></div>
       <div>💧 유동성★: ${s.d_liq||'-'} <span class="text-slate-400">(${s.liq}/2)</span></div>`;
   }
+}
+
+async function applyTechAuto(ticker) {
+  ticker = (ticker||'').toUpperCase().trim().replace(/\s+/g, '');
+  const meta = document.getElementById('techAutoMeta');
+  const detail = document.getElementById('techAutoDetail');
+  if (!ticker) { if (meta) meta.textContent = ''; if (detail) detail.classList.add('hidden'); return; }
+  // 1) 로컬 tech.json (S&P500)
+  const s = ((__techData && __techData.stocks) || []).find(x =>
+    (x.ticker||'').toUpperCase() === ticker || (x.ticker||'').toUpperCase() === ticker.replace(/-/g, '.'));
+  if (s) { renderTechStock(s); return; }
+  // 2) 서버리스 Worker fallback (임의 티커)
+  if (TECH_API) {
+    if (meta) meta.textContent = `${ticker} 실시간 계산 중…`;
+    try {
+      const res = await fetch(`${TECH_API}?ticker=${encodeURIComponent(ticker)}`);
+      const d = await res.json();
+      if (d && !d.error && d.score != null) { renderTechStock(d); return; }
+      if (meta) meta.textContent = `'${ticker}' 데이터 없음 (${d.error||'no data'})`;
+    } catch (e) {
+      if (meta) meta.textContent = `실시간 조회 실패: ${e.message}`;
+    }
+    if (detail) detail.classList.add('hidden');
+    return;
+  }
+  // 3) Worker 미연결 안내
+  if (meta) meta.innerHTML = `'${ticker}'는 S&P500 목록에 없습니다. 임의 티커 검색은 <b>Worker 배포 후</b> 가능 (worker/README.md).`;
+  if (detail) detail.classList.add('hidden');
 }
 
 function renderTechTable() {

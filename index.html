@@ -59,6 +59,9 @@
   details[open] summary .chev { transform: rotate(180deg); }
   .chev { transition: transform .25s; }
   .tab-btn.active { background: #0f172a; color: white; }
+  .assetx-subbtn { background: #f1f5f9; color: #475569; transition: all .2s; border: 1px solid #e2e8f0; }
+  .assetx-subbtn:hover { background: #e2e8f0; }
+  .assetx-subbtn.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(99,102,241,0.35); }
   .pulse-dot { animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
   .card-hover { transition: transform .2s, box-shadow .2s; }
@@ -155,9 +158,11 @@
       <button onclick="showTab('dashboard')" class="tab-btn active px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="dashboard">📊 대시보드</button>
       <button onclick="showTab('charts')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="charts">📈 실시간 차트</button>
       <button onclick="showTab('simulate')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="simulate">🎮 시뮬레이션</button>
-      <button onclick="showTab('stockanalysis')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="stockanalysis">🔬 종목 분석</button>
-      <button onclick="showTab('study8')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="study8">📚 8축 학습</button>
-      <button onclick="showTab('philosophy')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="philosophy">🧠 핵심 철학</button>
+      <button onclick="showTab('assetx2')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="assetx2">📚 자산네제곱 (1~6단계)</button>
+      <button onclick="showTab('technical')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="technical">📐 기술적 분석</button>
+      <button onclick="showTab('scenario')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="scenario">🎯 시나리오</button>
+      <button onclick="showTab('report')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="report">📰 시장리포트</button>
+      <button onclick="showTab('strategy')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="strategy">♟️ 투자전략</button>
       <button onclick="showTab('tools')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="tools">🔗 도구상자</button>
       <button onclick="showTab('workbook')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="workbook">✍️ 실전 워크북</button>
       <button onclick="showTab('backtest')" class="tab-btn px-5 py-3 text-sm font-semibold rounded-t-lg whitespace-nowrap" data-tab="backtest">🔬 백테스트</button>
@@ -1057,9 +1062,30 @@
 </section>
 
 <!-- ============================================================= -->
-<!-- ============== TAB STOCKANALYSIS: 종목 분석 (2-3단계) ======== -->
+<!-- ============== TAB ASSETX2: 자산네제곱 통합 허브 ============= -->
 <!-- ============================================================= -->
-<section id="tab-stockanalysis" class="tab-content hidden">
+<section id="tab-assetx2" class="tab-content hidden">
+
+  <!-- 허브 헤더 -->
+  <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-fuchsia-600 text-white rounded-2xl p-6 mb-6 shadow-lg">
+    <h2 class="text-2xl font-bold">📚 자산네제곱 프로젝트 (1~6단계 통합)</h2>
+    <p class="text-indigo-100 text-sm mt-2">시장을 읽고(1) → 종목을 고르고(2-3) → 저점에 사고(4) → 포트폴리오를 짜고(5) → 정보를 해석한다(6)</p>
+  </div>
+
+  <!-- 서브탭 네비게이션 -->
+  <div class="bg-white rounded-xl p-3 mb-6 shadow-sm sticky top-16 z-20">
+    <div class="flex flex-wrap gap-2">
+      <button onclick="switchAssetxSub('philosophy')" class="assetx-subbtn active px-4 py-2 rounded-lg text-sm font-semibold" data-sub="philosophy">🧠 핵심 철학</button>
+      <button onclick="switchAssetxSub('axis8')" class="assetx-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-sub="axis8">1️⃣ 시장 8축</button>
+      <button onclick="switchAssetxSub('stock')" class="assetx-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-sub="stock">2-3️⃣ 종목 분석</button>
+      <button onclick="switchAssetxSub('step4')" class="assetx-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-sub="step4">4️⃣ 저점 매수</button>
+      <button onclick="switchAssetxSub('step5')" class="assetx-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-sub="step5">5️⃣ 포트폴리오</button>
+      <button onclick="switchAssetxSub('step6')" class="assetx-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-sub="step6">6️⃣ 정보 해석력</button>
+    </div>
+  </div>
+
+  <!-- ===== 서브패널: 2-3단계 종목 분석 ===== -->
+  <div id="sub-stock" class="assetx-sub hidden">
 
   <div class="bg-gradient-to-r from-orange-50 to-amber-50 border-l-4 border-orange-500 rounded-xl p-6 mb-6">
     <h2 class="text-xl font-bold flex items-center gap-2">🔬 종목 분석 — 자산네제곱 2-3단계 통합</h2>
@@ -1683,12 +1709,10 @@
     </div>
   </div>
 
-</section>
+  </div><!-- /sub-stock -->
 
-<!-- ============================================================= -->
-<!-- ============== TAB 2: 8축 통합 (분석+학습 합침) =============== -->
-<!-- ============================================================= -->
-<section id="tab-study8" class="tab-content hidden">
+  <!-- ===== 서브패널: 1단계 시장 8축 ===== -->
+  <div id="sub-axis8" class="assetx-sub hidden">
   <div class="bg-gradient-to-r from-indigo-50 to-purple-50 border-l-4 border-indigo-500 rounded-xl p-6 mb-6">
     <h2 class="text-xl font-bold flex items-center gap-2">📚 8축 통합 — 현재 분석 + PDF 학습 + 체크리스트 + 데이터 소스</h2>
     <p class="text-sm text-slate-700 mt-2">각 축을 펼치면 <b>현재 상황 → 해석 → 깊이 공부 → 매주 체크 → 직링크</b>가 한 번에 보입니다.</p>
@@ -1710,12 +1734,10 @@
   </div>
 
   <div id="study8List" class="space-y-4"></div>
-</section>
+  </div><!-- /sub-axis8 -->
 
-<!-- ============================================================= -->
-<!-- ============== TAB 3: PHILOSOPHY ============================ -->
-<!-- ============================================================= -->
-<section id="tab-philosophy" class="tab-content hidden">
+  <!-- ===== 서브패널: 핵심 철학 (기본 표시) ===== -->
+  <div id="sub-philosophy" class="assetx-sub">
   <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-2xl p-8 mb-6 shadow-lg">
     <h2 class="text-2xl font-bold mb-2">🧠 자산네제곱 1단계의 핵심 철학</h2>
     <p class="text-purple-100">"물고기 잡는 방법을 배웠다고 끝이 아니다" — 시장을 읽는 8개의 동력</p>
@@ -1854,7 +1876,332 @@
       </div>
     </div>
   </div>
-</section>
+  </div><!-- /sub-philosophy -->
+
+  <!-- ===== 서브패널: 4단계 저점 매수 설계도 ===== -->
+  <div id="sub-step4" class="assetx-sub hidden">
+    <div class="bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-2xl p-6 mb-6 shadow-lg">
+      <h2 class="text-2xl font-bold">4️⃣ 저점 매수 설계도 — "틀려도 이기는 구조"</h2>
+      <p class="text-rose-100 text-sm mt-2">분석이 맞아도 돈 못 버는 이유 / 통념 깨기 / 켈리 공식 / 분할 매수 / V·U·L자 바닥</p>
+    </div>
+
+    <!-- 분석 맞아도 못 버는 4가지 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+      <h3 class="text-lg font-bold mb-3">⚠️ 분석이 맞아도 돈을 못 버는 4가지 이유</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="bg-rose-50 border-l-4 border-rose-400 rounded-lg p-4"><b class="text-rose-900">1. 타이밍</b><div class="text-sm text-slate-700 mt-1">구조가 좋아져도 가격은 먼저 안 움직인다. 시장은 후행지표(과거)를, 나는 선행지표(미래)를 본다 → 시차 발생</div></div>
+        <div class="bg-rose-50 border-l-4 border-rose-400 rounded-lg p-4"><b class="text-rose-900">2. 포지션 설계</b><div class="text-sm text-slate-700 mt-1">확신이 들어 올인 → -35%에 손절 → 직후 반등. 저점은 변동성 극심, 견딜 수 있는 크기여야</div></div>
+        <div class="bg-rose-50 border-l-4 border-rose-400 rounded-lg p-4"><b class="text-rose-900">3. 시나리오 붕괴 기준 부재</b><div class="text-sm text-slate-700 mt-1">"틀렸을 때 어떻게?"가 없으면 무한 물타기 → 회복 불가 손실</div></div>
+        <div class="bg-rose-50 border-l-4 border-rose-400 rounded-lg p-4"><b class="text-rose-900">4. 시간 압박</b><div class="text-sm text-slate-700 mt-1">가격보다 시간이 사람을 포기시킨다. 6개월 횡보 → 기회비용·지루함에 매도 → 직후 반등</div></div>
+      </div>
+    </div>
+
+    <!-- 통념 3개 깨기 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+      <h3 class="text-lg font-bold mb-3">💥 깨야 할 통념 3가지</h3>
+      <div class="space-y-3">
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+          <div class="font-bold text-amber-900">통념 1: "저점 = 공포 정점"</div>
+          <div class="text-sm text-slate-700 mt-1">❌ 공포 정점 때는 이미 반등 초입. ✅ 진짜 저점은 <b>"공포 확산의 종료"</b> — 팔 사람이 다 팔아 더 안 떨어지는 순간. 조용하게 만들어짐.</div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+          <div class="font-bold text-amber-900">통념 2: "확신 들면 비중 늘려라"</div>
+          <div class="text-sm text-slate-700 mt-1">❌ 저점은 변동성 극심. ✅ <b>확신과 최적 비중은 별개</b>. 켈리 공식 → 변동성 클수록 비중 줄여야. Half Kelly로 15~22%만.</div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+          <div class="font-bold text-amber-900">통념 3: "기술 지표가 저점을 알려준다"</div>
+          <div class="text-sm text-slate-700 mt-1">❌ RSI 30 = 바닥 아님. ✅ 기술 지표는 <b>"위험 감소 신호"</b> — RSI 다이버전스, MACD 골든크로스 반복, 볼린저 수축 = "더 나빠질 확률 ↓"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 켈리 공식 계산기 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+      <h3 class="text-lg font-bold mb-3">🎲 켈리 공식 계산기 (최적 베팅 비율)</h3>
+      <p class="text-xs text-slate-500 mb-4">f* = (bp - q) / b · 실전에서는 Half Kelly(50%) 권장 (승률 과대평가 보정)</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div>
+          <label class="text-xs text-slate-500">예상 승률 (%)</label>
+          <input type="range" id="kellyWin" min="40" max="80" value="60" step="5" class="w-full" oninput="calcKelly()">
+          <div class="text-center font-bold" id="kellyWinVal">60%</div>
+        </div>
+        <div>
+          <label class="text-xs text-slate-500">이기면 수익 (%)</label>
+          <input type="range" id="kellyGain" min="20" max="200" value="100" step="10" class="w-full" oninput="calcKelly()">
+          <div class="text-center font-bold" id="kellyGainVal">+100%</div>
+        </div>
+        <div>
+          <label class="text-xs text-slate-500">지면 손실 (%)</label>
+          <input type="range" id="kellyLoss" min="10" max="60" value="40" step="5" class="w-full" oninput="calcKelly()">
+          <div class="text-center font-bold" id="kellyLossVal">-40%</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-slate-100 rounded-lg p-4 text-center">
+          <div class="text-xs text-slate-500">풀 켈리</div>
+          <div class="text-2xl font-bold" id="kellyFull">-</div>
+        </div>
+        <div class="bg-emerald-100 rounded-lg p-4 text-center">
+          <div class="text-xs text-emerald-700">Half 켈리 (권장)</div>
+          <div class="text-2xl font-bold text-emerald-700" id="kellyHalf">-</div>
+        </div>
+      </div>
+      <div class="bg-indigo-50 border-l-4 border-indigo-500 p-3 rounded mt-4 text-xs text-indigo-900" id="kellyNote">슬라이더를 움직여보세요. 변동성이 클수록 최적 비중은 줄어듭니다.</div>
+    </div>
+
+    <!-- 분할 매수 + 바닥 형태 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold mb-3">📊 변곡점 신호별 분할 매수</h3>
+        <div class="space-y-2 text-sm">
+          <div class="flex items-center gap-3 bg-slate-50 rounded p-3"><span class="font-bold text-slate-400 w-12">0-1개</span><div><b>관망</b> — 아직 저점 아님</div></div>
+          <div class="flex items-center gap-3 bg-emerald-50 rounded p-3"><span class="font-bold text-emerald-600 w-12">2개</span><div><b>1차 20%</b> — 저점 초입, 시험 진입</div></div>
+          <div class="flex items-center gap-3 bg-emerald-50 rounded p-3"><span class="font-bold text-emerald-600 w-12">3개</span><div><b>2차 +30%</b> — 저점 중간, 확신 상승</div></div>
+          <div class="flex items-center gap-3 bg-emerald-100 rounded p-3"><span class="font-bold text-emerald-700 w-12">4개</span><div><b>3차 +30~50%</b> — 저점 후반, 구조적 변곡점</div></div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold mb-3">📈 바닥 형태 구분 (사건 vs 구조)</h3>
+        <div class="space-y-2 text-sm">
+          <div class="bg-emerald-50 rounded p-3"><b class="text-emerald-900">V자</b> — 일시적 사건 + 오버슈팅 + 유동성 공급. 고점에서 미리 하락폭 계산 + 지정가 대기로 포착</div>
+          <div class="bg-amber-50 rounded p-3"><b class="text-amber-900">U자</b> — 구조적 불확실성, 기업은 안 망함. 거래량↓ 변동성 수축 → "시간이 바닥을 만든다"</div>
+          <div class="bg-rose-50 rounded p-3"><b class="text-rose-900">L자</b> — 구조 붕괴, 성장 동력 상실. 회피. 장기 횡보</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 핵심 결론 -->
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6">
+      <h3 class="text-lg font-bold mb-2">🎯 4단계 결론</h3>
+      <p class="text-slate-300 text-sm">저점 매수는 <b class="text-white">"맞히기"가 아니라 "틀린 상태에서도 다음 수를 둘 수 있는 구조"</b>를 만드는 것. "여기가 바닥일 수도 아닐 수도 있다. 하지만 구조적으로 좋아지고 있으니 조금씩 사자. 틀리면 다음 구간에서 더 산다."</p>
+      <div class="bg-white/10 rounded-lg p-3 mt-3 text-xs italic">"진짜 바닥은 외롭다. 주변이 '너 미쳤어?' 할 때가 기회, '나도 살까?' 할 때는 늦었다."</div>
+    </div>
+  </div><!-- /sub-step4 -->
+
+  <!-- ===== 서브패널: 5단계 포트폴리오 전략 ===== -->
+  <div id="sub-step5" class="assetx-sub hidden">
+    <div class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-2xl p-6 mb-6 shadow-lg">
+      <h2 class="text-2xl font-bold">5️⃣ 포트폴리오 전략 지도</h2>
+      <p class="text-blue-100 text-sm mt-2">수익은 종목이 만들고, 생존은 구조가 만든다 — 5개 바구니 / 계좌 분리 / 리밸런싱</p>
+    </div>
+
+    <!-- 5개 바구니 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+      <h3 class="text-lg font-bold mb-3">🧺 포트폴리오 5개 바구니</h3>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3 bg-indigo-50 rounded-lg p-4"><span class="bg-indigo-600 text-white font-bold rounded-lg px-3 py-2 text-sm">35-50%</span><div><b>① 핵심 시나리오</b> — 3단계 변곡점 + 4단계 분할매수로 만든 종목. 초과수익 원천. 섹터 분산 필수</div></div>
+        <div class="flex items-center gap-3 bg-emerald-50 rounded-lg p-4"><span class="bg-emerald-600 text-white font-bold rounded-lg px-3 py-2 text-sm">20-30%</span><div><b>② 추세 확인</b> — 이미 오르기 시작한 종목. 핵심이 횡보할 때 심리적 공백 채움 (대형 ETF 등)</div></div>
+        <div class="flex items-center gap-3 bg-amber-50 rounded-lg p-4"><span class="bg-amber-600 text-white font-bold rounded-lg px-3 py-2 text-sm">15-25%</span><div><b>③ 방어·안정</b> — ETF·배당주. 출렁임 완화. <b>손실 비대칭성</b>(50% 잃으면 100% 벌어야 본전) 방어</div></div>
+        <div class="flex items-center gap-3 bg-rose-50 rounded-lg p-4"><span class="bg-rose-600 text-white font-bold rounded-lg px-3 py-2 text-sm">10-15%</span><div><b>④ 기회 포착</b> — V자 급락 대비 대기. 평소 비워둠. 4단계 고점 지정가 전략 실행</div></div>
+        <div class="flex items-center gap-3 bg-slate-100 rounded-lg p-4"><span class="bg-slate-700 text-white font-bold rounded-lg px-3 py-2 text-sm">≥10%</span><div><b>⑤ 현금</b> — 모든 전략의 탄약. 어떤 경우에도 최소 10%. 하락장엔 더 ↑</div></div>
+      </div>
+    </div>
+
+    <!-- 손실 비대칭성 + 계좌 분리 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold mb-3">⚖️ 손실의 비대칭성</h3>
+        <table class="w-full text-sm border-collapse">
+          <tr class="bg-slate-100"><th class="border p-2">손실</th><th class="border p-2">본전 회복에 필요한 수익</th></tr>
+          <tr><td class="border p-2 text-center">-10%</td><td class="border p-2 text-center text-amber-600">+11%</td></tr>
+          <tr><td class="border p-2 text-center">-30%</td><td class="border p-2 text-center text-orange-600">+43%</td></tr>
+          <tr><td class="border p-2 text-center">-50%</td><td class="border p-2 text-center text-rose-600 font-bold">+100%</td></tr>
+        </table>
+        <p class="text-xs text-slate-500 mt-3">→ 크게 잃지 않는 게 핵심. 방어 바구니의 존재 이유.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold mb-3">🗂️ 계좌 3분리 (멘탈 어카운팅)</h3>
+        <div class="space-y-2 text-sm">
+          <div class="bg-blue-50 rounded p-3"><b>A. 장기 계좌</b> — 1년+ 보유. "성장 스토리 유효한가?"만 확인</div>
+          <div class="bg-emerald-50 rounded p-3"><b>B. 스윙 계좌</b> — 저점·분할·시나리오 매매. "내 시나리오 유효한가?"</div>
+          <div class="bg-slate-100 rounded p-3"><b>C. 현금 계좌</b> — 급락 대응. 기다림도 포지션</div>
+        </div>
+        <p class="text-xs text-rose-600 mt-2">⚠️ 섞으면 스윙 손실을 장기로 둔갑 → 손절 미룸</p>
+      </div>
+    </div>
+
+    <!-- 환경별 비중 + 트레일링 스탑 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+      <h3 class="text-lg font-bold mb-3">🌦️ 시장 환경별 주식 비중 (돛 조절)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+        <div class="bg-emerald-50 rounded-lg p-4"><b class="text-emerald-900">상승장</b><div class="text-2xl font-bold text-emerald-700 my-1">90-100%</div>돛 활짝</div>
+        <div class="bg-amber-50 rounded-lg p-4"><b class="text-amber-900">조정</b><div class="text-2xl font-bold text-amber-700 my-1">60-70%</div>돛 줄임</div>
+        <div class="bg-rose-50 rounded-lg p-4"><b class="text-rose-900">하락장</b><div class="text-2xl font-bold text-rose-700 my-1">30-50%</div>닻은 내리지 않음</div>
+      </div>
+      <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded mt-4 text-xs">
+        <b>⚠️ 100% 현금 금지:</b> 연간 최고 상승일 10일만 놓쳐도 장기 수익률 절반. 최고 상승일은 하락장 중간에 갑자기 나옴 → 최소 비중 유지하며 관찰
+      </div>
+    </div>
+
+    <!-- 진입 전 체크리스트 -->
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6">
+      <h3 class="text-lg font-bold mb-3">✅ 진입 전 6개 체크리스트</h3>
+      <ol class="space-y-1 text-sm text-slate-200">
+        <li>1. <b>버틸 수 있는 금액</b> — "-30% 빠져도 안 팔 금액?" = 첫 진입 최대치</li>
+        <li>2. <b>목표 비중 + 분할 계획</b></li>
+        <li>3. <b>시나리오 유효성</b> — 변곡점 신호 2개 미만이면 시험매수</li>
+        <li>4. <b>붕괴 기준</b> — 부정 신호 3개+ 면 재검토</li>
+        <li>5. <b>정기 점검 일정</b> — 월 1회</li>
+        <li>6. <b>매도 기준</b> — 시나리오 완성·과열·더 좋은 기회</li>
+      </ol>
+    </div>
+  </div><!-- /sub-step5 -->
+
+  <!-- ===== 서브패널: 6단계 정보 해석력 ===== -->
+  <div id="sub-step6" class="assetx-sub hidden">
+    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl p-6 mb-6 shadow-lg">
+      <h2 class="text-2xl font-bold">6️⃣ 정보 해석력이 수익률을 결정한다</h2>
+      <p class="text-emerald-100 text-sm mt-2">정보 자체는 무기가 아니다. 해석이 차이를 만든다.</p>
+    </div>
+
+    <!-- 핵심 방정식 -->
+    <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-2xl p-8 mb-6 text-center shadow-lg">
+      <div class="text-sm text-emerald-100">투자에서 가장 중요한 방정식</div>
+      <div class="text-3xl md:text-4xl font-extrabold my-4">주가 변화 = 실제 결과 − 시장 기대</div>
+      <p class="text-sm text-emerald-50">좋은 기업이어도 시장이 이미 알면 안 오른다. <b>중요한 건 절대적 좋고나쁨이 아니라 '기대보다 얼마나'</b></p>
+    </div>
+
+    <!-- 컨센서스가 틀리는 이유 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+      <h3 class="text-lg font-bold mb-3">📉 컨센서스(시장 기대)가 항상 틀리는 3가지 이유</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+        <div class="bg-slate-50 rounded-lg p-4"><b>1. 다수와 다르기 어렵다</b><div class="text-slate-600 mt-1">혼자 틀리면 망신, 같이 틀리면 안전 → 항상 무난·보수적 → 급변 과소평가</div></div>
+        <div class="bg-slate-50 rounded-lg p-4"><b>2. 과거 데이터에 묶임</b><div class="text-slate-600 mt-1">변곡점은 과거에 안 나타남 → 성장 시작 구간 너무 낮게, 끝 구간 너무 높게</div></div>
+        <div class="bg-slate-50 rounded-lg p-4"><b>3. 이해충돌</b><div class="text-slate-600 mt-1">매도 리포트 적음 → <b>"중립" = 사실상 매도</b>. 목표가 상향은 이미 오른 뒤</div></div>
+      </div>
+      <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded mt-4 text-sm">
+        <b>🎯 기회:</b> 컨센서스가 낮게 깔린 + 실제로 변화 시작 = 어닝 서프라이즈. 3단계 변곡점 분석이 컨센서스 오류를 먼저 포착하는 도구.
+      </div>
+    </div>
+
+    <!-- 뉴스 역설 + 내러티브 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold mb-3">🔄 뉴스 역설 읽기</h3>
+        <div class="space-y-2 text-sm">
+          <div class="bg-emerald-50 rounded p-3"><b>나쁜 뉴스인데 안 빠짐</b> → ① 더 나쁜 걸 이미 예상 (바닥 신호) ② 악재 속 좋은 씨앗 (구조조정 등)</div>
+          <div class="bg-rose-50 rounded p-3"><b>좋은 뉴스인데 빠짐</b> → ① 소문에 사서 뉴스에 판다 (기대 선반영) ② 호재 뒤 악재 (저가 수주 = 마진 훼손)</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold mb-3">📖 숫자가 아니라 내러티브가 움직인다</h3>
+        <p class="text-sm text-slate-700 mb-2">테슬라 2010년대 적자에도 상승(스토리), 2022년 실적 개선에도 -70%(스토리 변화).</p>
+        <div class="text-sm font-semibold mb-1">내러티브 4단계 사이클:</div>
+        <div class="flex items-center gap-1 text-xs">
+          <span class="bg-emerald-100 rounded px-2 py-1">생성(최대수익)</span>→
+          <span class="bg-amber-100 rounded px-2 py-1">성장</span>→
+          <span class="bg-orange-100 rounded px-2 py-1">과열(위험)</span>→
+          <span class="bg-rose-100 rounded px-2 py-1">붕괴</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-2">"이야기가 가장 크게 들릴 때가 가장 위험"</p>
+      </div>
+    </div>
+
+    <!-- 컨센서스 추적 3방법 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+      <h3 class="text-lg font-bold mb-3">🔍 컨센서스 추적 3방법 (Perplexity 등 활용)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+        <div class="bg-blue-50 rounded-lg p-4"><b>① 방향 변화</b><div class="text-slate-600 mt-1">컨센서스가 바닥 찍고 상승 = 최고 매수 타이밍</div></div>
+        <div class="bg-blue-50 rounded-lg p-4"><b>② 리비전 비율</b><div class="text-slate-600 mt-1">상향 리비전 지속 = 실적이 기대 상회 중</div></div>
+        <div class="bg-blue-50 rounded-lg p-4"><b>③ 어닝 서프라이즈 패턴</b><div class="text-slate-600 mt-1">연속 서프라이즈 = 시장이 아직 변화 인식 못함</div></div>
+      </div>
+    </div>
+
+    <!-- 결론 -->
+    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6">
+      <h3 class="text-lg font-bold mb-2">🎯 6단계 결론 — 투자의 핵심 질문</h3>
+      <ul class="text-sm text-slate-200 space-y-1">
+        <li>• "지금 이 기업을 지지하는 <b class="text-emerald-400">이야기(내러티브)</b>가 무엇인가?"</li>
+        <li>• "그 이야기가 살아있는가, 흔들리고 있는가?"</li>
+        <li>• "시장 기대(컨센서스)보다 실제가 좋아질 것인가?"</li>
+      </ul>
+      <div class="bg-white/10 rounded-lg p-3 mt-3 text-xs italic">보고서는 목표주가가 아니라 '그 목표주가를 만든 가정'을 봐라. 가정이 틀리면 목표가는 무의미.</div>
+    </div>
+  </div><!-- /sub-step6 -->
+
+</section><!-- /tab-assetx2 -->
+
+<!-- ============================================================= -->
+<!-- ====== 향후 카테고리 자리 예약 (PDF 추가 시 채워짐) ========= -->
+<!-- ============================================================= -->
+
+<!-- 기술적 분석 프로젝트 -->
+<section id="tab-technical" class="tab-content hidden">
+  <div class="bg-gradient-to-r from-purple-50 to-fuchsia-50 border-l-4 border-purple-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold">📐 기술적 분석 프로젝트</h2>
+    <p class="text-sm text-slate-600 mt-1">차트·추세·지표 기반의 매매 타이밍 분석 체계가 들어갈 공간입니다.</p>
+  </div>
+  <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
+    <div class="text-5xl mb-4">📐</div>
+    <h3 class="text-lg font-bold mb-2">콘텐츠 준비 중</h3>
+    <p class="text-sm text-slate-500 max-w-lg mx-auto">이 카테고리의 PDF를 추가하면 여기에 자동으로 학습 콘텐츠가 채워집니다.<br>예상 구성: 추세·지지/저항, 캔들·차트 패턴, 이동평균·MACD·RSI, 거래량 분석, 진입/청산 규칙</p>
+    <div class="flex flex-wrap gap-2 justify-center mt-5 text-xs">
+      <span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full">추세 분석</span>
+      <span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full">차트 패턴</span>
+      <span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full">보조지표</span>
+      <span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full">매매 타이밍</span>
+    </div>
+    <p class="text-xs text-slate-400 mt-5">💡 8축의 "거시 진단"과 결합하면 <b>"무엇을 살까(거시) + 언제 살까(기술)"</b>가 완성됩니다.</p>
+  </div>
+</section><!-- /tab-technical -->
+
+<!-- 시나리오 -->
+<section id="tab-scenario" class="tab-content hidden">
+  <div class="bg-gradient-to-r from-orange-50 to-amber-50 border-l-4 border-orange-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold">🎯 시나리오</h2>
+    <p class="text-sm text-slate-600 mt-1">"만약 ~라면" 형태의 분기별 대응 시나리오·플레이북이 들어갈 공간입니다.</p>
+  </div>
+  <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
+    <div class="text-5xl mb-4">🎯</div>
+    <h3 class="text-lg font-bold mb-2">콘텐츠 준비 중</h3>
+    <p class="text-sm text-slate-500 max-w-lg mx-auto">이 카테고리의 PDF를 추가하면 여기에 자동으로 시나리오가 채워집니다.<br>예상 구성: 강세/중립/약세 분기, 트리거 조건, 단계별 행동 지침, 손절·익절 라인</p>
+    <div class="flex flex-wrap gap-2 justify-center mt-5 text-xs">
+      <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full">분기 시나리오</span>
+      <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full">트리거 조건</span>
+      <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full">대응 플레이북</span>
+    </div>
+    <p class="text-xs text-slate-400 mt-5">💡 현재 "대시보드"의 종합 액션 신호가 시나리오의 출발점입니다. 여기서 더 구체적인 분기로 확장됩니다.</p>
+  </div>
+</section><!-- /tab-scenario -->
+
+<!-- 시장리포트 -->
+<section id="tab-report" class="tab-content hidden">
+  <div class="bg-gradient-to-r from-teal-50 to-emerald-50 border-l-4 border-teal-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold">📰 시장리포트</h2>
+    <p class="text-sm text-slate-600 mt-1">정기 시황 분석·이벤트 해설 리포트가 들어갈 공간입니다.</p>
+  </div>
+  <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
+    <div class="text-5xl mb-4">📰</div>
+    <h3 class="text-lg font-bold mb-2">콘텐츠 준비 중</h3>
+    <p class="text-sm text-slate-500 max-w-lg mx-auto">이 카테고리의 PDF를 추가하면 여기에 자동으로 리포트가 채워집니다.<br>예상 구성: 주간/월간 시황, FOMC·CPI·고용 해설, 섹터 동향, 핵심 이벤트 타임라인</p>
+    <div class="flex flex-wrap gap-2 justify-center mt-5 text-xs">
+      <span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full">주간 시황</span>
+      <span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full">이벤트 해설</span>
+      <span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full">섹터 동향</span>
+    </div>
+    <p class="text-xs text-slate-400 mt-5">💡 "실시간 차트"의 라이브 데이터 + 8축 진단을 근거로 리포트가 작성됩니다.</p>
+  </div>
+</section><!-- /tab-report -->
+
+<!-- 투자전략 -->
+<section id="tab-strategy" class="tab-content hidden">
+  <div class="bg-gradient-to-r from-rose-50 to-pink-50 border-l-4 border-rose-500 rounded-xl p-6 mb-6">
+    <h2 class="text-xl font-bold">♟️ 투자전략</h2>
+    <p class="text-sm text-slate-600 mt-1">자산배분·종목선정·리스크 관리 등 실전 전략이 들어갈 공간입니다.</p>
+  </div>
+  <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
+    <div class="text-5xl mb-4">♟️</div>
+    <h3 class="text-lg font-bold mb-2">콘텐츠 준비 중</h3>
+    <p class="text-sm text-slate-500 max-w-lg mx-auto">이 카테고리의 PDF를 추가하면 여기에 자동으로 전략이 채워집니다.<br>예상 구성: 자산배분 모델, 종목 스크리닝, 리밸런싱 규칙, 포지션 사이징, 헤지 전략</p>
+    <div class="flex flex-wrap gap-2 justify-center mt-5 text-xs">
+      <span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full">자산배분</span>
+      <span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full">종목 선정</span>
+      <span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full">리스크 관리</span>
+      <span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full">리밸런싱</span>
+    </div>
+    <p class="text-xs text-slate-400 mt-5">💡 자산네제곱 5단계(포트폴리오)의 원리를 실행 전략으로 구체화하는 공간입니다.</p>
+  </div>
+</section><!-- /tab-strategy -->
 
 <!-- ============================================================= -->
 <!-- ============== TAB 4: TOOLS (소스 + 용어 통합) ============== -->
@@ -2779,9 +3126,11 @@ function renderGlossary() {
 // === 탭 ===
 function showTab(name) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-  document.getElementById('tab-' + name).classList.remove('hidden');
+  const tabEl = document.getElementById('tab-' + name);
+  if (tabEl) tabEl.classList.remove('hidden');
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+  const tabBtn = document.querySelector(`[data-tab="${name}"]`);
+  if (tabBtn) tabBtn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   // NEW v5: URL 해시 업데이트
   if (history.replaceState) {
@@ -2868,8 +3217,49 @@ function initTabFromHash() {
 }
 
 function goToAxis(id) {
-  showTab('study8');
-  setTimeout(() => openAxis(id), 100);
+  showTab('assetx2');
+  switchAssetxSub('axis8');
+  setTimeout(() => openAxis(id), 150);
+}
+
+// === 자산네제곱 허브: 서브탭 전환 ===
+function switchAssetxSub(name) {
+  document.querySelectorAll('.assetx-sub').forEach(el => el.classList.add('hidden'));
+  const panel = document.getElementById('sub-' + name);
+  if (panel) panel.classList.remove('hidden');
+  document.querySelectorAll('.assetx-subbtn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.assetx-subbtn[data-sub="${name}"]`);
+  if (btn) btn.classList.add('active');
+}
+
+// === 4단계: 켈리 공식 계산기 ===
+function calcKelly() {
+  const win = parseFloat(document.getElementById('kellyWin').value) / 100;   // 승률
+  const gain = parseFloat(document.getElementById('kellyGain').value) / 100; // 수익 시 이익률
+  const loss = parseFloat(document.getElementById('kellyLoss').value) / 100; // 손실 시 손실률
+  // 표시 라벨 업데이트
+  const wL = document.getElementById('kellyWinVal'); if (wL) wL.textContent = (win*100).toFixed(0) + '%';
+  const gL = document.getElementById('kellyGainVal'); if (gL) gL.textContent = '+' + (gain*100).toFixed(0) + '%';
+  const lL = document.getElementById('kellyLossVal'); if (lL) lL.textContent = '-' + (loss*100).toFixed(0) + '%';
+  // 켈리 공식: f = (p*b - q) / b,  b = gain/loss (배당비), q = 1-p
+  const b = gain / loss;
+  const p = win;
+  const q = 1 - p;
+  let kelly = (p * b - q) / b;     // 풀 켈리 (전체 자본 대비 비중)
+  if (kelly < 0) kelly = 0;        // 음수면 베팅하지 않음(기대값 마이너스)
+  const half = kelly / 2;          // 하프 켈리(실전 권장)
+  const fullEl = document.getElementById('kellyFull');
+  const halfEl = document.getElementById('kellyHalf');
+  const noteEl = document.getElementById('kellyNote');
+  if (kelly <= 0) {
+    if (fullEl) fullEl.textContent = '0%';
+    if (halfEl) halfEl.textContent = '0%';
+    if (noteEl) noteEl.innerHTML = '⚠️ <b>베팅 금지</b> — 이 조건은 기대값이 마이너스입니다. 장기적으로 돈을 잃습니다. 승률을 높이거나 손익비(이익/손실)를 개선하세요.';
+    return;
+  }
+  if (fullEl) fullEl.textContent = (kelly*100).toFixed(1) + '%';
+  if (halfEl) halfEl.textContent = (half*100).toFixed(1) + '%';
+  if (noteEl) noteEl.innerHTML = `💡 한 종목에 <b>전체 투자금의 ${(half*100).toFixed(1)}%</b> 이하로 베팅하세요. 풀 켈리(${(kelly*100).toFixed(1)}%)는 변동성이 너무 커서 실전에서는 절반(Half Kelly)을 쓰는 것이 정석입니다.`;
 }
 
 function openAxis(id) {
@@ -4895,6 +5285,8 @@ window.addEventListener('load', () => {
   // NEW v5: 테마 + URL 해시
   initTheme();
   initTabFromHash();
+  // 켈리 계산기 초기값 렌더
+  if (document.getElementById('kellyWin')) calcKelly();
   // 해시 변경 감지 (사용자 back/forward)
   window.addEventListener('hashchange', initTabFromHash);
 });

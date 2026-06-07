@@ -32,6 +32,40 @@ except ImportError:
 KST = timezone(timedelta(hours=9))
 SP500_CSV = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv"
 
+# S&P500 외 인기 종목/ADR/ETF/신규상장 (리테일 검색 빈도 높음) — 유니버스에 병합
+EXTRA = [
+    # 인기 ETF
+    ("SPY", "S&P500 ETF", "ETF"), ("QQQ", "Nasdaq100 ETF", "ETF"), ("IWM", "Russell2000 ETF", "ETF"),
+    ("DIA", "Dow ETF", "ETF"), ("VTI", "Total Market ETF", "ETF"), ("VOO", "S&P500 ETF", "ETF"),
+    ("ARKK", "ARK Innovation", "ETF"), ("SOXX", "Semiconductor ETF", "ETF"), ("SMH", "Semiconductor ETF", "ETF"),
+    ("TQQQ", "Nasdaq 3x", "ETF"), ("SOXL", "Semi 3x", "ETF"), ("GLD", "Gold ETF", "ETF"),
+    ("SLV", "Silver ETF", "ETF"), ("TLT", "20Y Treasury ETF", "ETF"), ("HYG", "High Yield ETF", "ETF"),
+    ("XLK", "Tech Sector", "ETF"), ("XLF", "Financial Sector", "ETF"), ("XLE", "Energy Sector", "ETF"),
+    # 성장/신규상장/밈
+    ("SOFI", "SoFi", "Fin"), ("RBLX", "Roblox", "Comm"), ("RIVN", "Rivian", "Cons"),
+    ("LCID", "Lucid", "Cons"), ("HOOD", "Robinhood", "Fin"), ("COIN", "Coinbase", "Fin"),
+    ("SNOW", "Snowflake", "Tech"), ("NET", "Cloudflare", "Tech"), ("DDOG", "Datadog", "Tech"),
+    ("ZS", "Zscaler", "Tech"), ("S", "SentinelOne", "Tech"), ("PATH", "UiPath", "Tech"),
+    ("U", "Unity", "Tech"), ("AFRM", "Affirm", "Fin"), ("UPST", "Upstart", "Fin"),
+    ("DKNG", "DraftKings", "Cons"), ("LYFT", "Lyft", "Tech"), ("PINS", "Pinterest", "Comm"),
+    ("SNAP", "Snap", "Comm"), ("SHOP", "Shopify", "Tech"), ("ARM", "Arm Holdings", "Tech"),
+    ("IONQ", "IonQ", "Tech"), ("RGTI", "Rigetti", "Tech"), ("QBTS", "D-Wave", "Tech"),
+    ("RKLB", "Rocket Lab", "Industrials"), ("ASTS", "AST SpaceMobile", "Comm"),
+    ("ACHR", "Archer", "Industrials"), ("JOBY", "Joby", "Industrials"), ("PLUG", "Plug Power", "Energy"),
+    ("CHPT", "ChargePoint", "Cons"), ("RUN", "Sunrun", "Energy"), ("GME", "GameStop", "Cons"),
+    ("AMC", "AMC", "Comm"), ("BBAI", "BigBear.ai", "Tech"), ("SMR", "NuScale", "Energy"),
+    ("OKLO", "Oklo", "Energy"), ("RDDT", "Reddit", "Comm"), ("ONON", "On Holding", "Cons"),
+    # 주요 ADR (해외)
+    ("TSM", "TSMC", "Tech"), ("ASML", "ASML", "Tech"), ("BABA", "Alibaba", "Cons"),
+    ("PDD", "PDD/Temu", "Cons"), ("JD", "JD.com", "Cons"), ("NIO", "NIO", "Cons"),
+    ("XPEV", "XPeng", "Cons"), ("LI", "Li Auto", "Cons"), ("BIDU", "Baidu", "Comm"),
+    ("SE", "Sea Ltd", "Cons"), ("GRAB", "Grab", "Tech"), ("NVO", "Novo Nordisk", "Health"),
+    ("SAP", "SAP", "Tech"), ("TM", "Toyota", "Cons"), ("SONY", "Sony", "Cons"),
+    ("SHEL", "Shell", "Energy"), ("BP", "BP", "Energy"), ("HSBC", "HSBC", "Fin"),
+    ("UL", "Unilever", "Staples"), ("RIO", "Rio Tinto", "Materials"), ("BHP", "BHP", "Materials"),
+    ("MSTR", "MicroStrategy", "Tech"), ("HIMS", "Hims & Hers", "Health"), ("CVNA", "Carvana", "Cons"),
+]
+
 # S&P500 수집 실패 시 폴백(대표 종목)
 FALLBACK = [
     ("AAPL", "Apple", "Tech"), ("MSFT", "Microsoft", "Tech"), ("GOOGL", "Alphabet", "Comm"),
@@ -185,8 +219,12 @@ def chunked(lst, n):
 
 def main():
     universe = load_universe()
-    meta = {yf_symbol(s): (s, name, sector) for s, name, sector in universe}
+    # S&P500 + 인기 비S&P500/ADR/ETF 병합 (yf 심볼 기준 중복 제거)
+    meta = {}
+    for s, name, sector in list(universe) + EXTRA:
+        meta.setdefault(yf_symbol(s), (s, name, sector))
     symbols = list(meta.keys())
+    print(f"🌐 분석 유니버스: {len(symbols)}종목 (S&P500 + 인기주/ADR/ETF)")
     out = []
     CHUNK = 50
     for ci, chunk in enumerate(chunked(symbols, CHUNK)):

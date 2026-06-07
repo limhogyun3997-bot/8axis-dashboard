@@ -2279,7 +2279,7 @@
     <!-- 인터랙티브 4축 진단 -->
     <div class="bg-white rounded-2xl p-6 shadow-sm">
       <h3 class="font-bold text-lg mb-1">🧭 4축 통합 진단기</h3>
-      <p class="text-xs text-slate-500 mb-3">종목을 검색하면 가격 데이터로 4축이 <b>자동</b> 채워집니다. 직접 골라서 보정해도 됩니다 (확신 ≠ 예측).</p>
+      <p class="text-xs text-slate-500 mb-3"><b>아무 티커나</b> 검색하면 가격 데이터로 4축이 자동 채워집니다 (S&P500 등은 즉시, 그 외는 실시간 계산). 직접 골라서 보정해도 됩니다 (확신 ≠ 예측).</p>
       <!-- 종목 검색 자동 채움 -->
       <div class="flex flex-wrap items-center gap-2 mb-3">
         <input id="techTickerSearch" list="techTickerList" placeholder="티커 검색 (예: NVDA)" class="border rounded-lg px-3 py-2 text-sm w-48" onchange="applyTechAuto(this.value)" onkeydown="if(event.key==='Enter')applyTechAuto(this.value)">
@@ -2312,7 +2312,7 @@
         <h3 class="font-bold text-lg">📈 S&P 500 자동 4축 진단표</h3>
         <input id="techTableSearch" oninput="renderTechTable()" placeholder="티커/이름 검색…" class="border rounded-lg px-3 py-1.5 text-sm w-44">
       </div>
-      <p class="text-xs text-slate-500 mb-3">S&P 500 약 500종목을 매일 일봉으로 자동 채점. 행을 누르면 위 진단기에 반영됩니다. (유동성은 캔들 프록시 ★) · 목록 밖 임의 티커는 위 검색창에서 조회(Worker 연결 시).</p>
+      <p class="text-xs text-slate-500 mb-3">S&P 500 + 인기주/ADR/ETF 약 580종목을 매일 일봉으로 자동 채점. 행을 누르면 위 진단기에 반영됩니다. (유동성은 캔들 프록시 ★) · <b>목록 밖 임의 티커도 위 검색창에 입력하면 실시간 계산</b>(프록시 경유, 간헐적으로 느리거나 실패할 수 있음).</p>
       <div id="techTableWrap" class="overflow-x-auto"><div class="text-center text-slate-400 py-8 text-sm">tech.json 로딩 중…</div></div>
       <p class="text-xs text-slate-400 mt-3" id="techTableAsOf"></p>
     </div>
@@ -5436,23 +5436,100 @@ async function applyTechAuto(ticker) {
   const s = ((__techData && __techData.stocks) || []).find(x =>
     (x.ticker||'').toUpperCase() === ticker || (x.ticker||'').toUpperCase() === ticker.replace(/-/g, '.'));
   if (s) { renderTechStock(s); return; }
-  // 2) 서버리스 Worker fallback (임의 티커)
+  // 2) 서버리스 Worker (설정 시 최우선 — 가장 안정적)
+  if (meta) meta.innerHTML = `<span class="text-slate-400">${ticker} 실시간 계산 중…</span>`;
   if (TECH_API) {
-    if (meta) meta.textContent = `${ticker} 실시간 계산 중…`;
     try {
       const res = await fetch(`${TECH_API}?ticker=${encodeURIComponent(ticker)}`);
       const d = await res.json();
-      if (d && !d.error && d.score != null) { renderTechStock(d); return; }
-      if (meta) meta.textContent = `'${ticker}' 데이터 없음 (${d.error||'no data'})`;
-    } catch (e) {
-      if (meta) meta.textContent = `실시간 조회 실패: ${e.message}`;
-    }
-    if (detail) detail.classList.add('hidden');
-    return;
+      if (d && !d.error && d.score != null) { d.ticker = d.ticker || ticker; renderTechStock(d); return; }
+    } catch (e) { /* 워커 실패 시 프록시로 폴백 */ }
   }
-  // 3) Worker 미연결 안내
-  if (meta) meta.innerHTML = `'${ticker}'는 S&P500 목록에 없습니다. 임의 티커 검색은 <b>Worker 배포 후</b> 가능 (worker/README.md).`;
+  // 3) 클라이언트 즉석 계산 (공개 프록시 순차 시도)
+  const live = await fetchTechLive(ticker);
+  if (live) { live.ticker = ticker; renderTechStock(live); return; }
+  // 4) 실패 안내
+  if (meta) meta.innerHTML = `'${ticker}' 실시간 조회 실패(목록 밖 + 프록시 불안정). 잠시 후 재시도하거나, 안정적 사용은 <b>Worker 연결</b>(worker/README.md).`;
   if (detail) detail.classList.add('hidden');
+}
+
+// --- 클라이언트 즉석 기술분석 (목록 밖 임의 티커) ---
+const TECH_PROXIES = [
+  y => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(y)}`,
+  y => `https://api.allorigins.win/raw?url=${encodeURIComponent(y)}`,
+  y => `https://corsproxy.io/?url=${encodeURIComponent(y)}`,
+];
+async function fetchWithTimeout(url, ms) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), ms);
+  try { return await fetch(url, { signal: ctl.signal }); }
+  finally { clearTimeout(t); }
+}
+async function fetchTechLive(ticker) {
+  const y = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?range=1y&interval=1d`;
+  for (const mk of TECH_PROXIES) {
+    try {
+      const res = await fetchWithTimeout(mk(y), 12000);
+      if (!res.ok) continue;
+      const data = await res.json();
+      const r = data && data.chart && data.chart.result && data.chart.result[0];
+      if (!r) continue;
+      const q = r.indicators.quote[0];
+      const adj = r.indicators.adjclose && r.indicators.adjclose[0] && r.indicators.adjclose[0].adjclose;
+      const cr = adj || q.close;
+      const idx = [];
+      for (let i = 0; i < cr.length; i++) if (cr[i] != null && q.high[i] != null && q.low[i] != null && q.open[i] != null) idx.push(i);
+      if (idx.length < 60) continue;
+      const close = idx.map(i => cr[i]), high = idx.map(i => q.high[i]), low = idx.map(i => q.low[i]), open = idx.map(i => q.open[i]);
+      const out = computeTechAxes({ close, high, low, open });
+      out.name = (r.meta && (r.meta.shortName || r.meta.longName)) || ticker;
+      out.source = 'worker';
+      return out;
+    } catch (e) { /* 다음 프록시 */ }
+  }
+  return null;
+}
+// computeAxes (worker/tech-worker.js와 동일 로직)
+function _sma(a, p) { if (a.length < p) return null; let s = 0; for (let i = a.length - p; i < a.length; i++) s += a[i]; return s / p; }
+function _rsi(close, p) { p = p || 14; if (close.length < p + 1) return null; let g = 0, l = 0; for (let i = close.length - p; i < close.length; i++) { const d = close[i] - close[i - 1]; if (d > 0) g += d; else l -= d; } g /= p; l /= p; if (l === 0) return 100; return 100 - 100 / (1 + g / l); }
+function computeTechAxes({ close, high, low, open }) {
+  const c = close[close.length - 1], ma50 = _sma(close, 50), ma200 = _sma(close, 200);
+  let s_struct, d_struct;
+  if (ma200 != null && ma50 != null && c > ma50 && ma50 > ma200) { s_struct = 2; d_struct = '상승추세(정배열)'; }
+  else if (ma200 != null && ma50 != null && c < ma50 && ma50 < ma200) { s_struct = 0; d_struct = '하락추세(역배열)'; }
+  else {
+    const rc = close.slice(-60), h = Math.floor(rc.length / 2), fh = rc.slice(0, h), sh = rc.slice(h);
+    const mx = a => Math.max.apply(null, a), mn = a => Math.min.apply(null, a);
+    if (sh.length && mx(sh) > mx(fh) && mn(sh) > mn(fh)) { s_struct = 2; d_struct = '상승추세(고점·저점 상승)'; }
+    else if (sh.length && mx(sh) < mx(fh) && mn(sh) < mn(fh)) { s_struct = 0; d_struct = '하락추세(고점·저점 하락)'; }
+    else { s_struct = 1; d_struct = '횡보'; }
+  }
+  const hi = Math.max.apply(null, close), lo = Math.min.apply(null, close), rng = hi - lo;
+  let s_price, d_price, range_pct = null;
+  if (rng <= 0) { s_price = 1; d_price = '범위 산출 불가'; }
+  else { const pct = (c - lo) / rng * 100; range_pct = Math.round(pct);
+    if (pct < 33) { s_price = 2; d_price = `범위 하단(${range_pct}%)·싸다`; }
+    else if (pct < 66) { s_price = 1; d_price = `범위 중간(${range_pct}%)`; }
+    else { s_price = 0; d_price = `범위 상단(${range_pct}%)·비싸다`; } }
+  const rv = _rsi(close);
+  let s_time, d_time;
+  if (rv == null) { s_time = 1; d_time = 'RSI 산출 불가'; }
+  else if (rv < 35) { s_time = 2; d_time = `과매도(RSI ${Math.round(rv)})·에너지 축적`; }
+  else if (rv <= 65) { s_time = 1; d_time = `중립(RSI ${Math.round(rv)})`; }
+  else { s_time = 0; d_time = `과매수(RSI ${Math.round(rv)})·에너지 소진`; }
+  let swept = false; const n = close.length;
+  for (let i = Math.max(0, n - 10); i < n; i++) { const r2 = high[i] - low[i]; if (r2 <= 0) continue;
+    if ((Math.min(open[i], close[i]) - low[i]) / r2 >= 0.45 && (close[i] - low[i]) / r2 >= 0.6) swept = true; }
+  const nearHigh = c >= Math.max.apply(null, high.slice(-20)) * 0.98;
+  let s_liq, d_liq;
+  if (swept) { s_liq = 2; d_liq = '긴 아래꼬리+회복(사냥 완료 가능)'; }
+  else if (nearHigh) { s_liq = 0; d_liq = '최근 고점 근접(위에 유동성)'; }
+  else { s_liq = 1; d_liq = '중립'; }
+  const score = s_struct + s_price + s_time + s_liq;
+  const verdict = score >= 7 ? '적극 진입' : score >= 5 ? '분할 진입' : score >= 3 ? '신중·관망' : '회피';
+  return { struct: s_struct, price: s_price, time: s_time, liq: s_liq, score, verdict,
+    d_struct, d_price, d_time, d_liq, close: Math.round(c * 100) / 100,
+    rsi: rv == null ? null : Math.round(rv * 10) / 10, range_pct };
 }
 
 function renderTechTable() {

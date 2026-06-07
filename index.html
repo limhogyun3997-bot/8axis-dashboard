@@ -62,6 +62,9 @@
   .assetx-subbtn { background: #f1f5f9; color: #475569; transition: all .2s; border: 1px solid #e2e8f0; }
   .assetx-subbtn:hover { background: #e2e8f0; }
   .assetx-subbtn.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(99,102,241,0.35); }
+  .strat-subbtn { background: #f1f5f9; color: #475569; transition: all .2s; border: 1px solid #e2e8f0; }
+  .strat-subbtn:hover { background: #e2e8f0; }
+  .strat-subbtn.active { background: linear-gradient(135deg, #e11d48, #ec4899); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(225,29,72,0.30); }
   .pulse-dot { animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
   .card-hover { transition: transform .2s, box-shadow .2s; }
@@ -1952,13 +1955,15 @@
     <!-- 분할 매수 + 바닥 형태 -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
       <div class="bg-white rounded-2xl p-6 shadow-sm">
-        <h3 class="text-lg font-bold mb-3">📊 변곡점 신호별 분할 매수</h3>
+        <h3 class="text-lg font-bold mb-3">📊 변곡점 신호별 분할 매수 <span class="text-xs font-normal text-slate-400">(4단계 본문: 20·20·30·30)</span></h3>
         <div class="space-y-2 text-sm">
-          <div class="flex items-center gap-3 bg-slate-50 rounded p-3"><span class="font-bold text-slate-400 w-12">0-1개</span><div><b>관망</b> — 아직 저점 아님</div></div>
-          <div class="flex items-center gap-3 bg-emerald-50 rounded p-3"><span class="font-bold text-emerald-600 w-12">2개</span><div><b>1차 20%</b> — 저점 초입, 시험 진입</div></div>
-          <div class="flex items-center gap-3 bg-emerald-50 rounded p-3"><span class="font-bold text-emerald-600 w-12">3개</span><div><b>2차 +30%</b> — 저점 중간, 확신 상승</div></div>
-          <div class="flex items-center gap-3 bg-emerald-100 rounded p-3"><span class="font-bold text-emerald-700 w-12">4개</span><div><b>3차 +30~50%</b> — 저점 후반, 구조적 변곡점</div></div>
+          <div class="flex items-center gap-3 bg-slate-50 rounded p-3"><span class="font-bold text-slate-400 w-16">0-1개</span><div><b>관망</b> — 아직 저점 아님</div></div>
+          <div class="flex items-center gap-3 bg-emerald-50 rounded p-3"><span class="font-bold text-emerald-600 w-16">2개</span><div><b>1차 20%</b> — 저점 초입, 시험 진입</div></div>
+          <div class="flex items-center gap-3 bg-emerald-50 rounded p-3"><span class="font-bold text-emerald-600 w-16">3개·추가하락</span><div><b>2차 +20%</b> — 저점 중간, 확신 상승 (누적 40%)</div></div>
+          <div class="flex items-center gap-3 bg-emerald-100 rounded p-3"><span class="font-bold text-emerald-700 w-16">4개·반등</span><div><b>3차 +30%</b> — 저점 후반, 구조적 변곡점 (누적 70%)</div></div>
+          <div class="flex items-center gap-3 bg-emerald-200 rounded p-3"><span class="font-bold text-emerald-800 w-16">추세확인</span><div><b>4차 +30%</b> — 상승추세 명확 (누적 100%)</div></div>
         </div>
+        <p class="text-xs text-slate-400 mt-2">※ 5단계 본문은 3분할(20~25 / 25~30 / 나머지)로 더 단순화 — 둘 다 PDF 근거. 여기선 4단계 본문 기준.</p>
       </div>
       <div class="bg-white rounded-2xl p-6 shadow-sm">
         <h3 class="text-lg font-bold mb-3">📈 바닥 형태 구분 (사건 vs 구조)</h3>
@@ -2148,19 +2153,14 @@
 <!-- 시나리오 -->
 <section id="tab-scenario" class="tab-content hidden">
   <div class="bg-gradient-to-r from-orange-50 to-amber-50 border-l-4 border-orange-500 rounded-xl p-6 mb-6">
-    <h2 class="text-xl font-bold">🎯 시나리오</h2>
-    <p class="text-sm text-slate-600 mt-1">"만약 ~라면" 형태의 분기별 대응 시나리오·플레이북이 들어갈 공간입니다.</p>
+    <h2 class="text-xl font-bold">🎯 시장 시나리오 — 지표 → 해석 → 예측 (자동)</h2>
+    <p class="text-sm text-slate-600 mt-1">8축·거시 지표(라이브)를 <b>1·5·6단계 규칙</b>으로 해석해 <b>구체적 시나리오</b>를 자동 생성합니다. 데이터가 바뀌면 시나리오도 바뀝니다.</p>
+    <p class="text-xs text-slate-400 mt-1" id="scenarioAsOf">데이터 로딩 중…</p>
   </div>
-  <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
-    <div class="text-5xl mb-4">🎯</div>
-    <h3 class="text-lg font-bold mb-2">콘텐츠 준비 중</h3>
-    <p class="text-sm text-slate-500 max-w-lg mx-auto">이 카테고리의 PDF를 추가하면 여기에 자동으로 시나리오가 채워집니다.<br>예상 구성: 강세/중립/약세 분기, 트리거 조건, 단계별 행동 지침, 손절·익절 라인</p>
-    <div class="flex flex-wrap gap-2 justify-center mt-5 text-xs">
-      <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full">분기 시나리오</span>
-      <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full">트리거 조건</span>
-      <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full">대응 플레이북</span>
+  <div id="scenarioEngine" class="space-y-6">
+    <div class="bg-white rounded-2xl p-8 shadow-sm text-center text-slate-400">
+      <div class="text-4xl mb-3 pulse-dot">🎯</div>지표를 해석하는 중입니다…
     </div>
-    <p class="text-xs text-slate-400 mt-5">💡 현재 "대시보드"의 종합 액션 신호가 시나리오의 출발점입니다. 여기서 더 구체적인 분기로 확장됩니다.</p>
   </div>
 </section><!-- /tab-scenario -->
 
@@ -2186,20 +2186,124 @@
 <!-- 투자전략 -->
 <section id="tab-strategy" class="tab-content hidden">
   <div class="bg-gradient-to-r from-rose-50 to-pink-50 border-l-4 border-rose-500 rounded-xl p-6 mb-6">
-    <h2 class="text-xl font-bold">♟️ 투자전략</h2>
-    <p class="text-sm text-slate-600 mt-1">자산배분·종목선정·리스크 관리 등 실전 전략이 들어갈 공간입니다.</p>
+    <h2 class="text-xl font-bold">♟️ 매수 종목 점수화 (2·3·6단계)</h2>
+    <p class="text-sm text-slate-600 mt-1">자산네제곱 <b>2단계(재무·해자)·3단계(방향·변곡점)·6단계(컨센서스 갭)</b> 기준으로 종목을 100점 만점 채점합니다.</p>
   </div>
-  <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
-    <div class="text-5xl mb-4">♟️</div>
-    <h3 class="text-lg font-bold mb-2">콘텐츠 준비 중</h3>
-    <p class="text-sm text-slate-500 max-w-lg mx-auto">이 카테고리의 PDF를 추가하면 여기에 자동으로 전략이 채워집니다.<br>예상 구성: 자산배분 모델, 종목 스크리닝, 리밸런싱 규칙, 포지션 사이징, 헤지 전략</p>
-    <div class="flex flex-wrap gap-2 justify-center mt-5 text-xs">
-      <span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full">자산배분</span>
-      <span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full">종목 선정</span>
-      <span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full">리스크 관리</span>
-      <span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full">리밸런싱</span>
+
+  <!-- 서브 토글 -->
+  <div class="flex gap-2 mb-6">
+    <button onclick="switchStrategySub('auto')" class="strat-subbtn active px-4 py-2 rounded-lg text-sm font-semibold" data-ss="auto">🔍 자동 워치리스트 점수</button>
+    <button onclick="switchStrategySub('manual')" class="strat-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-ss="manual">✍️ 수동 종목 채점</button>
+  </div>
+
+  <!-- (A) 자동 워치리스트 -->
+  <div id="strat-auto" class="strat-sub">
+    <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+        <h3 class="font-bold text-lg">🔍 워치리스트 자동 점수표</h3>
+        <input id="stockSearch" oninput="renderScoresTable()" placeholder="티커/이름 검색…" class="border rounded-lg px-3 py-1.5 text-sm w-44">
+      </div>
+      <p class="text-xs text-slate-500 mb-3">매일 yfinance 펀더멘털을 받아 <b>정량 항목(재무·밸류·성장·컨센서스·타이밍)</b>을 자동 채점합니다. 해자·내러티브는 정성 항목이라 ★로 표시 — 수동 채점에서 보정하세요.</p>
+      <div id="scoresTableWrap" class="overflow-x-auto">
+        <div class="text-center text-slate-400 py-8 text-sm">scores.json 로딩 중…</div>
+      </div>
+      <p class="text-xs text-slate-400 mt-3" id="scoresAsOf"></p>
     </div>
-    <p class="text-xs text-slate-400 mt-5">💡 자산네제곱 5단계(포트폴리오)의 원리를 실행 전략으로 구체화하는 공간입니다.</p>
+  </div>
+
+  <!-- (B) 수동 채점 -->
+  <div id="strat-manual" class="strat-sub hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-4">
+        <div class="bg-white rounded-2xl p-5 shadow-sm">
+          <input id="ssName" placeholder="종목명 (예: NVDA)" class="border rounded-lg px-3 py-2 text-sm w-full font-semibold" oninput="calcStockScore()">
+        </div>
+        <!-- 1. 재무 건전성 -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm">
+          <h4 class="font-bold mb-3">1️⃣ 재무 건전성 <span class="text-xs text-slate-400">/25점 · 2단계</span></h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <label class="block">이자보상배율(영업이익/이자)
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="8">≥10 (매우안전)</option><option value="6">5~10 (안전)</option><option value="4" selected>3~5 (보통)</option><option value="2">2~3 (위험)</option><option value="0">&lt;2 (매우위험)</option></select></label>
+            <label class="block">순부채/EBITDA
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="7">넷캐시(마이너스)</option><option value="6">0~1</option><option value="4" selected>1~2</option><option value="2">2~3</option><option value="0">&gt;3</option></select></label>
+            <label class="block">FCF(잉여현금흐름)
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="5">흑자·견고</option><option value="4" selected>흑자</option><option value="2">적자(5조건 충족)</option><option value="0">적자(조건 미달)</option></select></label>
+            <label class="block">영업레버리지(이익↑/매출↑)
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="5">≥2.0</option><option value="4" selected>1.5~2.0</option><option value="2">1.0~1.5</option><option value="0">&lt;1.0</option></select></label>
+          </div>
+        </div>
+        <!-- 2. 밸류에이션 -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm">
+          <h4 class="font-bold mb-3">2️⃣ 밸류에이션 <span class="text-xs text-slate-400">/15점 · 2단계</span></h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+            <label class="block">PER
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="5">&lt;15</option><option value="4">15~20</option><option value="3" selected>20~25</option><option value="1">25~30</option><option value="0">30+</option></select></label>
+            <label class="block">PEG(PER/성장률)
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="5">&lt;1.0</option><option value="4" selected>1.0~1.5</option><option value="2">1.5~2.0</option><option value="0">2.0+</option></select></label>
+            <label class="block">안전마진(내재가치 대비)
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="5">40%+</option><option value="4">30~40%</option><option value="3" selected>20~30%</option><option value="1">10~20%</option><option value="0">&lt;10%</option></select></label>
+          </div>
+        </div>
+        <!-- 3. 성장/수명주기 -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm">
+          <h4 class="font-bold mb-3">3️⃣ 성장·수명주기 <span class="text-xs text-slate-400">/20점 · 2단계</span></h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+            <label class="block">매출 성장률(또는 TAM CAGR)
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="8">20%+</option><option value="6" selected>10~20%</option><option value="4">5~10%</option><option value="2">0~5%</option><option value="0">마이너스</option></select></label>
+            <label class="block">영업이익률 방향(3단계)
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="7">상승 추세</option><option value="4" selected>유지</option><option value="0">하락</option></select></label>
+            <label class="block">산업 수명주기
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="5">성장기</option><option value="3" selected>도입기/성숙기</option><option value="0">쇠퇴기</option></select></label>
+          </div>
+        </div>
+        <!-- 4. 해자 -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm">
+          <h4 class="font-bold mb-3">4️⃣ 경제적 해자 <span class="text-xs text-slate-400">/15점 · 2단계 (5종 × 0~3)</span></h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <label class="block">네트워크 효과<select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="3">독점</option><option value="2">강력</option><option value="1" selected>일부</option><option value="0">없음</option></select></label>
+            <label class="block">전환 비용<select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="3">독점</option><option value="2">강력</option><option value="1" selected>일부</option><option value="0">없음</option></select></label>
+            <label class="block">규모의 경제<select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="3">독점</option><option value="2">강력</option><option value="1" selected>일부</option><option value="0">없음</option></select></label>
+            <label class="block">브랜드<select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="3">독점</option><option value="2">강력</option><option value="1" selected>일부</option><option value="0">없음</option></select></label>
+            <label class="block">특허·라이선스<select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="3">독점</option><option value="2">강력</option><option value="1" selected>일부</option><option value="0">없음</option></select></label>
+          </div>
+        </div>
+        <!-- 5. 변곡점/방향 + 6. 컨센서스 + 7. 타이밍 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white rounded-2xl p-5 shadow-sm">
+            <h4 class="font-bold mb-3 text-sm">5️⃣ 변곡점 <span class="text-xs text-slate-400">/10 · 3단계</span></h4>
+            <label class="block text-sm">신호 개수(수요반전·가격안정·비용정점·경쟁완화)
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="10">4개(완벽)</option><option value="7">3개</option><option value="5" selected>2개(매수)</option><option value="2">1개</option><option value="0">0개</option></select></label>
+          </div>
+          <div class="bg-white rounded-2xl p-5 shadow-sm">
+            <h4 class="font-bold mb-3 text-sm">6️⃣ 컨센서스 갭 <span class="text-xs text-slate-400">/10 · 6단계</span></h4>
+            <label class="block text-sm mb-2">어닝 서프라이즈
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="5">연속 서프라이즈</option><option value="2" selected>혼조</option><option value="0">연속 미스</option></select></label>
+            <label class="block text-sm">컨센서스 리비전
+              <select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="5">상향</option><option value="2" selected>유지</option><option value="0">하향</option></select></label>
+          </div>
+          <div class="bg-white rounded-2xl p-5 shadow-sm">
+            <h4 class="font-bold mb-3 text-sm">7️⃣ 타이밍 <span class="text-xs text-slate-400">/5 · 3단계</span></h4>
+            <label class="block text-sm mb-2">200일선<select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="2" selected>위</option><option value="0">아래</option></select></label>
+            <label class="block text-sm mb-2">섹터 자금<select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="2" selected>유입</option><option value="0">유출</option></select></label>
+            <label class="block text-sm">촉매<select class="ss-input w-full border rounded p-2 mt-1" onchange="calcStockScore()"><option value="1" selected>있음</option><option value="0">없음</option></select></label>
+          </div>
+        </div>
+      </div>
+      <!-- 결과 패널 -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-2xl p-6 shadow-sm sticky-mini">
+          <div class="text-xs text-slate-500">자산네제곱 종합 점수</div>
+          <div class="text-5xl font-extrabold my-2" id="ssScore">63</div>
+          <div class="w-full bg-slate-100 rounded-full h-3 mb-3"><div id="ssBar" class="h-3 rounded-full bg-amber-500" style="width:63%"></div></div>
+          <div id="ssVerdict" class="text-lg font-bold mb-2">🟡 관망/시험매수</div>
+          <div id="ssPosition" class="text-sm bg-slate-50 rounded-lg p-3 mb-3">권장 비중: 시험매수 5~8%</div>
+          <div id="ssBreakdown" class="text-xs text-slate-500 space-y-1"></div>
+          <button onclick="saveStockScore()" class="w-full mt-4 bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-lg text-sm font-semibold">💾 이 종목 저장/비교</button>
+          <div id="ssSaved" class="mt-3 space-y-1 text-xs"></div>
+        </div>
+      </div>
+    </div>
+    <p class="text-xs text-slate-400 mt-4">※ 배점: 재무25 · 밸류15 · 성장20 · 해자15 · 변곡점10 · 컨센서스10 · 타이밍5 = 100. 80+ 강력매수 / 65~79 매수 / 50~64 관망 / &lt;50 회피. 포지션 상한은 4단계 Half Kelly(15~22%) 기준.</p>
   </div>
 </section><!-- /tab-strategy -->
 
@@ -4586,6 +4690,7 @@ async function loadLiveData() {
 }
 
 function applyLiveData(data) {
+  window.__liveData = data; // 시나리오/종목 엔진에서 재사용
   // 1. 자동 6축 axes 배열 덮어쓰기 (FRED 추가로 employment, consumption 자동화)
   const map = {
     'interest': 1,
@@ -4664,6 +4769,9 @@ function applyLiveData(data) {
     document.getElementById('headerPhase').textContent = s.phase || '분석 중';
     document.getElementById('headerStrategy').textContent = s.strategy || '-';
   }
+
+  // 7. 시장 시나리오 자동 해석 엔진
+  if (typeof renderScenarioEngine === 'function') renderScenarioEngine(data);
 }
 
 function showLiveBadge(data) {
@@ -4677,6 +4785,341 @@ function showLiveBadge(data) {
 function showStaleBadge() {
   document.getElementById('liveBadge').innerHTML = `<span class="inline-block w-2 h-2 bg-amber-500 rounded-full"></span> <span class="text-amber-700">정적 데이터 사용 중</span>`;
   document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v5.1';
+}
+
+// ============================================================
+// === Engine 1: 시장 시나리오 자동 해석 (지표→해석→예측) ===
+//   1단계(8축·4-4-반반) + 5단계(환경 매트릭스·자산배분) + 6단계(컨센서스·내러티브)
+// ============================================================
+function renderScenarioEngine(data) {
+  const el = document.getElementById('scenarioEngine');
+  if (!el || !data) return;
+  const fred = data.fred || {}, prices = data.prices || {}, summary = data.summary || {};
+  const action = data.action || {}, sahm = data.sahm || {};
+  const sectors = (data.sectors && data.sectors.sorted_by_5d) || [];
+  const mag7 = data.mag7 || [];
+  const axesArr = (typeof axes !== 'undefined') ? axes : [];
+  const num = v => (v===undefined||v===null||v===''||isNaN(v)) ? null : Number(v);
+  const g = (o,k) => (o && o[k]) ? o[k] : null;
+
+  // ---------- 입력 지표 ----------
+  const cpi = num(g(fred,'CPIAUCSL') && fred.CPIAUCSL.value);
+  const realRate = num(g(fred,'DFII10') && fred.DFII10.value);
+  const fedRate = num(g(fred,'DFF') && fred.DFF.value);
+  const unrate = num(g(fred,'UNRATE') && fred.UNRATE.value);
+  const wage = num(g(fred,'CES0500000003') && fred.CES0500000003.value);
+  const retail = num(g(fred,'RSAFS') && fred.RSAFS.value);
+  const cardDel = num(g(fred,'DRCCLACBS') && fred.DRCCLACBS.value);
+  const us10y = num(g(prices,'us10y') && prices.us10y.value);
+  const us2y = num(g(prices,'us2y') && prices.us2y.value);
+  const vix = num(g(prices,'vix') && prices.vix.value);
+  const dxy = num(g(prices,'dxy') && prices.dxy.value);
+  const wti = num(g(prices,'wti') && prices.wti.value);
+
+  const pos = summary.positive||0, neg = summary.negative||0, neu = summary.neutral||0;
+  const earningsAxis = axesArr.find(a => a.id === 2);
+  const earningsRating = earningsAxis ? earningsAxis.rating : '중립';
+
+  // ---------- 1. 국면 (4-4-반반) + 자산배분 (5단계) ----------
+  let phase, pc, allocStock, allocText, prob;
+  if (pos >= 4) {
+    phase='강세 · 상승장'; pc='emerald'; allocStock='90~100%';
+    allocText='주식 90~100% · 현금 ≥10% (닻 유지). 추세 추종 + 핵심 바구니 비중 확대.';
+    prob={bull:55, base:30, bear:15};
+  } else if (neg >= 4) {
+    phase='약세 · 하락장'; pc='rose'; allocStock='30~50%';
+    allocText='주식 30~50% · 현금/방어 50~70%. 신규 진입 보류, 핵심만 보유(완전청산 금지).';
+    prob={bull:15, base:30, bear:55};
+  } else {
+    phase='변동성 · 횡보/조정'; pc='amber'; allocStock='60~70%';
+    allocText='주식 60~70% · 현금 30~40%. 분할 진입(시험매수), 변곡점 신호 대기.';
+    const diff = pos - neg;
+    prob = diff>0 ? {bull:38,base:42,bear:20} : diff<0 ? {bull:22,base:42,bear:36} : {bull:30,base:45,bear:25};
+  }
+
+  // ---------- 2. 시장 환경 분류 (5단계 9환경) ----------
+  const hotInflation = cpi!==null && cpi>=3.3;
+  const tight = realRate!==null && realRate>=1.5;
+  const recession = !!sahm.triggered || (unrate!==null && unrate>=5.0);
+  const inverted = (us10y!==null && us2y!==null) && us10y < us2y;
+  const strongDollar = dxy!==null && dxy>=103;
+  const weakDollar = dxy!==null && dxy<=96;
+  const oilShock = wti!==null && wti>=90;
+  const fear = vix!==null && vix>=28;
+  const calm = vix!==null && vix<16;
+
+  let env, envEmoji, envDesc, up, down;
+  if (recession) {
+    env='침체 진입'; envEmoji='🟥';
+    envDesc='Sahm Rule 발동 또는 실업률 5%+ — 경기 수축 국면.';
+    up=['현금','美 단기국채','방어주(필수소비·유틸·헬스케어)','장기국채(TLT)'];
+    down=['경기민감주','고레버리지·소형주','하이일드'];
+  } else if (hotInflation && oilShock) {
+    env='스태그플레이션 위험'; envEmoji='🟧';
+    envDesc=`CPI ${cpi}% + 유가 $${wti} — 물가 상승 속 성장 둔화 우려.`;
+    up=['원자재','금','에너지','물가연동채(TIPS)','현금'];
+    down=['성장주','일반 채권','장기 듀레이션'];
+  } else if (hotInflation && tight) {
+    env='고금리·인플레 (긴축)'; envEmoji='🟨';
+    envDesc=`CPI ${cpi}% · 실질금리 ${realRate}% — 긴축 환경, 밸류에이션 부담.`;
+    up=['에너지','금융','원자재','가치주','배당주'];
+    down=['고PER 성장주','장기 듀레이션','부동산(리츠)'];
+  } else if (strongDollar) {
+    env='강달러 국면'; envEmoji='🟦';
+    envDesc=`DXY ${dxy} — 달러 강세, 신흥국·원자재·수출주 부담.`;
+    up=['美 대형주','美 내수주','현금(달러)'];
+    down=['신흥국','원자재','다국적 수출주'];
+  } else if (weakDollar) {
+    env='약달러 국면'; envEmoji='🟩';
+    envDesc=`DXY ${dxy} — 달러 약세, 위험자산·실물자산 우호.`;
+    up=['금','신흥국','원자재','비(非)미국 주식'];
+    down=['달러 현금'];
+  } else if (pos>=4 && !hotInflation) {
+    env='골디락스'; envEmoji='🟢';
+    envDesc='완만한 성장 + 안정 물가 — 위험자산에 최적.';
+    up=['성장주·기술주','소비재','중소형 성장','리츠'];
+    down=['현금','과도한 방어주'];
+  } else {
+    env='중립·전환 구간'; envEmoji='⚪';
+    envDesc='뚜렷한 단일 테마 없음 — 변곡점 대기, 분산 유지.';
+    up=['퀄리티 대형주','배당주','금(보험)','현금'];
+    down=['고변동·테마주','무이익 성장주'];
+  }
+
+  // ---------- 3. 바닥 형태 V/U/L (4단계) ----------
+  let bottom, bottomDesc;
+  if (recession) {
+    bottom='L자 경계'; bottomDesc='구조적 둔화 신호 — 성급한 저점매수 금지. 시간이 바닥을 만든다.';
+  } else if (fear && earningsRating!=='부정') {
+    bottom='V/U자 후보'; bottomDesc='공포(VIX↑)는 높으나 펀더멘털(실적) 건재 — 사건성 오버슈팅이면 V자, 구조적 불확실이면 U자. 분할매수 영역.';
+  } else if (!fear && pos>=4) {
+    bottom='추세 진행(바닥 아님)'; bottomDesc='저점 논의보다 추세 추종 구간.';
+  } else {
+    bottom='U자 형성 가능'; bottomDesc='급반등보다 거래량 수축·변동성 축소를 확인하며 시간 분할.';
+  }
+
+  // ---------- 4. 섹터 틸트 (환경 + 실제 로테이션) ----------
+  const topSec = sectors.slice(0,3).map(s=>`${s.name}(${s.chg_5d>=0?'+':''}${s.chg_5d}%)`).join(' · ');
+  const botSec = sectors.slice(-2).map(s=>`${s.name}(${s.chg_5d>=0?'+':''}${s.chg_5d}%)`).join(' · ');
+
+  // ---------- 5. 6단계 컨센서스·내러티브 오버레이 ----------
+  let narr;
+  if (earningsRating==='부정' || (earningsAxis && /가이던스/.test(earningsAxis.summary||''))) {
+    narr='⚠️ 내러티브 점검: 실적/가이던스 톤이 약화 — "주가 = 실제 − 기대"에서 기대(컨센서스)가 너무 높았는지 확인. 호재에도 안 오르면 이미 반영된 것.';
+  } else if (fear) {
+    narr='🔵 컨센서스: 공포 국면 — 악재에도 추가 하락이 없다면 "이미 다 반영(바닥 신호)". 컨센서스가 과도하게 비관적인 종목이 기회.';
+  } else if (calm && pos>=4) {
+    narr='🟠 과열 주의: 변동성 낮고 모두 낙관 — 내러티브 3단계(과열)일 수 있음. 어닝 서프라이즈가 소멸되면 전환 신호.';
+  } else {
+    narr='⚪ 컨센서스: 뚜렷한 쏠림 없음 — 리비전 방향(상향/하향)과 어닝 서프라이즈 연속성으로 미래를 선반영.';
+  }
+
+  // ---------- 6. 트리거 워치리스트 ----------
+  const buyTrig = (action.buy_triggers||[]);
+  const sellTrig = (action.sell_triggers||[]);
+
+  // ---------- 렌더 ----------
+  const pcMap = {emerald:'bg-emerald-50 border-emerald-500 text-emerald-800', rose:'bg-rose-50 border-rose-500 text-rose-800', amber:'bg-amber-50 border-amber-500 text-amber-800'};
+  const asOfEl = document.getElementById('scenarioAsOf');
+  if (asOfEl) asOfEl.textContent = `기준: ${data.last_updated_kst || data.last_updated || ''} · 긍정 ${pos} / 중립 ${neu} / 부정 ${neg}`;
+
+  const probBar = (label, val, color) => `
+    <div class="mb-2">
+      <div class="flex justify-between text-xs mb-1"><span class="font-semibold">${label}</span><span>${val}%</span></div>
+      <div class="w-full bg-slate-100 rounded-full h-3"><div class="h-3 rounded-full ${color}" style="width:${val}%"></div></div>
+    </div>`;
+
+  el.innerHTML = `
+    <!-- 종합 국면 -->
+    <div class="rounded-2xl border-l-4 p-6 shadow-sm ${pcMap[pc]}">
+      <div class="text-xs uppercase tracking-wide opacity-70">현재 국면 (8축 4-4-반반)</div>
+      <div class="text-2xl font-extrabold mt-1">${phase}</div>
+      <div class="text-sm mt-2">${allocText}</div>
+    </div>
+
+    <!-- 환경 + 바닥 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="font-bold text-lg mb-1">${envEmoji} 시장 환경 <span class="text-sm text-slate-400">(5단계 매트릭스)</span></h3>
+        <div class="text-base font-bold text-slate-800">${env}</div>
+        <p class="text-sm text-slate-600 mt-1">${envDesc}</p>
+        <div class="grid grid-cols-2 gap-3 mt-3 text-sm">
+          <div class="bg-emerald-50 rounded-lg p-3"><div class="text-xs text-emerald-700 font-semibold mb-1">유리 ▲</div>${up.map(x=>`<div>· ${x}</div>`).join('')}</div>
+          <div class="bg-rose-50 rounded-lg p-3"><div class="text-xs text-rose-700 font-semibold mb-1">불리 ▼</div>${down.map(x=>`<div>· ${x}</div>`).join('')}</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="font-bold text-lg mb-1">📉 바닥 형태 진단 <span class="text-sm text-slate-400">(4단계 V/U/L)</span></h3>
+        <div class="text-base font-bold text-slate-800">${bottom}</div>
+        <p class="text-sm text-slate-600 mt-1">${bottomDesc}</p>
+        <div class="mt-3 text-sm bg-slate-50 rounded-lg p-3">
+          <div class="text-xs text-slate-500 mb-1">실제 섹터 자금 흐름 (5일)</div>
+          <div class="text-emerald-700">유입 ▲ ${topSec||'-'}</div>
+          <div class="text-rose-700 mt-1">유출 ▼ ${botSec||'-'}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3분기 시나리오 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h3 class="font-bold text-lg mb-4">🔮 3-분기 시나리오 (확률 가중)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="border border-emerald-200 rounded-xl p-4">
+          <div class="flex items-center justify-between"><span class="font-bold text-emerald-700">📈 강세 시나리오</span><span class="text-lg font-extrabold text-emerald-600">${prob.bull}%</span></div>
+          <p class="text-xs text-slate-600 mt-2">${recession?'정책 전환(금리인하)·유동성 공급으로 V자 반등':'인플레 둔화 + 실적 컨센서스 상향 → 위험자산 재평가'}. 트리거: ${buyTrig[0]||'VIX 안정 + 자금흐름 개선'}.</p>
+          <p class="text-xs text-emerald-700 mt-2 font-semibold">대응: 분할매수 2→3단계, 주식 비중 상단(${phase.includes('강세')?'90~100%':'70%+'}).</p>
+        </div>
+        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+          <div class="flex items-center justify-between"><span class="font-bold text-slate-700">➡️ 기본 시나리오</span><span class="text-lg font-extrabold text-slate-600">${prob.base}%</span></div>
+          <p class="text-xs text-slate-600 mt-2">현 환경(${env}) 지속. 박스권 등락, 섹터 로테이션 중심. 추세 미확정.</p>
+          <p class="text-xs text-slate-700 mt-2 font-semibold">대응: 현 비중 유지(주식 ${allocStock}), 변곡점 신호 ≥2개 대기.</p>
+        </div>
+        <div class="border border-rose-200 rounded-xl p-4">
+          <div class="flex items-center justify-between"><span class="font-bold text-rose-700">📉 약세 시나리오</span><span class="text-lg font-extrabold text-rose-600">${prob.bear}%</span></div>
+          <p class="text-xs text-slate-600 mt-2">${oilShock?'유가 급등·인플레 재점화':recession?'고용·소비 추가 악화':'금리 재상승 또는 실적 가이던스 추가 하향'} → 위험자산 디레이팅. 트리거: ${sellTrig[0]||'VIX 28+ 돌파 · 신용 스프레드 확대'}.</p>
+          <p class="text-xs text-rose-700 mt-2 font-semibold">대응: 신규매수 중단, 현금 비중↑, 부정신호 3개 시 핵심만 보유.</p>
+        </div>
+      </div>
+      <div class="mt-4">
+        ${probBar('📈 강세', prob.bull, 'bg-emerald-500')}
+        ${probBar('➡️ 기본', prob.base, 'bg-slate-400')}
+        ${probBar('📉 약세', prob.bear, 'bg-rose-500')}
+      </div>
+      <p class="text-xs text-slate-400 mt-2">※ 확률은 8축 균형(긍정${pos}/부정${neg})에 따른 규칙 기반 추정 — 절대 예측이 아닌 상대적 가중입니다.</p>
+    </div>
+
+    <!-- 컨센서스/내러티브 + 트리거 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-6">
+        <h3 class="font-bold mb-2">🧠 컨센서스·내러티브 (6단계)</h3>
+        <p class="text-sm text-indigo-900">${narr}</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="font-bold mb-2">⏰ 트리거 워치리스트</h3>
+        <div class="text-sm">
+          <div class="text-emerald-700 font-semibold text-xs mb-1">매수 전환 신호</div>
+          ${(buyTrig.length?buyTrig:['자금흐름 부정→중립 전환','VIX 20 이하 안정']).map(t=>`<div class="flex gap-2"><span>✅</span><span>${t}</span></div>`).join('')}
+          <div class="text-rose-700 font-semibold text-xs mb-1 mt-3">매도/방어 신호</div>
+          ${(sellTrig.length?sellTrig:['VIX 28+ 돌파','금리 급등 재개','실적 가이던스 추가 하향']).map(t=>`<div class="flex gap-2"><span>⚠️</span><span>${t}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <p class="text-xs text-slate-400 text-center">엔진 근거: 1단계(8축·4-4-반반) · 5단계(환경 매트릭스·자산배분·V/U/L) · 6단계(컨센서스·내러티브). 입력은 모두 라이브 data.json.</p>
+  `;
+}
+
+// ============================================================
+// === Engine 2: 매수 종목 점수화 (2·3·6단계) ===
+// ============================================================
+function switchStrategySub(name) {
+  document.querySelectorAll('.strat-sub').forEach(el => el.classList.add('hidden'));
+  const p = document.getElementById('strat-' + name);
+  if (p) p.classList.remove('hidden');
+  document.querySelectorAll('.strat-subbtn').forEach(b => b.classList.remove('active'));
+  const b = document.querySelector(`.strat-subbtn[data-ss="${name}"]`);
+  if (b) b.classList.add('active');
+}
+
+// --- 점수 → 판정/포지션 (4단계 Half Kelly 상한) ---
+function scoreVerdict(score) {
+  if (score >= 80) return { label:'🚀 강력 매수 후보', color:'emerald', pos:'핵심 비중 15~22% (Half Kelly 상단), 분할 3~4단계' };
+  if (score >= 65) return { label:'✅ 매수 후보', color:'teal', pos:'10~15%, 분할 2~3단계로 진입' };
+  if (score >= 50) return { label:'🟡 관망 / 시험매수', color:'amber', pos:'시험매수 5~8% 또는 신호 대기' };
+  return { label:'🔴 회피', color:'rose', pos:'신규 진입 보류 (기대값 부족)' };
+}
+
+// --- 수동 채점 ---
+function calcStockScore() {
+  const inputs = document.querySelectorAll('#strat-manual .ss-input');
+  let total = 0;
+  inputs.forEach(s => { total += Number(s.value) || 0; });
+  const v = scoreVerdict(total);
+  const cmap = {emerald:'bg-emerald-500', teal:'bg-teal-500', amber:'bg-amber-500', rose:'bg-rose-500'};
+  const tmap = {emerald:'text-emerald-600', teal:'text-teal-600', amber:'text-amber-600', rose:'text-rose-600'};
+  const scoreEl = document.getElementById('ssScore');
+  if (scoreEl) { scoreEl.textContent = total; scoreEl.className = 'text-5xl font-extrabold my-2 ' + tmap[v.color]; }
+  const bar = document.getElementById('ssBar');
+  if (bar) { bar.style.width = total + '%'; bar.className = 'h-3 rounded-full ' + cmap[v.color]; }
+  const vd = document.getElementById('ssVerdict'); if (vd) vd.textContent = v.label;
+  const ps = document.getElementById('ssPosition'); if (ps) ps.innerHTML = '권장 비중: ' + v.pos;
+  // 카테고리별 합계
+  const vals = Array.from(inputs).map(s => Number(s.value)||0);
+  const fin = vals.slice(0,4).reduce((a,b)=>a+b,0);
+  const val = vals.slice(4,7).reduce((a,b)=>a+b,0);
+  const grw = vals.slice(7,10).reduce((a,b)=>a+b,0);
+  const moat = vals.slice(10,15).reduce((a,b)=>a+b,0);
+  const inf = vals[15]||0, cons = (vals[16]||0)+(vals[17]||0), tim = (vals[18]||0)+(vals[19]||0)+(vals[20]||0);
+  const bd = document.getElementById('ssBreakdown');
+  if (bd) bd.innerHTML = [
+    ['재무',fin,25],['밸류',val,15],['성장',grw,20],['해자',moat,15],['변곡점',inf,10],['컨센서스',cons,10],['타이밍',tim,5]
+  ].map(([n,s,m])=>`<div class="flex justify-between"><span>${n}</span><span>${s}/${m}</span></div>`).join('');
+}
+
+function saveStockScore() {
+  const name = (document.getElementById('ssName').value || '무제').trim();
+  const score = Number(document.getElementById('ssScore').textContent) || 0;
+  let saved = JSON.parse(localStorage.getItem('ss_scores') || '[]');
+  saved = saved.filter(x => x.name !== name);
+  saved.unshift({ name, score, date: new Date().toLocaleDateString('ko-KR') });
+  saved = saved.slice(0, 12);
+  localStorage.setItem('ss_scores', JSON.stringify(saved));
+  renderSavedScores();
+}
+
+function renderSavedScores() {
+  const saved = JSON.parse(localStorage.getItem('ss_scores') || '[]');
+  const el = document.getElementById('ssSaved');
+  if (!el) return;
+  if (!saved.length) { el.innerHTML = '<div class="text-slate-400">저장된 종목 없음</div>'; return; }
+  saved.sort((a,b)=>b.score-a.score);
+  el.innerHTML = '<div class="font-semibold text-slate-600 mb-1">📋 비교 (점수순)</div>' + saved.map(s => {
+    const v = scoreVerdict(s.score);
+    const tmap = {emerald:'text-emerald-600',teal:'text-teal-600',amber:'text-amber-600',rose:'text-rose-600'};
+    return `<div class="flex justify-between border-b border-slate-100 py-1"><span>${s.name}</span><span class="font-bold ${tmap[v.color]}">${s.score}</span></div>`;
+  }).join('');
+}
+
+// --- 자동 워치리스트 (scores.json) ---
+let __scoresData = null;
+async function loadScores() {
+  try {
+    const res = await fetch('./scores.json?t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    __scoresData = await res.json();
+    renderScoresTable();
+    const a = document.getElementById('scoresAsOf');
+    if (a) a.textContent = `기준: ${__scoresData.last_updated_kst || ''} · ${(__scoresData.stocks||[]).length}종목 · 출처: yfinance (정량 항목 자동, 해자/내러티브는 ★ 수동 보정)`;
+  } catch (e) {
+    const w = document.getElementById('scoresTableWrap');
+    if (w) w.innerHTML = `<div class="text-center text-slate-400 py-8 text-sm">scores.json 아직 생성 전입니다. 일일 워크플로우 첫 실행 후 표시됩니다.<br><span class="text-xs">(${e.message})</span></div>`;
+  }
+}
+
+function renderScoresTable() {
+  const w = document.getElementById('scoresTableWrap');
+  if (!w || !__scoresData) return;
+  const q = (document.getElementById('stockSearch').value || '').toUpperCase();
+  let rows = (__scoresData.stocks || []).filter(s =>
+    !q || (s.ticker||'').toUpperCase().includes(q) || (s.name||'').toUpperCase().includes(q));
+  rows.sort((a,b)=>b.score-a.score);
+  if (!rows.length) { w.innerHTML = '<div class="text-center text-slate-400 py-6 text-sm">검색 결과 없음</div>'; return; }
+  const cls = sc => sc>=80?'text-emerald-600':sc>=65?'text-teal-600':sc>=50?'text-amber-600':'text-rose-600';
+  const badge = sc => sc>=80?'🚀':sc>=65?'✅':sc>=50?'🟡':'🔴';
+  w.innerHTML = `<table class="w-full text-sm">
+    <thead><tr class="text-left text-xs text-slate-400 border-b">
+      <th class="py-2">종목</th><th>점수</th><th class="hidden md:table-cell">재무</th><th class="hidden md:table-cell">밸류</th><th class="hidden md:table-cell">성장</th><th class="hidden sm:table-cell">컨센</th><th>판정</th>
+    </tr></thead><tbody>
+    ${rows.map(s=>`<tr class="border-b border-slate-50">
+      <td class="py-2"><b>${s.ticker}</b> <span class="text-xs text-slate-400">${s.name||''}</span></td>
+      <td class="font-extrabold ${cls(s.score)}">${s.score}</td>
+      <td class="hidden md:table-cell text-slate-500">${s.fin??'-'}</td>
+      <td class="hidden md:table-cell text-slate-500">${s.val??'-'}</td>
+      <td class="hidden md:table-cell text-slate-500">${s.grw??'-'}</td>
+      <td class="hidden sm:table-cell text-slate-500">${s.cons??'-'}</td>
+      <td>${badge(s.score)} <span class="text-xs ${cls(s.score)}">${s.verdict||''}</span></td>
+    </tr>`).join('')}
+    </tbody></table>`;
 }
 
 // === NEW v5.1: 종합 액션 신호 배너 ===
@@ -5287,6 +5730,10 @@ window.addEventListener('load', () => {
   initTabFromHash();
   // 켈리 계산기 초기값 렌더
   if (document.getElementById('kellyWin')) calcKelly();
+  // 종목 점수화 엔진 초기화
+  if (document.getElementById('ssScore')) calcStockScore();
+  if (typeof renderSavedScores === 'function') renderSavedScores();
+  if (typeof loadScores === 'function') loadScores();
   // 해시 변경 감지 (사용자 back/forward)
   window.addEventListener('hashchange', initTabFromHash);
 });

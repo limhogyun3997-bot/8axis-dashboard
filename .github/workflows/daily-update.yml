@@ -11,6 +11,7 @@ on:
   push:
     paths:
       - 'update_data.py'
+      - 'score_stocks.py'
       - '.github/workflows/daily-update.yml'
 
 # data.json 자동 푸시 + 실패 시 issue 생성 권한
@@ -46,6 +47,9 @@ jobs:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python update_data.py
 
+      - name: 🔍 Run stock scorer
+        run: python score_stocks.py || echo "⚠️ 종목 점수화 실패 — scores.json 갱신 건너뜀"
+
       - name: 📝 Show summary
         run: |
           python -c "
@@ -64,14 +68,15 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          # 변경사항 확인
-          if git diff --quiet data.json; then
+          # 변경사항 확인 (data.json 또는 scores.json)
+          if git diff --quiet data.json scores.json; then
             echo "📭 변경사항 없음"
             exit 0
           fi
 
-          # 새 data.json 백업
+          # 새 결과물 백업
           cp data.json /tmp/data_new.json
+          [ -f scores.json ] && cp scores.json /tmp/scores_new.json
           TIMESTAMP=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
 
           # 3회 재시도 with reset 전략
@@ -79,7 +84,8 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cp /tmp/data_new.json data.json
-            git add data.json
+            [ -f /tmp/scores_new.json ] && cp /tmp/scores_new.json scores.json
+            git add data.json scores.json
 
             if git diff --staged --quiet; then
               echo "📭 변경사항 없음 (remote가 이미 최신)"

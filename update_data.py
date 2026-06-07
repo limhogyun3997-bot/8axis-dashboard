@@ -883,8 +883,12 @@ def compute_action_signal(pos, neu, neg, vix_val, auto_axes, sahm):
         allocation = "대형 우량주 60% + 성장주 20% + 현금 " + cash
     elif level == "cautious_buy":
         allocation = "대형 우량주 50% + 방어주 20% + 현금 " + cash
+    elif level == "neutral_bull":
+        allocation = "대형 우량주 45% + 방어주 25% + 현금 " + cash
     elif level == "neutral":
         allocation = "대형주 40% + 채권/금 20% + 현금 " + cash
+    elif level == "neutral_bear":
+        allocation = "필수소비재/헬스케어 35% + 채권/금 20% + 현금 " + cash
     elif level == "defensive":
         allocation = "필수소비재/헬스케어 30% + TLT/GLD 20% + 현금 " + cash
     else:  # stop

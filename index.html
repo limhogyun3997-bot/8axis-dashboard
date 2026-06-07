@@ -217,6 +217,9 @@
     </div>
   </div>
 
+  <!-- NEW v5.1: 종합 액션 신호 대형 배너 -->
+  <div id="actionBanner" class="mb-6"></div>
+
   <!-- 1. 신호 집계 + 4-4-반반 규칙 (자동 업데이트) -->
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
     <div class="bg-white rounded-2xl p-6 border-l-4 border-emerald-500 shadow-sm card-hover">
@@ -2654,7 +2657,10 @@ function renderAxisGrid() {
           <div class="font-bold text-lg">${a.name}</div>
           <div class="text-xs text-slate-500">${a.subtitle}</div>
         </div>
-        <span class="${c.badge} text-white text-xs font-bold px-3 py-1 rounded-full">${a.rating}</span>
+        <div class="flex flex-col items-end gap-1">
+          <span class="${c.badge} text-white text-xs font-bold px-3 py-1 rounded-full">${a.rating}</span>
+          ${a.as_of ? `<span class="text-[10px] text-slate-400">📅 ${a.as_of}<br><span class="text-slate-400">(${a.freq || ''})</span></span>` : ''}
+        </div>
       </div>
       <div class="space-y-1 mb-3">
         ${a.metrics.map(m => `<div class="flex justify-between text-sm"><span class="text-slate-500">${m.k}</span><span class="font-semibold ${toneClass(m.tone)}">${m.v}</span></div>`).join('')}
@@ -4205,6 +4211,8 @@ function applyLiveData(data) {
       axis.metrics = live.metrics;
       axis.summary = live.summary;
       if (live.pdfTip) axis.pdfTip = live.pdfTip;
+      axis.as_of = live.as_of;
+      axis.freq = live.freq;
     }
   }
 
@@ -4219,6 +4227,8 @@ function applyLiveData(data) {
       if (m.metrics) axis.metrics = m.metrics;
       if (m.summary) axis.summary = m.summary;
       if (m.pdfTip) axis.pdfTip = m.pdfTip;
+      axis.as_of = m.as_of;
+      axis.freq = m.freq;
     }
   }
 
@@ -4230,6 +4240,7 @@ function applyLiveData(data) {
   renderKeyNumbers(data.prices || {}, data.fred || {});
 
   // 5. NEW v5: Sahm Rule, 섹터, Mag7, 변곡점 알람
+  if (typeof renderActionBanner === 'function') renderActionBanner(data.action);
   if (typeof renderSahm === 'function') renderSahm(data.sahm);
   if (typeof renderSectors === 'function') renderSectors(data.sectors);
   if (typeof renderMag7 === 'function') renderMag7(data.mag7);
@@ -4265,14 +4276,77 @@ function applyLiveData(data) {
 function showLiveBadge(data) {
   const t = data.last_updated_kst || data.last_updated || '';
   document.getElementById('liveBadge').innerHTML = `<span class="inline-block w-2 h-2 bg-emerald-500 rounded-full pulse-dot"></span> <span class="text-emerald-700 font-semibold">LIVE</span> · 마지막 갱신 ${t}`;
-  document.getElementById('headerLiveBadge').innerHTML = `Live · ${t} · v5.0 (auto)`;
+  document.getElementById('headerLiveBadge').innerHTML = `Live · ${t} · v5.1 (auto)`;
   // 라이브 데이터 날짜 기억 (yield curve 라벨용)
   window.__liveDataDate = (t.split(' ')[0] || '').replace(/-/g, '.');
 }
 
 function showStaleBadge() {
   document.getElementById('liveBadge').innerHTML = `<span class="inline-block w-2 h-2 bg-amber-500 rounded-full"></span> <span class="text-amber-700">정적 데이터 사용 중</span>`;
-  document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v5.0';
+  document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v5.1';
+}
+
+// === NEW v5.1: 종합 액션 신호 배너 ===
+function renderActionBanner(action) {
+  const el = document.getElementById('actionBanner');
+  if (!el || !action) return;
+
+  const styles = {
+    strong_buy:    { bg: 'from-emerald-600 to-green-600', emoji: '🚀', text: 'white' },
+    buy:           { bg: 'from-emerald-500 to-teal-500', emoji: '✅', text: 'white' },
+    cautious_buy:  { bg: 'from-lime-500 to-emerald-500', emoji: '🟢', text: 'white' },
+    neutral_bull:  { bg: 'from-teal-400 to-cyan-500', emoji: '🟡', text: 'white' },
+    neutral:       { bg: 'from-amber-400 to-yellow-500', emoji: '⚖️', text: 'white' },
+    neutral_bear:  { bg: 'from-orange-400 to-amber-500', emoji: '🟠', text: 'white' },
+    defensive:     { bg: 'from-orange-500 to-rose-500', emoji: '🛡️', text: 'white' },
+    stop:          { bg: 'from-rose-600 to-red-700', emoji: '🛑', text: 'white' },
+  };
+  const s = styles[action.level] || styles.neutral;
+  const confColor = action.confidence === '높음' ? 'bg-white/30' : (action.confidence === '중간' ? 'bg-white/20' : 'bg-white/10');
+
+  const triggers = (action.buy_triggers || []).length || (action.sell_triggers || []).length;
+  let triggerHtml = '';
+  if (action.buy_triggers && action.buy_triggers.length) {
+    triggerHtml += `<div class="text-xs"><b>🟢 매수 트리거:</b> ${action.buy_triggers.join(' · ')}</div>`;
+  }
+  if (action.sell_triggers && action.sell_triggers.length) {
+    triggerHtml += `<div class="text-xs mt-1"><b>🔴 매도 트리거:</b> ${action.sell_triggers.join(' · ')}</div>`;
+  }
+
+  let contrarianHtml = '';
+  if (action.contrarian) {
+    contrarianHtml = `<div class="bg-white/20 rounded-lg p-3 mt-3">
+      <div class="font-bold text-sm">⚡ ${action.contrarian.type}</div>
+      <div class="text-xs mt-1">${action.contrarian.desc}</div>
+      <div class="text-xs mt-1 opacity-80">${action.contrarian.backtest || ''}</div>
+    </div>`;
+  }
+
+  el.innerHTML = `<div class="bg-gradient-to-r ${s.bg} text-white rounded-2xl p-6 shadow-lg">
+    <div class="flex items-start gap-4 flex-wrap">
+      <div class="text-5xl">${s.emoji}</div>
+      <div class="flex-1 min-w-[250px]">
+        <div class="flex items-center gap-3 flex-wrap">
+          <span class="text-3xl font-extrabold">${action.signal}</span>
+          <span class="${confColor} text-xs font-bold px-3 py-1 rounded-full">신뢰도 ${action.confidence}</span>
+          <span class="bg-white/20 text-xs font-bold px-3 py-1 rounded-full">권장 현금 ${action.cash_ratio}</span>
+        </div>
+        <div class="text-sm mt-2 opacity-95">${action.reason}</div>
+        <div class="text-xs mt-2 bg-white/10 rounded px-3 py-2"><b>📊 백테스트:</b> ${action.backtest_note}</div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+      <div class="bg-white/15 rounded-lg p-3">
+        <div class="text-xs font-bold mb-1">💼 권장 자산 배분</div>
+        <div class="text-sm">${action.allocation}</div>
+      </div>
+      <div class="bg-white/15 rounded-lg p-3">
+        ${triggerHtml || '<div class="text-xs opacity-80">현재 트리거 신호 없음</div>'}
+      </div>
+    </div>
+    ${contrarianHtml}
+    <div class="text-xs opacity-70 mt-3">⚠️ 참고용 신호입니다. 룰 기반 자동 판정으로 정성적 요소(지정학·Fed 발언)는 미반영. 최종 판단은 본인 몫.</div>
+  </div>`;
 }
 
 // === NEW v5: Sahm Rule, 섹터, Mag7, 변곡점 렌더 ===

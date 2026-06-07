@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-06T16:34:48.982750+00:00",
-  "last_updated_kst": "2026-06-07 01:34 KST",
+  "last_updated": "2026-06-07T04:05:14.083239+00:00",
+  "last_updated_kst": "2026-06-07 13:05 KST",
   "version": "v3.0",
   "prices": {
     "sp500": {
@@ -96,9 +96,9 @@
       "prev": 99.41,
       "change_pct": 0.66,
       "change_5d_pct": 1.17,
-      "change_1m_pct": 2.09,
+      "change_1m_pct": 1.85,
       "high_1m": 100.11,
-      "low_1m": 97.63,
+      "low_1m": 97.82,
       "trade_date": "2026-06-05",
       "source": "Yahoo"
     },
@@ -107,7 +107,7 @@
       "prev": 93.04,
       "change_pct": -2.69,
       "change_5d_pct": 3.64,
-      "change_1m_pct": -4.77,
+      "change_1m_pct": -4.5,
       "high_1m": 109.47,
       "low_1m": 86.35,
       "trade_date": "2026-06-05",
@@ -118,54 +118,54 @@
       "prev": 95.03,
       "change_pct": -2.04,
       "change_5d_pct": 1.13,
-      "change_1m_pct": -8.08,
+      "change_1m_pct": -6.97,
       "high_1m": 112.69,
       "low_1m": 91.46,
       "trade_date": "2026-06-05",
       "source": "Yahoo"
     },
     "copper": {
-      "value": 6.2635,
+      "value": 6.2845,
       "prev": 6.511,
-      "change_pct": -3.8,
-      "change_5d_pct": -1.51,
-      "change_1m_pct": 2.07,
+      "change_pct": -3.48,
+      "change_5d_pct": -1.18,
+      "change_1m_pct": 2.56,
       "high_1m": 6.6525,
-      "low_1m": 5.9605,
+      "low_1m": 6.0525,
       "trade_date": "2026-06-05",
       "source": "Yahoo"
     },
     "gold": {
-      "value": 4337.1001,
+      "value": 4365.2998,
       "prev": 4475.7998,
-      "change_pct": -3.1,
-      "change_5d_pct": -4.9,
-      "change_1m_pct": -7.36,
+      "change_pct": -2.47,
+      "change_5d_pct": -4.28,
+      "change_1m_pct": -7.12,
       "high_1m": 4765.2002,
-      "low_1m": 4319.1001,
+      "low_1m": 4336.6001,
       "trade_date": "2026-06-05",
       "source": "Yahoo"
     },
     "silver": {
-      "value": 68.943,
+      "value": 69.103,
       "prev": 73.779,
-      "change_pct": -6.55,
-      "change_5d_pct": -8.82,
-      "change_1m_pct": -10.24,
+      "change_pct": -6.34,
+      "change_5d_pct": -8.61,
+      "change_1m_pct": -13.3,
       "high_1m": 88.888,
-      "low_1m": 68.65,
+      "low_1m": 67.7,
       "trade_date": "2026-06-05",
       "source": "Yahoo"
     },
     "btc": {
-      "value": 60506.9805,
+      "value": 61600.1602,
       "prev": 60922.668,
-      "change_pct": -0.68,
-      "change_5d_pct": -15.16,
-      "change_1m_pct": -25.69,
-      "high_1m": 82792.2109,
+      "change_pct": 1.11,
+      "change_5d_pct": -13.63,
+      "change_1m_pct": -23.01,
+      "high_1m": 82430.1719,
       "low_1m": 59108.918,
-      "trade_date": "2026-06-06",
+      "trade_date": "2026-06-07",
       "source": "Yahoo"
     },
     "qqq": {
@@ -538,8 +538,8 @@
   },
   "spread_2s10s_history": [
     {
-      "date": "2021-06-07",
-      "spread": 1.41
+      "date": "2021-06-08",
+      "spread": 1.39
     },
     {
       "date": "2021-07-01",
@@ -1030,7 +1030,9 @@
         }
       ],
       "summary": "실질금리 2.11% — 주식 약간 부담",
-      "pdfTip": "FRED DFII10 = 10Y TIPS = 실질금리. 2%+ 부담, 마이너스면 위험자산 폭등기."
+      "pdfTip": "FRED DFII10 = 10Y TIPS = 실질금리. 2%+ 부담, 마이너스면 위험자산 폭등기.",
+      "as_of": "2026-06-04",
+      "freq": "매일"
     },
     "flow": {
       "rating": "부정",
@@ -1055,7 +1057,9 @@
         }
       ],
       "summary": "패턴 4 공포 정점 — SQQQ 급증 → 역발상 매수 기회",
-      "pdfTip": "SQQQ 유입 급증 = 역발상 매수. 4패턴 (PDF p.23)."
+      "pdfTip": "SQQQ 유입 급증 = 역발상 매수. 4패턴 (PDF p.23).",
+      "as_of": "2026-06-05",
+      "freq": "매일"
     },
     "employment": {
       "rating": "중립",
@@ -1080,7 +1084,9 @@
         }
       ],
       "summary": "실업률 4.3%, NFP +172K — 연착륙 중",
-      "pdfTip": "Sahm Rule: 실업률 3MA 12M 최저 대비 +0.5%p → 침체. PDF p.30."
+      "pdfTip": "Sahm Rule: 실업률 3MA 12M 최저 대비 +0.5%p → 침체. PDF p.30.",
+      "as_of": "2026-05-01",
+      "freq": "월간"
     },
     "consumption": {
       "rating": "중립",
@@ -1105,7 +1111,9 @@
         }
       ],
       "summary": "연체율 2.92%, 실질소매 +1.1% — 혼재",
-      "pdfTip": "연체율 4%+ = 침체 임박. 실질소매(명목-CPI) > 0이면 진짜 성장."
+      "pdfTip": "연체율 4%+ = 침체 임박. 실질소매(명목-CPI) > 0이면 진짜 성장.",
+      "as_of": "2026-01-01",
+      "freq": "분기"
     },
     "dollar": {
       "rating": "중립",
@@ -1124,13 +1132,15 @@
         },
         {
           "k": "구리",
-          "v": "$6.26/lb",
+          "v": "$6.28/lb",
           "tone": "pos",
           "source": "Yahoo:HG=F"
         }
       ],
       "summary": "DXY 100.1, WTI $91 — 혼재",
-      "pdfTip": "유가 $100+ 지속 시 Fed 매파 회귀. 구리=닥터 코퍼."
+      "pdfTip": "유가 $100+ 지속 시 Fed 매파 회귀. 구리=닥터 코퍼.",
+      "as_of": "2026-06-05",
+      "freq": "매일"
     },
     "vix": {
       "rating": "중립",
@@ -1155,7 +1165,9 @@
         }
       ],
       "summary": "VIX 21.5 — 불안 증가 · 하루 +40% 급등",
-      "pdfTip": "VIX <10 자만, >30 공포. 백워데이션 발생 시 즉시 방어."
+      "pdfTip": "VIX <10 자만, >30 공포. 백워데이션 발생 시 즉시 방어.",
+      "as_of": "2026-06-05",
+      "freq": "매일"
     }
   },
   "manual_axes": {
@@ -1183,7 +1195,9 @@
       ],
       "summary": "Q1 84% Beat, 6분기 연속 두자리 EPS.",
       "pdfTip": "실적보다 가이던스. NVDA 2023 사례.",
-      "last_manual": "2026-05-24"
+      "last_manual": "2026-05-24",
+      "as_of": "2026-05-24",
+      "freq": "분기"
     },
     "margin": {
       "rating": "긍정",
@@ -1209,7 +1223,9 @@
       ],
       "summary": "S&P500 Q1 순이익률 13.4% — FactSet 추적 이래 최고.",
       "pdfTip": "4대 비용 압박 중 유가만. 마진 견조.",
-      "last_manual": "2026-05-22"
+      "last_manual": "2026-05-22",
+      "as_of": "2026-05-22",
+      "freq": "분기"
     }
   },
   "inflection": {
@@ -1219,6 +1235,21 @@
     "is_inflection": false,
     "summary": "0개 축 변동",
     "first_run": false
+  },
+  "action": {
+    "signal": "중립 관망",
+    "level": "neutral",
+    "confidence": "낮음",
+    "cash_ratio": "30~40%",
+    "reason": "명확한 방향성 없음",
+    "backtest_note": "추가 신호 대기",
+    "allocation": "대형주 40% + 채권/금 20% + 현금 30~40%",
+    "contrarian": null,
+    "buy_triggers": [
+      "자금흐름 부정→중립 전환"
+    ],
+    "sell_triggers": [],
+    "vix_state": null
   },
   "history_timeline": [
     {

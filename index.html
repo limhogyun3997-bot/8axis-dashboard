@@ -5455,8 +5455,8 @@ async function applyTechAuto(ticker) {
 
 // --- 클라이언트 즉석 기술분석 (목록 밖 임의 티커) ---
 const TECH_PROXIES = [
-  y => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(y)}`,
   y => `https://api.allorigins.win/raw?url=${encodeURIComponent(y)}`,
+  y => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(y)}`,
   y => `https://corsproxy.io/?url=${encodeURIComponent(y)}`,
 ];
 async function fetchWithTimeout(url, ms) {

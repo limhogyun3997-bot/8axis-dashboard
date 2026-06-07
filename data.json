@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-07T04:05:14.083239+00:00",
-  "last_updated_kst": "2026-06-07 13:05 KST",
+  "last_updated": "2026-06-07T04:08:12.016796+00:00",
+  "last_updated_kst": "2026-06-07 13:08 KST",
   "version": "v3.0",
   "prices": {
     "sp500": {
@@ -158,11 +158,11 @@
       "source": "Yahoo"
     },
     "btc": {
-      "value": 61600.1602,
+      "value": 61576.4219,
       "prev": 60922.668,
-      "change_pct": 1.11,
-      "change_5d_pct": -13.63,
-      "change_1m_pct": -23.01,
+      "change_pct": 1.07,
+      "change_5d_pct": -13.66,
+      "change_1m_pct": -23.04,
       "high_1m": 82430.1719,
       "low_1m": 59108.918,
       "trade_date": "2026-06-07",
@@ -1237,13 +1237,13 @@
     "first_run": false
   },
   "action": {
-    "signal": "중립 관망",
-    "level": "neutral",
+    "signal": "약한 강세 관망",
+    "level": "neutral_bull",
     "confidence": "낮음",
-    "cash_ratio": "30~40%",
-    "reason": "명확한 방향성 없음",
-    "backtest_note": "추가 신호 대기",
-    "allocation": "대형주 40% + 채권/금 20% + 현금 30~40%",
+    "cash_ratio": "25~35%",
+    "reason": "긍정 2 / 부정 1 — 약한 강세 (4축 미달, 정적 축 의존)",
+    "backtest_note": "강세 신호 부족 — 자동 6축 중 추가 긍정 전환 대기",
+    "allocation": "현금 25~35% + TLT/GLD 헤지, 신규 매수 보류",
     "contrarian": null,
     "buy_triggers": [
       "자금흐름 부정→중립 전환"

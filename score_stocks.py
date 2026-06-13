@@ -11,9 +11,12 @@ yfinance 펀더멘털을 받아 워치리스트 종목을 100점 만점으로 �
 정성 항목(해자·변곡점)은 ROE/모멘텀 프록시로 근사 — ★ 표시, 수동 보정 권장.
 판정: 80+ 강력매수 / 65~79 매수 / 50~64 관망 / <50 회피
 """
+import csv
+import io
 import json
 import sys
 import time
+import urllib.request
 from datetime import datetime, timezone, timedelta
 
 try:
@@ -24,6 +27,25 @@ except ImportError:
     import yfinance as yf
 
 KST = timezone(timedelta(hours=9))
+SP500_CSV = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv"
+
+
+def load_sp500():
+    """S&P500 구성종목 동적 수집 (ticker, name). 실패 시 빈 리스트."""
+    try:
+        req = urllib.request.Request(SP500_CSV, headers={"User-Agent": "Mozilla/5.0"})
+        data = urllib.request.urlopen(req, timeout=20).read().decode("utf-8")
+        out = []
+        for r in csv.DictReader(io.StringIO(data)):
+            sym = (r.get("Symbol") or "").strip().replace(".", "-")  # BRK.B → BRK-B
+            nm = (r.get("Security") or "").strip()
+            if sym:
+                out.append((sym, nm))
+        print(f"📋 S&P500 {len(out)}종목 수집")
+        return out
+    except Exception as e:
+        print(f"⚠️ S&P500 수집 실패 ({e}) — 기본 워치리스트 사용", file=sys.stderr)
+        return []
 
 # 워치리스트 (Mag7 + 대형주 + 인기 성장주/ADR ~90종목)
 WATCHLIST = [
@@ -215,14 +237,23 @@ def verdict(score):
     return "회피"
 
 
+def build_universe():
+    """S&P500 + 인기 비S&P500/ADR(WATCHLIST) 병합, 중복 제거."""
+    meta = {}
+    for t, n in load_sp500() + WATCHLIST:
+        meta.setdefault(t.upper(), n)
+    return list(meta.items())
+
+
 def main():
+    universe = build_universe()
+    print(f"🌐 펀더멘털 채점 유니버스: {len(universe)}종목")
     out = []
-    for ticker, name in WATCHLIST:
+    for ticker, name in universe:
         try:
             tk = yf.Ticker(ticker)
             info = tk.info or {}
             if not info or len(info) < 5:
-                print(f"⚠️  {ticker}: info 비어있음 — 건너뜀", file=sys.stderr)
                 continue
             fin = score_fin(info)
             val = score_val(info)
@@ -244,8 +275,7 @@ def main():
                 "upside": upside,
                 "pe": round(g(info, "trailingPE"), 1) if g(info, "trailingPE") else None,
             })
-            print(f"✅ {ticker}: {total}점 ({verdict(total)})")
-            time.sleep(0.4)
+            time.sleep(0.2)
         except Exception as e:
             print(f"❌ {ticker}: {e}", file=sys.stderr)
             continue

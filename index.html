@@ -5995,7 +5995,7 @@ function renderStockCard(ticker, tech, fund) {
         <div>해자★ ${fund.moat}/15</div><div>컨센 ${fund.cons}/10</div><div>타이밍 ${fund.tim}/5</div>
       </div>
       <div class="text-xs text-slate-400 mt-1">${fund.verdict||''}${fund.upside!=null?` · 목표가여력 ${fund.upside}%`:''}${fund.pe?` · PER ${fund.pe}`:''}</div>
-    </div>` : `<div class="bg-white rounded-xl p-4 shadow-sm text-sm text-slate-400">♟️ 펀더멘털 미수록<br><span class="text-xs">(대형주 94 외 — 종합은 기술 점수 기준)</span></div>`;
+    </div>` : `<div class="bg-white rounded-xl p-4 shadow-sm text-sm text-slate-400">♟️ 펀더멘털 미수록<br><span class="text-xs">(S&P500 외 — 종합은 기술 점수 기준)</span></div>`;
   const techBlock = tech ? `
     <div class="bg-white rounded-xl p-4 shadow-sm">
       <div class="flex justify-between items-center mb-2"><h4 class="font-bold">📐 기술 4축</h4><span class="font-extrabold ${tech.score>=5?'text-emerald-600':tech.score>=3?'text-amber-600':'text-rose-600'}">${tech.score}/8</span></div>

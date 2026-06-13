@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-13T10:09:35.438819+00:00",
-  "last_updated_kst": "2026-06-13 19:09 KST",
+  "last_updated": "2026-06-13T17:06:50.804995+00:00",
+  "last_updated_kst": "2026-06-14 02:06 KST",
   "version": "tech-2.0",
   "universe": "S&P 500",
   "basis": "yfinance 일봉(1년) · 기술적 분석 2강 4대 축 · 유동성은 캔들 프록시(★)",
@@ -929,24 +929,6 @@
       "ticker": "KVUE",
       "name": "Kenvue",
       "sector": "Consumer Staples"
-    },
-    {
-      "struct": 1,
-      "price": 2,
-      "time": 2,
-      "liq": 1,
-      "score": 6,
-      "verdict": "분할 진입",
-      "d_struct": "횡보",
-      "d_price": "범위 하단(2%)·싸다",
-      "d_time": "과매도(RSI 21)·에너지 축적",
-      "d_liq": "중립",
-      "close": 254.54,
-      "rsi": 20.8,
-      "range_pct": 2,
-      "ticker": "KLAC",
-      "name": "KLA Corporation",
-      "sector": "Information Technology"
     },
     {
       "struct": 1,
@@ -10181,6 +10163,24 @@
       "ticker": "KEY",
       "name": "KeyCorp",
       "sector": "Financials"
+    },
+    {
+      "struct": 2,
+      "price": 0,
+      "time": 0,
+      "liq": 0,
+      "score": 2,
+      "verdict": "회피",
+      "d_struct": "상승추세(정배열)",
+      "d_price": "범위 상단(100%)·비싸다",
+      "d_time": "과매수(RSI 76)·에너지 소진",
+      "d_liq": "최근 고점 근접(위에 유동성)",
+      "close": 254.54,
+      "rsi": 76.3,
+      "range_pct": 100,
+      "ticker": "KLAC",
+      "name": "KLA Corporation",
+      "sector": "Information Technology"
     },
     {
       "struct": 2,

@@ -15,6 +15,8 @@
 import json
 import sys
 import os
+import time
+import statistics
 import urllib.request
 import urllib.parse
 from datetime import datetime, timezone, timedelta
@@ -634,6 +636,94 @@ def eval_vix(prices):
             "pdfTip": "VIX <10 자만, >30 공포. 백워데이션 발생 시 즉시 방어."}
 
 
+# 실적/마진 자동 평가용 대형주 표본 (시총 상위 대표 30종목)
+FUND_SAMPLE = ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "AVGO", "TSLA",
+               "JPM", "V", "UNH", "LLY", "XOM", "JNJ", "WMT", "MA", "COST", "HD",
+               "PG", "ORCL", "AMD", "CRM", "NFLX", "ADBE", "KO", "PEP", "MRK",
+               "ABBV", "BAC", "CVX"]
+
+
+def eval_earnings_margin():
+    """대형주 표본 펀더멘털을 집계해 실적·마진 축을 데이터 기반으로 자동 평가.
+    yfinance 실패 시 각 축 '중립'으로 안전 폴백 (절대 크래시하지 않음)."""
+    today = (datetime.now(timezone.utc) + timedelta(hours=9)).strftime("%Y-%m-%d")
+    eqg_pos = eqg_tot = 0
+    rms, oms = [], []
+    expand = exp_tot = 0
+    n_ok = 0
+    try:
+        import yfinance as yf
+        for t in FUND_SAMPLE:
+            try:
+                info = yf.Ticker(t).info or {}
+            except Exception:
+                continue
+            if not info or len(info) < 5:
+                continue
+            n_ok += 1
+            eqg = info.get("earningsQuarterlyGrowth")
+            if eqg is not None:
+                eqg_tot += 1
+                if eqg > 0:
+                    eqg_pos += 1
+            rm = info.get("recommendationMean")
+            if rm:
+                rms.append(rm)
+            om = info.get("operatingMargins")
+            if om is not None:
+                oms.append(om)
+            eg, rg = info.get("earningsGrowth"), info.get("revenueGrowth")
+            if eg is not None and rg is not None:
+                exp_tot += 1
+                if eg > rg:
+                    expand += 1
+            time.sleep(0.2)
+    except Exception as e:
+        print(f"⚠️ 실적/마진 자동 평가 실패 ({e}) — 중립 폴백", file=sys.stderr)
+
+    def neutral(name, why):
+        return {"rating": "중립", "metrics": [{"k": "데이터", "v": why, "tone": "neu", "source": "yfinance"}],
+                "summary": f"{name} 데이터 수집 부족 — 중립 처리", "pdfTip": "표본 부족 시 중립.", "last_manual": today}
+
+    # --- 실적 축 ---
+    if eqg_tot >= 5:
+        beat = eqg_pos / eqg_tot
+        med_rm = statistics.median(rms) if rms else 3.0
+        if beat >= 0.65 and med_rm <= 2.2:
+            er, es = "긍정", f"대형주 {eqg_tot}곳 중 이익 증가 {beat*100:.0f}%, 애널리스트 매수우위(평균 {med_rm:.1f})"
+        elif beat <= 0.40 or med_rm >= 2.8:
+            er, es = "부정", f"이익 증가 {beat*100:.0f}%로 둔화, 애널리스트 신중(평균 {med_rm:.1f})"
+        else:
+            er, es = "중립", f"이익 증가 {beat*100:.0f}% 혼조, 애널리스트 평균 {med_rm:.1f}"
+        earnings = {"rating": er, "metrics": [
+            {"k": "이익증가 비율", "v": f"{beat*100:.0f}%", "tone": "pos" if beat >= 0.6 else ("neg" if beat <= 0.4 else "neu"), "source": f"yfinance 표본 {eqg_tot}"},
+            {"k": "애널리스트 평균", "v": f"{med_rm:.1f}/5", "tone": "pos" if med_rm <= 2.2 else ("neg" if med_rm >= 2.8 else "neu"), "source": "recommendationMean"},
+        ], "summary": es, "pdfTip": "실적보다 가이던스. 대형주 표본 집계로 매일 자동 갱신.", "last_manual": today}
+    else:
+        earnings = neutral("실적", "수집부족")
+
+    # --- 마진 축 ---
+    if oms and exp_tot >= 5:
+        med_om = statistics.median(oms)
+        exp_share = expand / exp_tot
+        if med_om >= 0.15 and exp_share >= 0.5:
+            mr, ms = "긍정", f"대형주 영업이익률 중앙값 {med_om*100:.1f}%, 마진 확대 종목 {exp_share*100:.0f}%"
+        elif med_om < 0.08 or exp_share <= 0.35:
+            mr, ms = "부정", f"영업이익률 중앙값 {med_om*100:.1f}%, 마진 확대 {exp_share*100:.0f}%로 압박"
+        else:
+            mr, ms = "중립", f"영업이익률 중앙값 {med_om*100:.1f}%, 마진 확대 {exp_share*100:.0f}% 혼조"
+        margin = {"rating": mr, "metrics": [
+            {"k": "영업이익률(중앙값)", "v": f"{med_om*100:.1f}%", "tone": "pos" if med_om >= 0.15 else ("neg" if med_om < 0.08 else "neu"), "source": "yfinance 표본"},
+            {"k": "마진 확대 종목", "v": f"{exp_share*100:.0f}%", "tone": "pos" if exp_share >= 0.5 else ("neg" if exp_share <= 0.35 else "neu"), "source": "이익성장>매출성장"},
+        ], "summary": ms, "pdfTip": "이익성장 > 매출성장 = 마진 확대(영업레버리지).", "last_manual": today}
+    else:
+        margin = neutral("마진", "수집부족")
+
+    print(f"  ✓ earnings(auto) [{earnings['rating']}] {earnings['summary'][:50]}")
+    print(f"  ✓ margin(auto)   [{margin['rating']}] {margin['summary'][:50]}")
+    return {"earnings": earnings, "margin": margin}
+
+
 def eval_dollar(prices):
     dxy = prices.get("dxy"); wti = prices.get("wti"); copper = prices.get("copper")
     if not (dxy and wti and copper):
@@ -960,30 +1050,9 @@ def main():
         if v:
             print(f"  ✓ {k:13s} [{v['rating']}] {v['summary'][:55]}")
 
-    manual_axes = {
-        "earnings": {
-            "rating": "중립",
-            "metrics": [
-                {"k": "Beat Rate", "v": "84%", "tone": "pos", "source": "FactSet (Q1)"},
-                {"k": "Broadcom 가이던스", "v": "상향 실패 ⚠️", "tone": "neg", "source": "2026-06-04"},
-                {"k": "반도체", "v": "Micron -17% AMD -13%", "tone": "neg", "source": "2026-06-05"}
-            ],
-            "summary": "Q1 Beat 84%는 유효하나, Broadcom AI 가이던스 실패로 반도체 급락 — '실적보다 가이던스' 실전 사례.",
-            "pdfTip": "실적보다 가이던스. Broadcom 2026.06 사례 = NVDA 2023과 동일 패턴.",
-            "last_manual": "2026-06-05"
-        },
-        "margin": {
-            "rating": "긍정",
-            "metrics": [
-                {"k": "순이익률", "v": "13.4%", "tone": "pos", "source": "FactSet (Q1)"},
-                {"k": "기록", "v": "2009년래 최고", "tone": "pos", "source": "FactSet"},
-                {"k": "IT 섹터", "v": "선두", "tone": "pos", "source": "FactSet"}
-            ],
-            "summary": "S&P500 Q1 순이익률 13.4% — FactSet 추적 이래 최고.",
-            "pdfTip": "4대 비용 압박 중 유가만. 마진 견조.",
-            "last_manual": "2026-05-22"
-        }
-    }
+    # 실적·마진 축: 대형주 표본 펀더멘털 집계로 자동 평가 (기존 하드코딩 → 데이터 기반)
+    print("📊 실적·마진 축 자동 평가 (대형주 표본)...")
+    manual_axes = eval_earnings_margin()
 
     # === NEW: 각 축에 데이터 기준일(as_of) 부여 ===
     yahoo_date = (prices.get("sp500") or {}).get("trade_date", "?")
@@ -999,7 +1068,7 @@ def main():
     axis_freq = {
         "interest": "매일", "flow": "매일", "dollar": "매일", "vix": "매일",
         "employment": "월간", "consumption": "분기",
-        "earnings": "분기", "margin": "분기",
+        "earnings": "매일(집계)", "margin": "매일(집계)",
     }
     for k, ax in auto_axes.items():
         if ax:

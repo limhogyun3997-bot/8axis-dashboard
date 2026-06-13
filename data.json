@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-13T17:39:51.951672+00:00",
-  "last_updated_kst": "2026-06-14 02:39 KST",
+  "last_updated": "2026-06-13T17:54:50.897564+00:00",
+  "last_updated_kst": "2026-06-14 02:54 KST",
   "version": "v3.0",
   "prices": {
     "sp500": {
@@ -158,11 +158,11 @@
       "source": "Yahoo"
     },
     "btc": {
-      "value": 64058.3789,
+      "value": 63940.3789,
       "prev": 63543.1992,
-      "change_pct": 0.81,
-      "change_5d_pct": 1.53,
-      "change_1m_pct": -19.2,
+      "change_pct": 0.63,
+      "change_5d_pct": 1.35,
+      "change_1m_pct": -19.35,
       "high_1m": 82005.9609,
       "low_1m": 59108.918,
       "trade_date": "2026-06-13",
@@ -1172,60 +1172,48 @@
   },
   "manual_axes": {
     "earnings": {
-      "rating": "중립",
+      "rating": "긍정",
       "metrics": [
         {
-          "k": "Beat Rate",
-          "v": "84%",
+          "k": "이익증가 비율",
+          "v": "79%",
           "tone": "pos",
-          "source": "FactSet (Q1)"
+          "source": "yfinance 표본 29"
         },
         {
-          "k": "Broadcom 가이던스",
-          "v": "상향 실패 ⚠️",
-          "tone": "neg",
-          "source": "2026-06-04"
-        },
-        {
-          "k": "반도체",
-          "v": "Micron -17% AMD -13%",
-          "tone": "neg",
-          "source": "2026-06-05"
+          "k": "애널리스트 평균",
+          "v": "1.7/5",
+          "tone": "pos",
+          "source": "recommendationMean"
         }
       ],
-      "summary": "Q1 Beat 84%는 유효하나, Broadcom AI 가이던스 실패로 반도체 급락 — '실적보다 가이던스' 실전 사례.",
-      "pdfTip": "실적보다 가이던스. Broadcom 2026.06 사례 = NVDA 2023과 동일 패턴.",
-      "last_manual": "2026-06-05",
-      "as_of": "2026-06-05",
-      "freq": "분기"
+      "summary": "대형주 29곳 중 이익 증가 79%, 애널리스트 매수우위(평균 1.7)",
+      "pdfTip": "실적보다 가이던스. 대형주 표본 집계로 매일 자동 갱신.",
+      "last_manual": "2026-06-14",
+      "as_of": "2026-06-14",
+      "freq": "매일(집계)"
     },
     "margin": {
       "rating": "긍정",
       "metrics": [
         {
-          "k": "순이익률",
-          "v": "13.4%",
+          "k": "영업이익률(중앙값)",
+          "v": "32.3%",
           "tone": "pos",
-          "source": "FactSet (Q1)"
+          "source": "yfinance 표본"
         },
         {
-          "k": "기록",
-          "v": "2009년래 최고",
+          "k": "마진 확대 종목",
+          "v": "69%",
           "tone": "pos",
-          "source": "FactSet"
-        },
-        {
-          "k": "IT 섹터",
-          "v": "선두",
-          "tone": "pos",
-          "source": "FactSet"
+          "source": "이익성장>매출성장"
         }
       ],
-      "summary": "S&P500 Q1 순이익률 13.4% — FactSet 추적 이래 최고.",
-      "pdfTip": "4대 비용 압박 중 유가만. 마진 견조.",
-      "last_manual": "2026-05-22",
-      "as_of": "2026-05-22",
-      "freq": "분기"
+      "summary": "대형주 영업이익률 중앙값 32.3%, 마진 확대 종목 69%",
+      "pdfTip": "이익성장 > 매출성장 = 마진 확대(영업레버리지).",
+      "last_manual": "2026-06-14",
+      "as_of": "2026-06-14",
+      "freq": "매일(집계)"
     }
   },
   "inflection": {
@@ -1248,17 +1236,11 @@
         "from": "중립",
         "to": "긍정",
         "direction": "up"
-      },
-      {
-        "axis": "earnings",
-        "from": "긍정",
-        "to": "중립",
-        "direction": "down"
       }
     ],
-    "count": 4,
-    "is_inflection": true,
-    "summary": "4개 축 변동 (변곡점!)",
+    "count": 3,
+    "is_inflection": false,
+    "summary": "3개 축 변동",
     "first_run": false
   },
   "action": {
@@ -1266,7 +1248,7 @@
     "level": "buy",
     "confidence": "높음",
     "cash_ratio": "10~20%",
-    "reason": "긍정 신호 4개 — 강세장 (4-4-반반 충족)",
+    "reason": "긍정 신호 5개 — 강세장 (4-4-반반 충족)",
     "backtest_note": "백테스트: 강세 4+ → 3M 후 71.7% 확률 상승, 평균 +2.46%",
     "allocation": "대형 우량주 60% + 성장주 20% + 현금 10~20%",
     "contrarian": null,
@@ -1290,10 +1272,10 @@
     }
   ],
   "summary": {
-    "positive": 4,
-    "neutral": 4,
+    "positive": 5,
+    "neutral": 3,
     "negative": 0,
-    "score": 4,
+    "score": 5,
     "phase": "강세장",
     "strategy": "공격적"
   },

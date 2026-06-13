@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>시장 8축 진단 대시보드 v4.0 — 금리곡선 + 갱신버튼</title>
+<title>시장 8축 진단 대시보드 v6.0 — 시나리오·종목점수·기술분석·리포트</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -100,7 +100,7 @@
       <div>
         <div class="flex items-center gap-3">
           <span class="pulse-dot inline-block w-3 h-3 bg-emerald-400 rounded-full"></span>
-          <span class="text-xs tracking-widest text-emerald-300 uppercase" id="headerLiveBadge">Live · 로딩 중... · v4.2</span>
+          <span class="text-xs tracking-widest text-emerald-300 uppercase" id="headerLiveBadge">Live · 로딩 중... · v6.0</span>
         </div>
         <h1 class="text-4xl font-extrabold mt-2">시장 8축 진단 대시보드</h1>
         <p class="text-slate-300 mt-1">자산네제곱 1-3단계 통합판 · 매일 자동 갱신</p>
@@ -2393,19 +2393,14 @@
 <!-- 시장리포트 -->
 <section id="tab-report" class="tab-content hidden">
   <div class="bg-gradient-to-r from-teal-50 to-emerald-50 border-l-4 border-teal-500 rounded-xl p-6 mb-6">
-    <h2 class="text-xl font-bold">📰 시장리포트</h2>
-    <p class="text-sm text-slate-600 mt-1">정기 시황 분석·이벤트 해설 리포트가 들어갈 공간입니다.</p>
+    <h2 class="text-xl font-bold">📰 시장리포트 — 자동 일일 시황</h2>
+    <p class="text-sm text-slate-600 mt-1">라이브 8축·거시·섹터·Mag7 데이터를 종합해 <b>매일 자동으로</b> 시황 리포트를 작성합니다.</p>
+    <p class="text-xs text-slate-400 mt-1" id="reportAsOf">데이터 로딩 중…</p>
   </div>
-  <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
-    <div class="text-5xl mb-4">📰</div>
-    <h3 class="text-lg font-bold mb-2">콘텐츠 준비 중</h3>
-    <p class="text-sm text-slate-500 max-w-lg mx-auto">이 카테고리의 PDF를 추가하면 여기에 자동으로 리포트가 채워집니다.<br>예상 구성: 주간/월간 시황, FOMC·CPI·고용 해설, 섹터 동향, 핵심 이벤트 타임라인</p>
-    <div class="flex flex-wrap gap-2 justify-center mt-5 text-xs">
-      <span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full">주간 시황</span>
-      <span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full">이벤트 해설</span>
-      <span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full">섹터 동향</span>
+  <div id="marketReport" class="space-y-6">
+    <div class="bg-white rounded-2xl p-8 shadow-sm text-center text-slate-400">
+      <div class="text-4xl mb-3 pulse-dot">📰</div>리포트 작성 중…
     </div>
-    <p class="text-xs text-slate-400 mt-5">💡 "실시간 차트"의 라이브 데이터 + 8축 진단을 근거로 리포트가 작성됩니다.</p>
   </div>
 </section><!-- /tab-report -->
 
@@ -2854,7 +2849,7 @@
 </main>
 
 <footer class="bg-slate-900 text-slate-400 text-center py-6 text-sm mt-12">
-  <div>시장 8축 진단 대시보드 · v4.0 · 2026.05.24</div>
+  <div>시장 8축 진단 대시보드 · v6.0 · 2026.06 (시나리오·종목점수·기술분석·리포트 자동화)</div>
   <div class="text-xs mt-2">
     📚 기반 자료: <a href="https://contents.premium.naver.com/assetx2/assetsx2" target="_blank" class="text-emerald-400 hover:text-emerald-300 underline">자산제곱 네이버 프리미엄</a> —
     <a href="https://contents.premium.naver.com/assetx2/assetsx2/contents/251124182642710ij" target="_blank" class="text-emerald-400 hover:text-emerald-300 underline">1단계</a> ·
@@ -5003,19 +4998,21 @@ function applyLiveData(data) {
 
   // 7. 시장 시나리오 자동 해석 엔진
   if (typeof renderScenarioEngine === 'function') renderScenarioEngine(data);
+  // 8. 시장리포트 자동 작성
+  if (typeof renderMarketReport === 'function') renderMarketReport(data);
 }
 
 function showLiveBadge(data) {
   const t = data.last_updated_kst || data.last_updated || '';
   document.getElementById('liveBadge').innerHTML = `<span class="inline-block w-2 h-2 bg-emerald-500 rounded-full pulse-dot"></span> <span class="text-emerald-700 font-semibold">LIVE</span> · 마지막 갱신 ${t}`;
-  document.getElementById('headerLiveBadge').innerHTML = `Live · ${t} · v5.1 (auto)`;
+  document.getElementById('headerLiveBadge').innerHTML = `Live · ${t} · v6.0 (auto)`;
   // 라이브 데이터 날짜 기억 (yield curve 라벨용)
   window.__liveDataDate = (t.split(' ')[0] || '').replace(/-/g, '.');
 }
 
 function showStaleBadge() {
   document.getElementById('liveBadge').innerHTML = `<span class="inline-block w-2 h-2 bg-amber-500 rounded-full"></span> <span class="text-amber-700">정적 데이터 사용 중</span>`;
-  document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v5.1';
+  document.getElementById('headerLiveBadge').textContent = 'Live · 정적 모드 · v6.0';
 }
 
 // ============================================================
@@ -5558,6 +5555,131 @@ function renderTechTable() {
       <td>${badge(s.score)} <span class="text-xs ${cls(s.score)}">${s.verdict||''}</span></td>
     </tr>`).join('')}
     </tbody></table>`;
+}
+
+// ============================================================
+// === 시장리포트: 라이브 데이터 → 자동 일일 시황 ===
+// ============================================================
+function renderMarketReport(data) {
+  const el = document.getElementById('marketReport');
+  if (!el || !data) return;
+  const s = data.summary || {}, a = data.action || {}, fred = data.fred || {}, prices = data.prices || {};
+  const sectors = (data.sectors && data.sectors.sorted_by_5d) || [];
+  const mag7 = data.mag7 || [];
+  const inf = data.inflection || {};
+  const axesArr = (typeof axes !== 'undefined') ? axes : [];
+  const fv = (k) => (fred[k] && fred[k].value != null) ? fred[k].value : null;
+  const pv = (k) => (prices[k] && prices[k].value != null) ? prices[k].value : null;
+  const asOf = document.getElementById('reportAsOf');
+  if (asOf) asOf.textContent = `기준: ${data.last_updated_kst || data.last_updated || ''} · 자동 생성`;
+
+  const pos = s.positive||0, neu = s.neutral||0, neg = s.negative||0;
+  const phase = s.phase || '분석 중';
+  const phaseColor = neg >= 4 ? 'rose' : pos >= 4 ? 'emerald' : 'amber';
+  const pc = { emerald:'from-emerald-600 to-green-600', amber:'from-amber-500 to-orange-500', rose:'from-rose-600 to-red-600' }[phaseColor];
+
+  const posAxes = axesArr.filter(x => x.rating === '긍정').map(x => x.name);
+  const neuAxes = axesArr.filter(x => x.rating === '중립').map(x => x.name);
+  const negAxes = axesArr.filter(x => x.rating === '부정').map(x => x.name);
+
+  // 한 줄 요약
+  let lead;
+  if (pos >= 4) lead = `8축 중 ${pos}개가 긍정으로 ${neg === 0 ? '약세 신호 없이 ' : ''}위험자산 우호적 국면입니다. 추세를 추종하되 과열 신호를 주시하세요.`;
+  else if (neg >= 4) lead = `8축 중 ${neg}개가 부정으로 방어적 대응이 필요한 국면입니다. 신규 매수보다 현금·방어 비중을 높이세요.`;
+  else lead = `긍정 ${pos} · 부정 ${neg}로 균형 잡힌 변동성 국면입니다. 분할 진입과 변곡점 신호 대기가 유효합니다.`;
+
+  const kpi = (label, val, sub) => `<div class="bg-slate-50 rounded-lg p-3"><div class="text-xs text-slate-500">${label}</div><div class="text-lg font-bold">${val ?? '-'}</div><div class="text-xs text-slate-400">${sub||''}</div></div>`;
+
+  const topSec = sectors.slice(0, 3);
+  const botSec = sectors.slice(-2);
+  const secRow = (x) => `<div class="flex justify-between text-sm py-1"><span>${x.name}</span><span class="${x.chg_5d>=0?'text-emerald-600':'text-rose-600'}">${x.chg_5d>=0?'+':''}${x.chg_5d}%</span></div>`;
+
+  const mag7sorted = [...mag7].filter(m=>m && m.chg_5d!=null).sort((a,b)=>b.chg_5d-a.chg_5d);
+  const mBest = mag7sorted[0], mWorst = mag7sorted[mag7sorted.length-1];
+
+  const buyTrig = a.buy_triggers || [], sellTrig = a.sell_triggers || [];
+  const infChanged = (inf.changed || []);
+
+  el.innerHTML = `
+    <!-- 헤드라인 -->
+    <div class="bg-gradient-to-r ${pc} text-white rounded-2xl p-6 shadow-lg">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <div class="text-xs uppercase tracking-widest opacity-80">오늘의 시장 국면</div>
+          <div class="text-2xl font-extrabold mt-1">${phase}</div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs opacity-80">종합 액션</div>
+          <div class="text-xl font-bold">${a.signal || '-'}</div>
+          <div class="text-xs opacity-80">권장 현금 ${a.cash_ratio || '-'}</div>
+        </div>
+      </div>
+      <p class="text-sm mt-3 leading-relaxed opacity-95">${lead}</p>
+    </div>
+
+    <!-- 8축 스냅샷 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h3 class="font-bold mb-3">🧭 8축 스냅샷 <span class="text-sm text-slate-400">(긍정 ${pos} / 중립 ${neu} / 부정 ${neg})</span></h3>
+      <div class="space-y-2 text-sm">
+        <div><span class="inline-block w-14 text-emerald-600 font-semibold">긍정</span> ${posAxes.join(' · ') || '-'}</div>
+        <div><span class="inline-block w-14 text-amber-500 font-semibold">중립</span> ${neuAxes.join(' · ') || '-'}</div>
+        <div><span class="inline-block w-14 text-rose-600 font-semibold">부정</span> ${negAxes.join(' · ') || '-'}</div>
+      </div>
+      ${a.reason ? `<p class="text-xs text-slate-500 mt-3">📌 ${a.reason}</p>` : ''}
+      ${a.allocation ? `<p class="text-xs text-slate-600 mt-1">💼 권장 배분: ${a.allocation}</p>` : ''}
+    </div>
+
+    <!-- 핵심 지표 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h3 class="font-bold mb-3">📈 핵심 지표</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        ${kpi('S&P 500', pv('sp500'), '지수')}
+        ${kpi('나스닥', pv('nasdaq'), '지수')}
+        ${kpi('VIX', pv('vix'), '변동성')}
+        ${kpi('10Y 금리', pv('us10y') != null ? pv('us10y')+'%' : null, '국채')}
+        ${kpi('CPI(YoY)', fv('CPIAUCSL') != null ? fv('CPIAUCSL')+'%' : null, '인플레')}
+        ${kpi('실업률', fv('UNRATE') != null ? fv('UNRATE')+'%' : null, '고용')}
+        ${kpi('달러(DXY)', pv('dxy'), '달러')}
+        ${kpi('WTI', pv('wti') != null ? '$'+pv('wti') : null, '유가')}
+      </div>
+    </div>
+
+    <!-- 섹터 + Mag7 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="font-bold mb-3">🔄 섹터 자금 흐름 (5일)</h3>
+        <div class="text-xs text-emerald-700 font-semibold mb-1">유입 ▲</div>
+        ${topSec.map(secRow).join('') || '-'}
+        <div class="text-xs text-rose-700 font-semibold mb-1 mt-3">유출 ▼</div>
+        ${botSec.map(secRow).join('') || '-'}
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="font-bold mb-3">🟣 Mag7 동향</h3>
+        ${mBest ? `<div class="flex justify-between text-sm py-1"><span>최강 ${mBest.ticker}</span><span class="text-emerald-600">+${mBest.chg_5d}% (5일)</span></div>` : ''}
+        ${mWorst ? `<div class="flex justify-between text-sm py-1"><span>최약 ${mWorst.ticker}</span><span class="${mWorst.chg_5d>=0?'text-emerald-600':'text-rose-600'}">${mWorst.chg_5d>=0?'+':''}${mWorst.chg_5d}% (5일)</span></div>` : ''}
+        <p class="text-xs text-slate-400 mt-2">빅테크 7종목의 5일 수익률 분포 — 쏠림/순환 파악용</p>
+      </div>
+    </div>
+
+    <!-- 변곡점 + 주의 변수 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-${infChanged.length ? 'amber' : 'slate'}-50 border border-${infChanged.length ? 'amber' : 'slate'}-200 rounded-2xl p-6">
+        <h3 class="font-bold mb-2">⚡ 변곡점 알림</h3>
+        ${infChanged.length
+          ? infChanged.map(c => `<div class="text-sm">• <b>${c.axis}</b> ${c.from} → ${c.to} (${c.direction === 'up' ? '개선' : '악화'})</div>`).join('')
+          : '<p class="text-sm text-slate-500">최근 회차 대비 축 평가 변동 없음 (안정)</p>'}
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="font-bold mb-2">⏰ 주의 변수 (트리거)</h3>
+        <div class="text-xs text-emerald-700 font-semibold">매수 전환</div>
+        ${(buyTrig.length ? buyTrig : ['자금흐름 개선','VIX 안정']).map(t => `<div class="text-sm">✅ ${t}</div>`).join('')}
+        <div class="text-xs text-rose-700 font-semibold mt-2">방어 전환</div>
+        ${(sellTrig.length ? sellTrig : ['VIX 28+ 돌파','금리 급등']).map(t => `<div class="text-sm">⚠️ ${t}</div>`).join('')}
+      </div>
+    </div>
+
+    <p class="text-xs text-slate-400 text-center">📊 본 리포트는 라이브 data.json(8축·FRED·Yahoo·섹터·Mag7)을 규칙 기반으로 자동 작성한 것입니다. 투자 조언이 아니며, 매일 갱신됩니다. 상세 분기 시나리오는 "🎯 시나리오" 탭 참고.</p>
+  `;
 }
 
 // === NEW v5.1: 종합 액션 신호 배너 ===

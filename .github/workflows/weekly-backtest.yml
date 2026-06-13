@@ -11,6 +11,7 @@ on:
   push:
     paths:
       - 'backtest_run.py'
+      - 'score_backtest.py'
       - '.github/workflows/weekly-backtest.yml'
 
 permissions:
@@ -47,6 +48,9 @@ jobs:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python backtest_run.py
 
+      - name: 🧪 Run score backtest (종목 점수 검증)
+        run: python score_backtest.py || echo "⚠️ 점수 백테스트 스킵"
+
       - name: 📊 Summary
         run: |
           python -c "
@@ -66,13 +70,14 @@ jobs:
           git config --local user.name "github-actions[bot]"
 
           # 변경사항 확인
-          if git diff --quiet backtest.json; then
+          if git diff --quiet backtest.json backtest_scores.json; then
             echo "📭 변경사항 없음 (시장이 휴장 또는 데이터 동일)"
             exit 0
           fi
 
-          # 새 backtest.json 백업
+          # 새 결과물 백업
           cp backtest.json /tmp/backtest_new.json
+          [ -f backtest_scores.json ] && cp backtest_scores.json /tmp/bts_new.json
 
           TS=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
 
@@ -81,9 +86,10 @@ jobs:
             # Remote의 최신 상태로 강제 동기화
             git fetch origin main
             git reset --hard origin/main
-            # 새 backtest.json 다시 적용
+            # 새 결과물 다시 적용
             cp /tmp/backtest_new.json backtest.json
-            git add backtest.json
+            [ -f /tmp/bts_new.json ] && cp /tmp/bts_new.json backtest_scores.json
+            git add backtest.json backtest_scores.json
 
             if git diff --staged --quiet; then
               echo "📭 변경사항 없음 (remote가 이미 최신)"

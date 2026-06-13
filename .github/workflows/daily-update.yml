@@ -54,6 +54,11 @@ jobs:
       - name: 📐 Run technical analyzer
         run: python tech_analysis.py || echo "⚠️ 기술분석 실패 — tech.json 갱신 건너뜀"
 
+      - name: 🔔 Run alert notifier
+        env:
+          ALERT_WEBHOOK: ${{ secrets.ALERT_WEBHOOK }}
+        run: python notify.py || echo "⚠️ 알림 스킵"
+
       - name: 📝 Show summary
         run: |
           python -c "
@@ -72,8 +77,8 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          # 변경사항 확인 (data.json / scores.json / tech.json)
-          if git diff --quiet data.json scores.json tech.json; then
+          # 변경사항 확인 (data / scores / tech / alert_state)
+          if git diff --quiet data.json scores.json tech.json alert_state.json; then
             echo "📭 변경사항 없음"
             exit 0
           fi
@@ -82,6 +87,7 @@ jobs:
           cp data.json /tmp/data_new.json
           [ -f scores.json ] && cp scores.json /tmp/scores_new.json
           [ -f tech.json ] && cp tech.json /tmp/tech_new.json
+          [ -f alert_state.json ] && cp alert_state.json /tmp/alert_new.json
           TIMESTAMP=$(TZ=Asia/Seoul date +"%Y-%m-%d %H:%M KST")
 
           # 3회 재시도 with reset 전략
@@ -91,7 +97,8 @@ jobs:
             cp /tmp/data_new.json data.json
             [ -f /tmp/scores_new.json ] && cp /tmp/scores_new.json scores.json
             [ -f /tmp/tech_new.json ] && cp /tmp/tech_new.json tech.json
-            git add data.json scores.json tech.json
+            [ -f /tmp/alert_new.json ] && cp /tmp/alert_new.json alert_state.json
+            git add data.json scores.json tech.json alert_state.json
 
             if git diff --staged --quiet; then
               echo "📭 변경사항 없음 (remote가 이미 최신)"

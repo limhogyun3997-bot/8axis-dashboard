@@ -2442,13 +2442,63 @@
   </div>
 
   <!-- 서브 토글 -->
-  <div class="flex gap-2 mb-6">
-    <button onclick="switchStrategySub('auto')" class="strat-subbtn active px-4 py-2 rounded-lg text-sm font-semibold" data-ss="auto">🔍 자동 워치리스트 점수</button>
-    <button onclick="switchStrategySub('manual')" class="strat-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-ss="manual">✍️ 수동 종목 채점</button>
+  <div class="flex flex-wrap gap-2 mb-6">
+    <button onclick="switchStrategySub('screener')" class="strat-subbtn active px-4 py-2 rounded-lg text-sm font-semibold" data-ss="screener">🧮 종목 스크리너</button>
+    <button onclick="switchStrategySub('portfolio')" class="strat-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-ss="portfolio">💼 내 포트폴리오</button>
+    <button onclick="switchStrategySub('auto')" class="strat-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-ss="auto">🔍 자동 점수표</button>
+    <button onclick="switchStrategySub('manual')" class="strat-subbtn px-4 py-2 rounded-lg text-sm font-semibold" data-ss="manual">✍️ 수동 채점</button>
+  </div>
+
+  <!-- (S) 종목 스크리너 -->
+  <div id="strat-screener" class="strat-sub">
+    <div class="bg-white rounded-2xl p-5 shadow-sm mb-4">
+      <h3 class="font-bold text-lg mb-1">🧮 종목 스크리너 — 조건으로 매수 후보 발굴</h3>
+      <p class="text-xs text-slate-500 mb-4">약 2,700종목(대형+중소형+러셀2000)을 <b>기술·펀더멘털·섹터·위치</b> 조건으로 걸러 후보를 찾습니다. 행을 누르면 종합 카드가 열립니다.</p>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 text-sm">
+        <label class="block">기술 점수 ≥ <span id="scrTechVal" class="font-bold">4</span>
+          <input type="range" id="scrTech" min="0" max="8" value="4" class="w-full" oninput="document.getElementById('scrTechVal').textContent=this.value"></label>
+        <label class="block">펀더 점수 ≥ <span id="scrFundVal" class="font-bold">0</span>
+          <input type="range" id="scrFund" min="0" max="100" value="0" step="5" class="w-full" oninput="document.getElementById('scrFundVal').textContent=this.value"></label>
+        <label class="block">구조
+          <select id="scrStruct" class="w-full border rounded p-2 mt-1"><option value="-1">무관</option><option value="2">상승추세</option><option value="1">횡보</option><option value="0">하락추세</option></select></label>
+        <label class="block">가격 위치
+          <select id="scrPrice" class="w-full border rounded p-2 mt-1"><option value="-1">무관</option><option value="2">하단(싸다)</option><option value="1">중간</option><option value="0">상단(비싸다)</option></select></label>
+        <label class="block">시간(RSI)
+          <select id="scrTime" class="w-full border rounded p-2 mt-1"><option value="-1">무관</option><option value="2">과매도</option><option value="1">중립</option><option value="0">과매수</option></select></label>
+        <label class="block">유니버스
+          <select id="scrUniverse" class="w-full border rounded p-2 mt-1"><option value="all">전체</option><option value="large">대형(S&P500)</option><option value="mid">중형</option><option value="small">소형/러셀</option><option value="fundOnly">펀더 수록만</option></select></label>
+      </div>
+      <div class="flex items-center gap-2 mt-4">
+        <button onclick="runScreener()" class="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 rounded-lg text-sm font-semibold">🔎 스크리닝</button>
+        <input id="scrName" placeholder="이름/티커 추가 필터(선택)" class="border rounded-lg px-3 py-2 text-sm flex-1" oninput="runScreener()">
+        <span id="scrCount" class="text-xs text-slate-400"></span>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm">
+      <div id="scrResults" class="overflow-x-auto"><div class="text-center text-slate-400 py-8 text-sm">조건을 정하고 "스크리닝"을 누르세요. (기술 데이터 로딩 후 동작)</div></div>
+    </div>
+  </div>
+
+  <!-- (P) 내 포트폴리오 -->
+  <div id="strat-portfolio" class="strat-sub hidden">
+    <div class="bg-white rounded-2xl p-5 shadow-sm mb-4">
+      <h3 class="font-bold text-lg mb-1">💼 내 포트폴리오 추적</h3>
+      <p class="text-xs text-slate-500 mb-4">보유 종목을 입력하면 평가손익 + 종합점수 + 섹터 집중도 + 현재 국면 권장 비중을 계산합니다. (브라우저에 저장)</p>
+      <div class="flex flex-wrap items-end gap-2">
+        <label class="text-sm">티커<input id="pfTicker" list="globalStockList" placeholder="NVDA" class="block border rounded-lg px-3 py-2 text-sm w-28 mt-1"></label>
+        <label class="text-sm">평단($)<input id="pfAvg" type="number" step="0.01" placeholder="150" class="block border rounded-lg px-3 py-2 text-sm w-28 mt-1"></label>
+        <label class="text-sm">수량<input id="pfQty" type="number" step="0.01" placeholder="10" class="block border rounded-lg px-3 py-2 text-sm w-24 mt-1"></label>
+        <button onclick="addHolding()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">+ 추가</button>
+      </div>
+    </div>
+    <div id="pfSummary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4"></div>
+    <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm">
+      <div id="pfTable" class="overflow-x-auto"></div>
+    </div>
   </div>
 
   <!-- (A) 자동 워치리스트 -->
-  <div id="strat-auto" class="strat-sub">
+  <div id="strat-auto" class="strat-sub hidden">
     <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
         <h3 class="font-bold text-lg">🔍 워치리스트 자동 점수표</h3>
@@ -5277,6 +5327,137 @@ function switchStrategySub(name) {
   document.querySelectorAll('.strat-subbtn').forEach(b => b.classList.remove('active'));
   const b = document.querySelector(`.strat-subbtn[data-ss="${name}"]`);
   if (b) b.classList.add('active');
+  // 스크리너/포트폴리오는 tech.json 필요 → 지연 로딩 후 렌더
+  if (name === 'portfolio') { if (typeof ensureTechLoaded==='function') ensureTechLoaded().then(renderPortfolio); else renderPortfolio(); }
+}
+
+// ============================================================
+// === 종목 스크리너 (조건으로 매수 후보 발굴) ===
+// ============================================================
+async function runScreener() {
+  const wrap = document.getElementById('scrResults');
+  if (wrap) wrap.innerHTML = '<div class="text-center text-slate-400 py-8 text-sm pulse-dot">데이터 로딩·필터링 중…</div>';
+  if (typeof ensureTechLoaded === 'function') await ensureTechLoaded();
+  const tech = (__techData && __techData.stocks) || [];
+  const fmap = {};
+  (((typeof __scoresData!=='undefined'&&__scoresData)||{}).stocks || []).forEach(s => fmap[s.ticker] = s);
+  const minT = +document.getElementById('scrTech').value;
+  const minF = +document.getElementById('scrFund').value;
+  const fStruct = +document.getElementById('scrStruct').value;
+  const fPrice = +document.getElementById('scrPrice').value;
+  const fTime = +document.getElementById('scrTime').value;
+  const uni = document.getElementById('scrUniverse').value;
+  const q = (document.getElementById('scrName').value || '').toUpperCase().trim();
+  const inUni = (s) => uni==='all' ? true
+    : uni==='large' ? !['MidCap','SmallCap','Russell2K','ETF'].includes(s.sector)
+    : uni==='mid' ? s.sector==='MidCap'
+    : uni==='small' ? (s.sector==='SmallCap'||s.sector==='Russell2K')
+    : uni==='fundOnly' ? !!fmap[s.ticker] : true;
+  let rows = tech.filter(s => {
+    if (s.score < minT) return false;
+    if (fStruct >= 0 && s.struct !== fStruct) return false;
+    if (fPrice >= 0 && s.price !== fPrice) return false;
+    if (fTime >= 0 && s.time !== fTime) return false;
+    if (!inUni(s)) return false;
+    const f = fmap[s.ticker];
+    if (minF > 0 && (!f || f.score < minF)) return false;
+    if (q && !(s.ticker.toUpperCase().includes(q) || (s.name||'').toUpperCase().includes(q))) return false;
+    return true;
+  }).map(s => {
+    const f = fmap[s.ticker];
+    const tp = Math.round(s.score/8*100), fp = f ? f.score : null;
+    const comb = (fp!=null) ? Math.round(0.5*fp+0.5*tp) : tp;
+    return { s, f, comb };
+  });
+  rows.sort((a,b) => b.comb - a.comb);
+  const total = rows.length;
+  rows = rows.slice(0, 100);
+  const cnt = document.getElementById('scrCount');
+  if (cnt) cnt.textContent = `${total}종목 일치` + (total>100?' (상위 100 표시)':'');
+  if (!total) { wrap.innerHTML = '<div class="text-center text-slate-400 py-8 text-sm">조건에 맞는 종목이 없습니다. 기준을 완화해 보세요.</div>'; return; }
+  const tc = sc => sc>=75?'text-emerald-600':sc>=60?'text-teal-600':sc>=45?'text-amber-600':'text-rose-600';
+  wrap.innerHTML = `<table class="w-full text-sm"><thead><tr class="text-xs text-slate-400 text-left border-b">
+    <th class="py-2">종목</th><th>종합</th><th>기술</th><th>펀더</th><th class="hidden sm:table-cell">섹터</th><th class="hidden md:table-cell">가격위치</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr class="border-b border-slate-50 cursor-pointer hover:bg-slate-50" onclick="openStockModal('${r.s.ticker}')">
+      <td class="py-2"><b>${r.s.ticker}</b> <span class="text-xs text-slate-400">${r.s.name||''}</span></td>
+      <td class="font-extrabold ${tc(r.comb)}">${r.comb}</td>
+      <td class="text-slate-500">${r.s.score}/8</td>
+      <td class="text-slate-500">${r.f?r.f.score:'-'}</td>
+      <td class="hidden sm:table-cell text-slate-400 text-xs">${r.s.sector||''}</td>
+      <td class="hidden md:table-cell text-slate-400 text-xs">${r.s.range_pct!=null?r.s.range_pct+'%':''}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+// ============================================================
+// === 내 포트폴리오 추적 ===
+// ============================================================
+function getPortfolio() { try { return JSON.parse(localStorage.getItem('my_portfolio')||'[]'); } catch(e){ return []; } }
+function setPortfolio(a) { localStorage.setItem('my_portfolio', JSON.stringify(a)); }
+function addHolding() {
+  const t = (document.getElementById('pfTicker').value||'').toUpperCase().trim();
+  const avg = parseFloat(document.getElementById('pfAvg').value);
+  const qty = parseFloat(document.getElementById('pfQty').value);
+  if (!t || !(avg>0) || !(qty>0)) { alert('티커·평단·수량을 올바르게 입력하세요.'); return; }
+  let pf = getPortfolio().filter(h => h.t !== t);
+  pf.push({ t, avg, qty });
+  setPortfolio(pf);
+  document.getElementById('pfTicker').value = ''; document.getElementById('pfAvg').value = ''; document.getElementById('pfQty').value = '';
+  renderPortfolio();
+}
+function removeHolding(t) { setPortfolio(getPortfolio().filter(h => h.t !== t)); renderPortfolio(); }
+function clearPortfolio() { if(confirm('포트폴리오를 모두 삭제할까요?')){ setPortfolio([]); renderPortfolio(); } }
+
+async function renderPortfolio() {
+  const sumEl = document.getElementById('pfSummary'), tblEl = document.getElementById('pfTable');
+  if (!tblEl) return;
+  const pf = getPortfolio();
+  if (!pf.length) { if(sumEl) sumEl.innerHTML=''; tblEl.innerHTML = '<div class="text-center text-slate-400 py-8 text-sm">보유 종목을 추가하세요. 평가손익 + 종합점수 + 섹터 집중도를 계산합니다.</div>'; return; }
+  if (typeof ensureTechLoaded === 'function') await ensureTechLoaded();
+  const tarr = (__techData && __techData.stocks) || [];
+  const fmap = {}; (((typeof __scoresData!=='undefined'&&__scoresData)||{}).stocks||[]).forEach(s=>fmap[s.ticker]=s);
+  let totCost=0, totVal=0, wScore=0, wBase=0; const sectorVal={};
+  const rows = pf.map(h => {
+    const tech = tarr.find(x=>(x.ticker||'').toUpperCase()===h.t);
+    const fund = fmap[h.t];
+    const px = tech ? tech.close : (fund ? fund.price : null);
+    const cost = h.avg*h.qty;
+    const val = px!=null ? px*h.qty : cost;
+    const pl = px!=null ? (px-h.avg)/h.avg*100 : null;
+    const tp = tech?Math.round(tech.score/8*100):null, fp = fund?fund.score:null;
+    const comb = (fp!=null&&tp!=null)?Math.round(0.5*fp+0.5*tp):(fp!=null?fp:tp);
+    totCost+=cost; totVal+=val;
+    if (comb!=null){ wScore+=comb*val; wBase+=val; }
+    const sec = (tech&&tech.sector)||'기타'; sectorVal[sec]=(sectorVal[sec]||0)+val;
+    return { h, px, val, pl, comb, tech };
+  });
+  const totPL = totCost>0 ? (totVal-totCost)/totCost*100 : 0;
+  const avgScore = wBase>0 ? Math.round(wScore/wBase) : null;
+  // 섹터 집중도(최대)
+  let topSec='-', topShare=0;
+  for (const [k,v] of Object.entries(sectorVal)){ const sh=v/totVal*100; if(sh>topShare){topShare=sh;topSec=k;} }
+  // 현재 국면 권장 주식비중 (5단계)
+  const sm = (window.__liveData||{}).summary||{};
+  const rec = (sm.positive||0)>=4 ? '90~100%' : (sm.negative||0)>=4 ? '30~50%' : '60~70%';
+  const fmtMoney = v => '$'+v.toLocaleString('en-US',{maximumFractionDigits:0});
+  const plc = totPL>=0?'text-emerald-600':'text-rose-600';
+  if (sumEl) sumEl.innerHTML = `
+    <div class="bg-white rounded-xl p-4 shadow-sm"><div class="text-xs text-slate-500">평가액</div><div class="text-xl font-bold">${fmtMoney(totVal)}</div></div>
+    <div class="bg-white rounded-xl p-4 shadow-sm"><div class="text-xs text-slate-500">총 손익</div><div class="text-xl font-bold ${plc}">${totPL>=0?'+':''}${totPL.toFixed(1)}%</div></div>
+    <div class="bg-white rounded-xl p-4 shadow-sm"><div class="text-xs text-slate-500">가중 종합점수</div><div class="text-xl font-bold">${avgScore??'-'}</div></div>
+    <div class="bg-white rounded-xl p-4 shadow-sm"><div class="text-xs text-slate-500">섹터 집중(최대)</div><div class="text-sm font-bold">${topSec} ${topShare.toFixed(0)}%</div></div>`;
+  const tc = sc => sc==null?'text-slate-400':sc>=60?'text-emerald-600':sc>=45?'text-amber-600':'text-rose-600';
+  tblEl.innerHTML = `
+    <div class="flex justify-between items-center mb-2"><h4 class="font-bold text-sm">보유 종목 (${pf.length})</h4><button onclick="clearPortfolio()" class="text-xs text-slate-400 hover:text-rose-500">전체 삭제</button></div>
+    <table class="w-full text-sm"><thead><tr class="text-xs text-slate-400 text-left border-b"><th class="py-1">종목</th><th>수량</th><th>평단</th><th>현재가</th><th>손익</th><th>종합</th><th></th></tr></thead><tbody>
+    ${rows.map(r=>`<tr class="border-b border-slate-50">
+      <td class="py-1 font-semibold cursor-pointer hover:text-indigo-600" onclick="openStockModal('${r.h.t}')">${r.h.t}</td>
+      <td class="text-slate-500">${r.h.qty}</td><td class="text-slate-500">$${r.h.avg}</td>
+      <td class="text-slate-500">${r.px!=null?'$'+r.px:'-'}</td>
+      <td class="font-semibold ${r.pl==null?'text-slate-400':r.pl>=0?'text-emerald-600':'text-rose-600'}">${r.pl==null?'-':(r.pl>=0?'+':'')+r.pl.toFixed(1)+'%'}</td>
+      <td class="font-bold ${tc(r.comb)}">${r.comb??'-'}</td>
+      <td><button onclick="removeHolding('${r.h.t}')" class="text-slate-300 hover:text-rose-500 text-xs">✕</button></td>
+    </tr>`).join('')}</tbody></table>
+    <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mt-3 text-xs text-indigo-900">🌐 현재 국면(${sm.phase||'-'}) 권장 주식 비중: <b>${rec}</b> · 한 종목 집중 과도(>25%) 시 분산 검토 (5단계 규칙)</div>`;
 }
 
 // --- 점수 → 판정/포지션 (4단계 Half Kelly 상한) ---

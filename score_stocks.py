@@ -25,16 +25,40 @@ except ImportError:
 
 KST = timezone(timedelta(hours=9))
 
-# 워치리스트 (Mag7 + 대형 인기주)
+# 워치리스트 (Mag7 + 대형주 + 인기 성장주/ADR ~90종목)
 WATCHLIST = [
+    # Mag7 + 대형 기술
     ("AAPL", "Apple"), ("MSFT", "Microsoft"), ("GOOGL", "Alphabet"),
     ("AMZN", "Amazon"), ("META", "Meta"), ("NVDA", "NVIDIA"), ("TSLA", "Tesla"),
     ("AVGO", "Broadcom"), ("AMD", "AMD"), ("NFLX", "Netflix"), ("CRM", "Salesforce"),
-    ("ADBE", "Adobe"), ("ORCL", "Oracle"), ("PLTR", "Palantir"), ("COST", "Costco"),
-    ("JPM", "JPMorgan"), ("V", "Visa"), ("MA", "Mastercard"), ("UNH", "UnitedHealth"),
-    ("LLY", "Eli Lilly"), ("XOM", "Exxon"), ("JNJ", "J&J"), ("WMT", "Walmart"),
-    ("HD", "Home Depot"), ("KO", "Coca-Cola"), ("DIS", "Disney"), ("CAT", "Caterpillar"),
-    ("GE", "GE Aerospace"), ("MU", "Micron"), ("TSM", "TSMC"),
+    ("ADBE", "Adobe"), ("ORCL", "Oracle"), ("PLTR", "Palantir"), ("CSCO", "Cisco"),
+    ("QCOM", "Qualcomm"), ("TXN", "Texas Instr"), ("INTC", "Intel"), ("IBM", "IBM"),
+    ("NOW", "ServiceNow"), ("INTU", "Intuit"), ("AMAT", "Applied Materials"),
+    ("MU", "Micron"), ("LRCX", "Lam Research"), ("KLAC", "KLA"),
+    # 금융
+    ("JPM", "JPMorgan"), ("V", "Visa"), ("MA", "Mastercard"), ("BAC", "Bank of America"),
+    ("WFC", "Wells Fargo"), ("GS", "Goldman Sachs"), ("MS", "Morgan Stanley"),
+    ("AXP", "American Express"), ("BLK", "BlackRock"), ("BRK-B", "Berkshire"),
+    # 헬스케어
+    ("UNH", "UnitedHealth"), ("LLY", "Eli Lilly"), ("JNJ", "J&J"), ("ABBV", "AbbVie"),
+    ("MRK", "Merck"), ("PFE", "Pfizer"), ("TMO", "Thermo Fisher"), ("ABT", "Abbott"),
+    # 소비
+    ("WMT", "Walmart"), ("COST", "Costco"), ("HD", "Home Depot"), ("KO", "Coca-Cola"),
+    ("PEP", "PepsiCo"), ("MCD", "McDonald's"), ("NKE", "Nike"), ("SBUX", "Starbucks"),
+    ("DIS", "Disney"), ("PG", "P&G"), ("LOW", "Lowe's"),
+    # 산업/에너지/기타
+    ("CAT", "Caterpillar"), ("GE", "GE Aerospace"), ("BA", "Boeing"), ("HON", "Honeywell"),
+    ("XOM", "Exxon"), ("CVX", "Chevron"), ("LIN", "Linde"), ("UNP", "Union Pacific"),
+    # 인기 성장주/신규상장
+    ("SOFI", "SoFi"), ("RBLX", "Roblox"), ("RIVN", "Rivian"), ("HOOD", "Robinhood"),
+    ("COIN", "Coinbase"), ("SNOW", "Snowflake"), ("NET", "Cloudflare"), ("DDOG", "Datadog"),
+    ("CRWD", "CrowdStrike"), ("ZS", "Zscaler"), ("PANW", "Palo Alto"), ("SHOP", "Shopify"),
+    ("UBER", "Uber"), ("ABNB", "Airbnb"), ("ARM", "Arm"), ("SMCI", "Super Micro"),
+    ("MSTR", "MicroStrategy"), ("DKNG", "DraftKings"), ("AFRM", "Affirm"), ("RDDT", "Reddit"),
+    ("HIMS", "Hims & Hers"), ("CVNA", "Carvana"), ("IONQ", "IonQ"), ("RKLB", "Rocket Lab"),
+    # 주요 ADR
+    ("TSM", "TSMC"), ("ASML", "ASML"), ("BABA", "Alibaba"), ("PDD", "PDD/Temu"),
+    ("NIO", "NIO"), ("SE", "Sea Ltd"), ("NVO", "Novo Nordisk"), ("SAP", "SAP"),
 ]
 
 

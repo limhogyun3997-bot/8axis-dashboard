@@ -15,6 +15,7 @@ yfinance 일봉(1년)을 배치 다운로드해 4대 축을 0/1/2로 자동 채�
 import csv
 import io
 import json
+import re
 import sys
 import time
 import urllib.request
@@ -134,6 +135,31 @@ def load_universe():
     except Exception as e:
         print(f"⚠️ S&P500 수집 실패 ({e}) — 폴백 사용", file=sys.stderr)
     return FALLBACK
+
+
+def load_smallmid():
+    """S&P MidCap 400 + SmallCap 600 = 중소형주 1000개 (Wikipedia wikitext 동적 수집)"""
+    pages = [("List_of_S%26P_400_companies", "MidCap"), ("List_of_S%26P_600_companies", "SmallCap")]
+    out = []
+    for title, tag in pages:
+        try:
+            url = f"https://en.wikipedia.org/wiki/{title}?action=raw"
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            txt = urllib.request.urlopen(req, timeout=25).read().decode("utf-8", "ignore")
+            cnt = 0
+            for row in txt.split("\n|-"):
+                tm = re.search(r"\{\{\s*(?:Nyse|Nasdaq|NYSE|NASDAQ)Symbol\s*\|\s*([A-Z][A-Z.\-]{0,5})", row)
+                if not tm:
+                    continue
+                tk = tm.group(1).strip()
+                nm = re.search(r"\[\[(?:[^\]|]*\|)?([^\]]+)\]\]", row)
+                name = (nm.group(1) if nm else tk).strip()[:40]
+                out.append((tk, name, tag))
+                cnt += 1
+            print(f"📋 {tag} 수집: {cnt}종목")
+        except Exception as e:
+            print(f"⚠️ {title} 수집 실패 ({e})", file=sys.stderr)
+    return out
 
 
 def yf_symbol(sym):
@@ -256,13 +282,14 @@ def chunked(lst, n):
 
 
 def main():
-    universe = load_universe()
-    # S&P500 + NASDAQ-100 + 인기 비S&P500/ADR/ETF 병합 (yf 심볼 기준 중복 제거)
+    universe = load_universe()       # S&P 500 (대형)
+    smallmid = load_smallmid()       # S&P MidCap400 + SmallCap600 (중소형 1000)
+    # 병합 (yf 심볼 기준 중복 제거) — 대형 먼저 등록되어 sector 우선
     meta = {}
-    for s, name, sector in list(universe) + NASDAQ100 + EXTRA:
+    for s, name, sector in list(universe) + NASDAQ100 + smallmid + EXTRA:
         meta.setdefault(yf_symbol(s), (s, name, sector))
     symbols = list(meta.keys())
-    print(f"🌐 분석 유니버스: {len(symbols)}종목 (S&P500 + NASDAQ-100 + 인기주/ADR/ETF)")
+    print(f"🌐 분석 유니버스: {len(symbols)}종목 (S&P500 + 중소형1000 + NASDAQ100 + 인기주/ADR/ETF)")
     out = []
     CHUNK = 50
     for ci, chunk in enumerate(chunked(symbols, CHUNK)):

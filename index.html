@@ -115,6 +115,13 @@
           <div class="text-2xl font-bold text-amber-300" id="headerStrategy">중립 + 방어</div>
         </div>
         <div class="flex items-center gap-2">
+          <div class="relative">
+            <input id="globalStockSearch" list="globalStockList" placeholder="🔎 종목 검색 (예: NVDA)"
+              onkeydown="if(event.key==='Enter')openStockModal(this.value)"
+              class="bg-white/95 text-slate-900 placeholder-slate-400 rounded-lg pl-3 pr-9 py-2 text-sm w-48 focus:w-60 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-400">
+            <datalist id="globalStockList"></datalist>
+            <button onclick="openStockModal(document.getElementById('globalStockSearch').value)" class="absolute right-1 top-1/2 -translate-y-1/2 text-slate-500 hover:text-emerald-600 px-1.5 py-1 text-sm" title="조회">↵</button>
+          </div>
           <button onclick="toggleDarkMode()" class="theme-toggle bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-lg" title="다크모드 전환">
             <span id="themeIcon">🌙</span>
           </button>
@@ -129,6 +136,29 @@
     </div>
   </div>
 </header>
+
+<!-- ============== 통합 종목 조회 모달 (P1+P2+P3) ============== -->
+<div id="stockModal" class="hidden fixed inset-0 z-50">
+  <div class="absolute inset-0 bg-black/50" onclick="closeStockModal()"></div>
+  <div class="absolute inset-x-0 top-0 mx-auto max-w-2xl w-full h-full sm:h-auto sm:my-8 bg-slate-50 sm:rounded-2xl shadow-2xl overflow-y-auto" style="max-height:100vh">
+    <div class="sticky top-0 bg-white border-b px-4 py-3 flex items-center gap-2 z-10">
+      <span class="font-bold text-lg whitespace-nowrap">🔎 종목 조회</span>
+      <input id="modalStockSearch" list="globalStockList" placeholder="티커 입력 후 Enter"
+        onkeydown="if(event.key==='Enter')openStockModal(this.value)"
+        class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+      <button onclick="openStockModal(document.getElementById('modalStockSearch').value)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-sm">조회</button>
+      <button onclick="closeStockModal()" class="text-slate-400 hover:text-slate-700 px-2 text-2xl leading-none">×</button>
+    </div>
+    <div id="stockCardBody" class="p-4"></div>
+    <div class="border-t bg-white p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h4 class="font-bold text-sm">⭐ 관심종목 비교</h4>
+        <button onclick="clearWatch()" class="text-xs text-slate-400 hover:text-rose-500">전체 삭제</button>
+      </div>
+      <div id="watchCompare" class="overflow-x-auto"></div>
+    </div>
+  </div>
+</div>
 
 <!-- ============== 실시간 티커 테이프 (Live Ticker) ============== -->
 <div class="bg-slate-900 border-b border-slate-700">
@@ -5315,6 +5345,7 @@ async function loadScores() {
     const res = await fetch('./scores.json?t=' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
     __scoresData = await res.json();
+    if (typeof updateGlobalDatalist === 'function') updateGlobalDatalist();
     renderScoresTable();
     const a = document.getElementById('scoresAsOf');
     if (a) a.textContent = `기준: ${__scoresData.last_updated_kst || ''} · ${(__scoresData.stocks||[]).length}종목 · 출처: yfinance (정량 항목 자동, 해자/내러티브는 ★ 수동 보정)`;
@@ -5402,6 +5433,7 @@ async function loadTech() {
     // 검색 자동완성
     const dl = document.getElementById('techTickerList');
     if (dl) dl.innerHTML = (__techData.stocks||[]).map(s=>`<option value="${s.ticker}">${s.name}</option>`).join('');
+    if (typeof updateGlobalDatalist === 'function') updateGlobalDatalist();
     renderTechTable();
     const a = document.getElementById('techTableAsOf');
     if (a) a.textContent = `기준: ${__techData.last_updated_kst||''} · ${(__techData.stocks||[]).length}종목 · ${__techData.basis||''}`;
@@ -5680,6 +5712,153 @@ function renderMarketReport(data) {
 
     <p class="text-xs text-slate-400 text-center">📊 본 리포트는 라이브 data.json(8축·FRED·Yahoo·섹터·Mag7)을 규칙 기반으로 자동 작성한 것입니다. 투자 조언이 아니며, 매일 갱신됩니다. 상세 분기 시나리오는 "🎯 시나리오" 탭 참고.</p>
   `;
+}
+
+// ============================================================
+// === 통합 종목 조회 (P1 카드 + P2 검색/관심 + P3 비교) ===
+// ============================================================
+const STOCK_TIER = (sc) => sc>=75?{l:'🚀 강력 매수 후보',c:'emerald'}:sc>=60?{l:'✅ 매수 후보',c:'teal'}:sc>=45?{l:'🟡 관망',c:'amber'}:{l:'🔴 회피',c:'rose'};
+
+async function ensureTechLoaded() {
+  if (!__techData && typeof loadTech === 'function') { try { await loadTech(); } catch(e){} }
+}
+function getFundData(ticker) {
+  return (((window.__scoresData||__scoresData||{}).stocks)||[]).find(x => (x.ticker||'').toUpperCase() === ticker) || null;
+}
+
+async function openStockModal(ticker) {
+  ticker = (ticker||'').toUpperCase().trim().replace(/\s+/g,'');
+  const modal = document.getElementById('stockModal');
+  const body = document.getElementById('stockCardBody');
+  if (!ticker || !modal) return;
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  const ms = document.getElementById('modalStockSearch'); if (ms) ms.value = ticker;
+  body.innerHTML = `<div class="text-center text-slate-400 py-10"><div class="text-3xl mb-2 pulse-dot">🔎</div>${ticker} 분석 중…</div>`;
+  renderWatchCompare();
+  await ensureTechLoaded();
+  let tech = ((__techData && __techData.stocks)||[]).find(x => (x.ticker||'').toUpperCase()===ticker || (x.ticker||'').toUpperCase()===ticker.replace(/-/g,'.'));
+  if (!tech && typeof fetchTechLive === 'function') {
+    const live = await fetchTechLive(ticker);
+    if (live) { live.ticker = ticker; tech = live; }
+  }
+  const fund = getFundData(ticker);
+  if (!tech && !fund) {
+    body.innerHTML = `<div class="text-center text-slate-500 py-10">'${ticker}' 데이터를 찾지 못했습니다.<br><span class="text-xs">목록 밖 + 실시간 조회 실패(프록시 불안정). 잠시 후 재시도해보세요.</span></div>`;
+    return;
+  }
+  renderStockCard(ticker, tech, fund);
+}
+function closeStockModal() {
+  const m = document.getElementById('stockModal'); if (m) m.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function renderStockCard(ticker, tech, fund) {
+  const body = document.getElementById('stockCardBody');
+  const techPct = tech ? Math.round(tech.score/8*100) : null;
+  const fundPct = fund ? fund.score : null;
+  const combined = (fundPct!=null && techPct!=null) ? Math.round(0.5*fundPct + 0.5*techPct) : (fundPct!=null ? fundPct : techPct);
+  const tier = STOCK_TIER(combined);
+  const name = (tech && tech.name) || (fund && fund.name) || '';
+  const price = (tech && tech.close) || (fund && fund.price) || null;
+  const ld = window.__liveData || {}; const sm = ld.summary || {};
+  const phase = sm.phase || '-';
+  const macroNote = (sm.positive||0) >= 4 ? '강세장 — 추세 우호' : (sm.negative||0) >= 4 ? '약세장 — 방어 우선' : '변동성 — 분할 접근';
+  const watched = getWatch().includes(ticker);
+  const grad = {emerald:'from-emerald-600 to-green-600',teal:'from-teal-600 to-cyan-600',amber:'from-amber-500 to-orange-500',rose:'from-rose-600 to-red-600'}[tier.c];
+  const dot = v => v===2?'<span class="text-emerald-500">●</span>':v===1?'<span class="text-amber-400">●</span>':'<span class="text-rose-400">●</span>';
+  const fundBlock = fund ? `
+    <div class="bg-white rounded-xl p-4 shadow-sm">
+      <div class="flex justify-between items-center mb-2"><h4 class="font-bold">♟️ 펀더멘털</h4><span class="font-extrabold ${fund.score>=65?'text-emerald-600':fund.score>=50?'text-amber-600':'text-rose-600'}">${fund.score}/100</span></div>
+      <div class="grid grid-cols-3 gap-1 text-xs text-slate-500">
+        <div>재무 ${fund.fin}/25</div><div>밸류 ${fund.val}/15</div><div>성장 ${fund.grw}/20</div>
+        <div>해자★ ${fund.moat}/15</div><div>컨센 ${fund.cons}/10</div><div>타이밍 ${fund.tim}/5</div>
+      </div>
+      <div class="text-xs text-slate-400 mt-1">${fund.verdict||''}${fund.upside!=null?` · 목표가여력 ${fund.upside}%`:''}${fund.pe?` · PER ${fund.pe}`:''}</div>
+    </div>` : `<div class="bg-white rounded-xl p-4 shadow-sm text-sm text-slate-400">♟️ 펀더멘털 미수록<br><span class="text-xs">(대형주 94 외 — 종합은 기술 점수 기준)</span></div>`;
+  const techBlock = tech ? `
+    <div class="bg-white rounded-xl p-4 shadow-sm">
+      <div class="flex justify-between items-center mb-2"><h4 class="font-bold">📐 기술 4축</h4><span class="font-extrabold ${tech.score>=5?'text-emerald-600':tech.score>=3?'text-amber-600':'text-rose-600'}">${tech.score}/8</span></div>
+      <div class="grid grid-cols-1 gap-0.5 text-xs">
+        <div>${dot(tech.struct)} 구조: ${tech.d_struct||'-'}</div>
+        <div>${dot(tech.price)} 가격: ${tech.d_price||'-'}</div>
+        <div>${dot(tech.time)} 시간: ${tech.d_time||'-'}</div>
+        <div>${dot(tech.liq)} 유동성★: ${tech.d_liq||'-'}</div>
+      </div>
+      <div class="text-xs text-slate-400 mt-1">${tech.verdict||''}${tech.source==='worker'?' · 실시간':''}</div>
+    </div>` : `<div class="bg-white rounded-xl p-4 shadow-sm text-sm text-slate-400">📐 기술 데이터 없음</div>`;
+  body.innerHTML = `
+    <div class="rounded-2xl p-5 text-white bg-gradient-to-r ${grad} shadow-lg">
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="text-2xl font-extrabold">${ticker} <span class="text-base font-normal opacity-80">${name}</span></div>
+          <div class="text-sm opacity-90 mt-0.5">${price!=null?'$'+price:''} ${tech&&tech.sector?'· '+tech.sector:''}</div>
+        </div>
+        <button onclick="toggleWatch('${ticker}')" class="text-3xl leading-none" title="관심종목">${watched?'⭐':'☆'}</button>
+      </div>
+      <div class="mt-3 flex items-end gap-3">
+        <div class="text-4xl font-extrabold">${combined}<span class="text-lg">/100</span></div>
+        <div class="text-lg font-bold mb-1">${tier.l}</div>
+      </div>
+      <div class="w-full bg-white/30 rounded-full h-2 mt-2"><div class="h-2 rounded-full bg-white" style="width:${combined}%"></div></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">${fundBlock}${techBlock}</div>
+    <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-3 mt-3 text-sm text-indigo-900">
+      🌐 오늘 시장: <b>${phase}</b> — ${macroNote}. ${combined>=60?'국면·종목 모두 우호적이면 분할 진입을 고려.':'국면을 함께 보며 신중히 접근.'}
+    </div>
+    <p class="text-xs text-slate-400 mt-2 text-center">종합 = 펀더멘털·기술 가중 평균(거시는 맥락). 투자 조언 아님 · 데이터: yfinance/FRED</p>
+  `;
+}
+
+// --- 관심종목 (localStorage) ---
+function getWatch() { try { return JSON.parse(localStorage.getItem('stock_watch')||'[]'); } catch(e){ return []; } }
+function setWatch(a) { localStorage.setItem('stock_watch', JSON.stringify(a.slice(0,20))); }
+function toggleWatch(ticker) {
+  ticker = (ticker||'').toUpperCase();
+  let w = getWatch();
+  w = w.includes(ticker) ? w.filter(x=>x!==ticker) : [ticker, ...w];
+  setWatch(w);
+  const cur = (document.getElementById('modalStockSearch')||{}).value;
+  if (cur) openStockModal(cur); else renderWatchCompare();
+}
+function clearWatch() { setWatch([]); renderWatchCompare(); }
+
+function renderWatchCompare() {
+  const el = document.getElementById('watchCompare');
+  if (!el) return;
+  const w = getWatch();
+  if (!w.length) { el.innerHTML = '<div class="text-xs text-slate-400 py-2">관심종목 없음 — 종목 카드에서 ☆를 눌러 추가</div>'; return; }
+  const tarr = (__techData && __techData.stocks) || [];
+  const farr = ((window.__scoresData||{}).stocks) || ((typeof __scoresData!=='undefined'&&__scoresData&&__scoresData.stocks)||[]);
+  const rows = w.map(t => {
+    const tech = tarr.find(x=>(x.ticker||'').toUpperCase()===t);
+    const fund = farr.find(x=>(x.ticker||'').toUpperCase()===t);
+    const tp = tech?Math.round(tech.score/8*100):null, fp = fund?fund.score:null;
+    const comb = (fp!=null&&tp!=null)?Math.round(0.5*fp+0.5*tp):(fp!=null?fp:tp);
+    return {t, comb, tech, fund};
+  });
+  rows.sort((a,b)=>(b.comb||0)-(a.comb||0));
+  const tc = sc => sc==null?'text-slate-400':sc>=60?'text-emerald-600':sc>=45?'text-amber-600':'text-rose-600';
+  el.innerHTML = `<table class="w-full text-sm"><thead><tr class="text-xs text-slate-400 text-left border-b"><th class="py-1">종목</th><th>종합</th><th>기술</th><th>펀더</th><th></th></tr></thead><tbody>
+    ${rows.map(r=>`<tr class="border-b border-slate-50">
+      <td class="py-1 font-semibold cursor-pointer hover:text-indigo-600" onclick="openStockModal('${r.t}')">${r.t}</td>
+      <td class="font-bold ${tc(r.comb)}">${r.comb!=null?r.comb:'-'}</td>
+      <td class="text-slate-500">${r.tech?r.tech.score+'/8':'-'}</td>
+      <td class="text-slate-500">${r.fund?r.fund.score:'-'}</td>
+      <td><button onclick="toggleWatch('${r.t}')" class="text-slate-300 hover:text-rose-500 text-xs">✕</button></td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+// --- 전역 검색 자동완성 (scores + tech 로드 시) ---
+function updateGlobalDatalist() {
+  const dl = document.getElementById('globalStockList');
+  if (!dl) return;
+  const set = {};
+  (((typeof __scoresData!=='undefined'&&__scoresData)||{}).stocks||[]).forEach(s=>set[s.ticker]=s.name||'');
+  ((__techData&&__techData.stocks)||[]).forEach(s=>{ if(!(s.ticker in set)) set[s.ticker]=s.name||''; });
+  dl.innerHTML = Object.keys(set).slice(0,3000).map(t=>`<option value="${t}">${set[t]}</option>`).join('');
 }
 
 // === NEW v5.1: 종합 액션 신호 배너 ===
@@ -6296,6 +6475,9 @@ window.addEventListener('load', () => {
   if (typeof loadScores === 'function') loadScores();
   // 기술적 분석 4축 진단 초기화 (tech.json은 탭 진입 시 지연 로딩)
   if (document.getElementById('techScore')) calcTechSignal();
+  // 통합 종목 조회: ESC 닫기 + 관심종목 비교 초기 렌더
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeStockModal(); });
+  if (typeof renderWatchCompare === 'function') renderWatchCompare();
   // 페이지 로드 시 이미 #technical 해시면 즉시 로드
   if (location.hash.replace('#','') === 'technical' && !window.__techLoaded) {
     window.__techLoaded = true;

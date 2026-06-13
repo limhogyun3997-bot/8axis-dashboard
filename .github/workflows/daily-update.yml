@@ -57,6 +57,7 @@ jobs:
       - name: 🔔 Run alert notifier
         env:
           ALERT_WEBHOOK: ${{ secrets.ALERT_WEBHOOK }}
+          ALERT_TICKERS: ${{ secrets.ALERT_TICKERS }}
         run: python notify.py || echo "⚠️ 알림 스킵"
 
       - name: 📝 Show summary

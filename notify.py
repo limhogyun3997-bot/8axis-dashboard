@@ -80,12 +80,34 @@ def main():
     if vix is not None and vix < 24:
         vix_alerted = False  # 정상 복귀 시 재무장
 
+    # 4) 관심종목 알림 (ALERT_TICKERS 시크릿 — 쉼표구분) : 기술점수 매수권 진입/이탈
+    ticker_state = dict(state.get("tickers", {}))
+    watch = [t.strip().upper() for t in os.environ.get("ALERT_TICKERS", "").split(",") if t.strip()]
+    if watch:
+        tech = load_json("tech.json", {})
+        tmap = {s.get("ticker", "").upper(): s for s in (tech.get("stocks") or [])}
+        for t in watch:
+            s = tmap.get(t) or tmap.get(t.replace("-", "."))
+            if not s:
+                continue
+            sc = s.get("score")
+            prev = ticker_state.get(t)
+            if sc is None:
+                continue
+            if prev is not None:
+                if prev < 6 <= sc:
+                    msgs.append(f"📈 관심종목 **{t}** 기술점수 {sc}/8 — 매수권 진입 ({s.get('verdict','')})")
+                elif prev >= 6 and sc <= 4:
+                    msgs.append(f"📉 관심종목 **{t}** 기술점수 {sc}/8 — 약화 (이탈)")
+            ticker_state[t] = sc
+
     # 상태 저장 (항상)
     new_state = {
         "last_action_level": level,
         "last_signal": signal,
         "last_date": today,
         "vix_alerted": vix_alerted,
+        "tickers": ticker_state,
     }
     with open(STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(new_state, f, ensure_ascii=False, indent=2)

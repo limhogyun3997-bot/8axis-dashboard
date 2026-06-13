@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-13T18:01:39.953709+00:00",
-  "last_updated_kst": "2026-06-14 03:01 KST",
+  "last_updated": "2026-06-13T18:35:15.797597+00:00",
+  "last_updated_kst": "2026-06-14 03:35 KST",
   "version": "tech-2.0",
   "universe": "S&P 500",
   "basis": "yfinance 일봉(1년) · 기술적 분석 2강 4대 축 · 유동성은 캔들 프록시(★)",
@@ -10,7 +10,7 @@
     "시간": "RSI 에너지",
     "유동성": "꼬리 사냥 프록시"
   },
-  "count": 2763,
+  "count": 2761,
   "stocks": [
     {
       "struct": 2,
@@ -23251,24 +23251,6 @@
       "sector": "Russell2K"
     },
     {
-      "struct": 1,
-      "price": 2,
-      "time": 1,
-      "liq": 1,
-      "score": 5,
-      "verdict": "분할 진입",
-      "d_struct": "횡보",
-      "d_price": "범위 하단(12%)·싸다",
-      "d_time": "중립(RSI 56)",
-      "d_liq": "중립",
-      "close": 15.26,
-      "rsi": 56.5,
-      "range_pct": 12,
-      "ticker": "METC",
-      "name": "Ramaco Resources Inc. Class A Common Sto",
-      "sector": "Russell2K"
-    },
-    {
       "struct": 2,
       "price": 0,
       "time": 1,
@@ -38548,24 +38530,6 @@
       "range_pct": 94,
       "ticker": "ECO",
       "name": "Okeanis Eco Tankers Corp. Common Stock",
-      "sector": "Russell2K"
-    },
-    {
-      "struct": 2,
-      "price": 0,
-      "time": 0,
-      "liq": 2,
-      "score": 4,
-      "verdict": "신중·관망",
-      "d_struct": "상승추세(정배열)",
-      "d_price": "범위 상단(100%)·비싸다",
-      "d_time": "과매수(RSI 83)·에너지 소진",
-      "d_liq": "긴 아래꼬리+회복(사냥 완료 가능)",
-      "close": 82.63,
-      "rsi": 83.3,
-      "range_pct": 100,
-      "ticker": "WMK",
-      "name": "Weis Markets Inc. Common Stock",
       "sector": "Russell2K"
     },
     {

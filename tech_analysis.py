@@ -66,6 +66,44 @@ EXTRA = [
     ("MSTR", "MicroStrategy", "Tech"), ("HIMS", "Hims & Hers", "Health"), ("CVNA", "Carvana", "Cons"),
 ]
 
+# NASDAQ-100 구성종목 (연 1회 재구성 — 하드코딩, dedup으로 S&P500과 병합)
+NASDAQ100 = [
+    ("AAPL", "Apple", "Tech"), ("MSFT", "Microsoft", "Tech"), ("NVDA", "NVIDIA", "Tech"),
+    ("AMZN", "Amazon", "Cons"), ("AVGO", "Broadcom", "Tech"), ("META", "Meta", "Comm"),
+    ("GOOGL", "Alphabet A", "Comm"), ("GOOG", "Alphabet C", "Comm"), ("TSLA", "Tesla", "Cons"),
+    ("COST", "Costco", "Staples"), ("NFLX", "Netflix", "Comm"), ("TMUS", "T-Mobile", "Comm"),
+    ("CSCO", "Cisco", "Tech"), ("PEP", "PepsiCo", "Staples"), ("ADBE", "Adobe", "Tech"),
+    ("LIN", "Linde", "Materials"), ("AMD", "AMD", "Tech"), ("QCOM", "Qualcomm", "Tech"),
+    ("TXN", "Texas Instr", "Tech"), ("INTU", "Intuit", "Tech"), ("AMGN", "Amgen", "Health"),
+    ("ISRG", "Intuitive Surgical", "Health"), ("AMAT", "Applied Materials", "Tech"),
+    ("BKNG", "Booking", "Cons"), ("CMCSA", "Comcast", "Comm"), ("HON", "Honeywell", "Industrials"),
+    ("VRTX", "Vertex", "Health"), ("ADP", "ADP", "Industrials"), ("PANW", "Palo Alto", "Tech"),
+    ("GILD", "Gilead", "Health"), ("ADI", "Analog Devices", "Tech"), ("MU", "Micron", "Tech"),
+    ("REGN", "Regeneron", "Health"), ("LRCX", "Lam Research", "Tech"), ("MELI", "MercadoLibre", "Cons"),
+    ("PYPL", "PayPal", "Fin"), ("SBUX", "Starbucks", "Cons"), ("KLAC", "KLA", "Tech"),
+    ("SNPS", "Synopsys", "Tech"), ("CDNS", "Cadence", "Tech"), ("CRWD", "CrowdStrike", "Tech"),
+    ("MAR", "Marriott", "Cons"), ("CEG", "Constellation Energy", "Energy"), ("ORLY", "O'Reilly", "Cons"),
+    ("CSX", "CSX", "Industrials"), ("ASML", "ASML", "Tech"), ("ABNB", "Airbnb", "Cons"),
+    ("FTNT", "Fortinet", "Tech"), ("ADSK", "Autodesk", "Tech"), ("PCAR", "PACCAR", "Industrials"),
+    ("ROP", "Roper", "Tech"), ("MNST", "Monster", "Staples"), ("NXPI", "NXP Semi", "Tech"),
+    ("WDAY", "Workday", "Tech"), ("AEP", "American Electric", "Utilities"), ("CPRT", "Copart", "Industrials"),
+    ("PAYX", "Paychex", "Industrials"), ("TTD", "Trade Desk", "Tech"), ("ROST", "Ross Stores", "Cons"),
+    ("KDP", "Keurig Dr Pepper", "Staples"), ("CHTR", "Charter", "Comm"), ("FAST", "Fastenal", "Industrials"),
+    ("DDOG", "Datadog", "Tech"), ("EA", "Electronic Arts", "Comm"), ("VRSK", "Verisk", "Industrials"),
+    ("EXC", "Exelon", "Utilities"), ("CTAS", "Cintas", "Industrials"), ("GEHC", "GE HealthCare", "Health"),
+    ("KHC", "Kraft Heinz", "Staples"), ("CCEP", "Coca-Cola Europacific", "Staples"), ("LULU", "Lululemon", "Cons"),
+    ("BKR", "Baker Hughes", "Energy"), ("XEL", "Xcel Energy", "Utilities"), ("FANG", "Diamondback", "Energy"),
+    ("TEAM", "Atlassian", "Tech"), ("IDXX", "Idexx", "Health"), ("CSGP", "CoStar", "Industrials"),
+    ("ON", "ON Semi", "Tech"), ("ANSS", "Ansys", "Tech"), ("DXCM", "Dexcom", "Health"),
+    ("ZS", "Zscaler", "Tech"), ("TTWO", "Take-Two", "Comm"), ("WBD", "Warner Bros", "Comm"),
+    ("GFS", "GlobalFoundries", "Tech"), ("MDB", "MongoDB", "Tech"), ("ARM", "Arm", "Tech"),
+    ("MRVL", "Marvell", "Tech"), ("CDW", "CDW", "Tech"), ("PDD", "PDD", "Cons"),
+    ("BIIB", "Biogen", "Health"), ("DASH", "DoorDash", "Cons"), ("SMCI", "Super Micro", "Tech"),
+    ("MSTR", "MicroStrategy", "Tech"), ("PLTR", "Palantir", "Tech"), ("AXON", "Axon", "Industrials"),
+    ("APP", "AppLovin", "Tech"), ("MCHP", "Microchip", "Tech"), ("ODFL", "Old Dominion", "Industrials"),
+    ("MDLZ", "Mondelez", "Staples"), ("ABNB", "Airbnb", "Cons"), ("LIN", "Linde", "Materials"),
+]
+
 # S&P500 수집 실패 시 폴백(대표 종목)
 FALLBACK = [
     ("AAPL", "Apple", "Tech"), ("MSFT", "Microsoft", "Tech"), ("GOOGL", "Alphabet", "Comm"),
@@ -219,12 +257,12 @@ def chunked(lst, n):
 
 def main():
     universe = load_universe()
-    # S&P500 + 인기 비S&P500/ADR/ETF 병합 (yf 심볼 기준 중복 제거)
+    # S&P500 + NASDAQ-100 + 인기 비S&P500/ADR/ETF 병합 (yf 심볼 기준 중복 제거)
     meta = {}
-    for s, name, sector in list(universe) + EXTRA:
+    for s, name, sector in list(universe) + NASDAQ100 + EXTRA:
         meta.setdefault(yf_symbol(s), (s, name, sector))
     symbols = list(meta.keys())
-    print(f"🌐 분석 유니버스: {len(symbols)}종목 (S&P500 + 인기주/ADR/ETF)")
+    print(f"🌐 분석 유니버스: {len(symbols)}종목 (S&P500 + NASDAQ-100 + 인기주/ADR/ETF)")
     out = []
     CHUNK = 50
     for ci, chunk in enumerate(chunked(symbols, CHUNK)):

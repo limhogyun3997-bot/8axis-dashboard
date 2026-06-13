@@ -162,6 +162,45 @@ def load_smallmid():
     return out
 
 
+_R2K_JUNK = re.compile(r"\b(ETF|ETN|Fund|Warrant|Warrants|Right|Rights|Unit|Units|Preferred|Depositary|Notes|Acquisition|SPAC)\b", re.I)
+_R2K_SYM = re.compile(r"^[A-Z][A-Z.\-]{0,5}$")
+
+
+def _mktcap(s):
+    s = (s or "").replace("$", "").replace(",", "").strip()
+    try:
+        return float(s)
+    except Exception:
+        return 0.0
+
+
+def load_russell2000():
+    """러셀2000 근사: 전체 미국 상장 보통주를 시총순 정렬 → 순위 1001~3000(소형주 ~2000)"""
+    rows = []
+    for ex in ["nasdaq", "nyse", "amex"]:
+        try:
+            u = f"https://raw.githubusercontent.com/rreichel3/US-Stock-Symbols/main/{ex}/{ex}_full_tickers.json"
+            req = urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0"})
+            rows += json.load(urllib.request.urlopen(req, timeout=30))
+        except Exception as e:
+            print(f"⚠️ {ex} 심볼 수집 실패 ({e})", file=sys.stderr)
+    clean, seen = [], set()
+    for r in rows:
+        sym = (r.get("symbol") or "").strip().upper()
+        nm = (r.get("name") or "").strip()
+        if not sym or sym in seen or not _R2K_SYM.match(sym) or _R2K_JUNK.search(nm):
+            continue
+        cap = _mktcap(r.get("marketCap"))
+        if cap <= 0:
+            continue
+        seen.add(sym)
+        clean.append((sym, nm[:40], cap))
+    clean.sort(key=lambda x: -x[2])
+    r2k = clean[1000:3000]  # 순위 1001~3000 = 소형주 구간
+    print(f"📋 Russell2000 근사 수집: {len(r2k)}종목 (시총 {r2k[0][2]/1e9:.1f}B~{r2k[-1][2]/1e9:.2f}B)" if r2k else "⚠️ Russell2000 수집 0")
+    return [(t, n, "Russell2K") for t, n, c in r2k]
+
+
 def yf_symbol(sym):
     # Yahoo는 점(.)을 하이픈(-)으로 사용 (예: BRK.B → BRK-B)
     return sym.replace(".", "-")
@@ -284,12 +323,13 @@ def chunked(lst, n):
 def main():
     universe = load_universe()       # S&P 500 (대형)
     smallmid = load_smallmid()       # S&P MidCap400 + SmallCap600 (중소형 1000)
-    # 병합 (yf 심볼 기준 중복 제거) — 대형 먼저 등록되어 sector 우선
+    russell = load_russell2000()     # 러셀2000 근사 (소형주 ~2000)
+    # 병합 (yf 심볼 기준 중복 제거) — 대형/지수 먼저 등록되어 sector 라벨 우선
     meta = {}
-    for s, name, sector in list(universe) + NASDAQ100 + smallmid + EXTRA:
+    for s, name, sector in list(universe) + NASDAQ100 + smallmid + EXTRA + russell:
         meta.setdefault(yf_symbol(s), (s, name, sector))
     symbols = list(meta.keys())
-    print(f"🌐 분석 유니버스: {len(symbols)}종목 (S&P500 + 중소형1000 + NASDAQ100 + 인기주/ADR/ETF)")
+    print(f"🌐 분석 유니버스: {len(symbols)}종목 (S&P500 + 중소형1000 + 러셀2000 + NASDAQ100 + 인기주)")
     out = []
     CHUNK = 50
     for ci, chunk in enumerate(chunked(symbols, CHUNK)):

@@ -2312,7 +2312,7 @@
         <h3 class="font-bold text-lg">📈 S&P 500 자동 4축 진단표</h3>
         <input id="techTableSearch" oninput="renderTechTable()" placeholder="티커/이름 검색…" class="border rounded-lg px-3 py-1.5 text-sm w-44">
       </div>
-      <p class="text-xs text-slate-500 mb-3">S&P 1500(대형500 + <b>중소형 1000</b>) + NASDAQ-100 + 인기주/ADR/ETF 약 <b>1,500여 종목</b>을 매일 일봉으로 자동 채점. 행을 누르면 위 진단기에 반영됩니다. (유동성은 캔들 프록시 ★) · <b>목록 밖 임의 티커도 위 검색창에 입력하면 실시간 계산</b>(프록시 경유, 간헐적으로 느리거나 실패할 수 있음).</p>
+      <p class="text-xs text-slate-500 mb-3">S&P 1500 + <b>러셀2000(소형주)</b> + NASDAQ-100 + 인기주/ADR/ETF 약 <b>2,700여 종목</b>을 매일 일봉으로 자동 채점. 행을 누르면 위 진단기에 반영됩니다. (유동성은 캔들 프록시 ★) · <b>목록 밖 임의 티커도 위 검색창에 입력하면 실시간 계산</b>(프록시 경유, 간헐적으로 느리거나 실패할 수 있음).</p>
       <div id="techTableWrap" class="overflow-x-auto"><div class="text-center text-slate-400 py-8 text-sm">tech.json 로딩 중…</div></div>
       <p class="text-xs text-slate-400 mt-3" id="techTableAsOf"></p>
     </div>
@@ -3465,6 +3465,11 @@ function showTab(name) {
   // NEW v5: URL 해시 업데이트
   if (history.replaceState) {
     history.replaceState(null, '', '#' + name);
+  }
+  // 지연 로딩: 기술분석 탭 첫 진입 시에만 tech.json(대용량) 로드
+  if (name === 'technical' && !window.__techLoaded) {
+    window.__techLoaded = true;
+    if (typeof loadTech === 'function') loadTech();
   }
 }
 
@@ -6167,9 +6172,13 @@ window.addEventListener('load', () => {
   if (document.getElementById('ssScore')) calcStockScore();
   if (typeof renderSavedScores === 'function') renderSavedScores();
   if (typeof loadScores === 'function') loadScores();
-  // 기술적 분석 4축 진단 초기화 + 종목 자동 진단 데이터
+  // 기술적 분석 4축 진단 초기화 (tech.json은 탭 진입 시 지연 로딩)
   if (document.getElementById('techScore')) calcTechSignal();
-  if (typeof loadTech === 'function') loadTech();
+  // 페이지 로드 시 이미 #technical 해시면 즉시 로드
+  if (location.hash.replace('#','') === 'technical' && !window.__techLoaded) {
+    window.__techLoaded = true;
+    if (typeof loadTech === 'function') loadTech();
+  }
   // 해시 변경 감지 (사용자 back/forward)
   window.addEventListener('hashchange', initTabFromHash);
 });

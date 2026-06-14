@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-13T19:19:13.456435+00:00",
-  "last_updated_kst": "2026-06-14 04:19 KST",
+  "last_updated": "2026-06-14T10:42:41.182172+00:00",
+  "last_updated_kst": "2026-06-14 19:42 KST",
   "version": "scores-1.0",
   "basis": "yfinance 펀더멘털 · 자산네제곱 2·3·6단계 채점 · 해자/변곡점은 프록시(★)",
   "scoring": {
@@ -1212,6 +1212,22 @@
       "price": 28.92,
       "upside": 2.3,
       "pe": null
+    },
+    {
+      "ticker": "KLAC",
+      "name": "KLA Corporation",
+      "score": 75,
+      "fin": 20,
+      "val": 0,
+      "grw": 16,
+      "moat": 15,
+      "inf": 10,
+      "cons": 9,
+      "tim": 5,
+      "verdict": "매수",
+      "price": 254.54,
+      "upside": -24.3,
+      "pe": 71.9
     },
     {
       "ticker": "ROST",
@@ -2652,22 +2668,6 @@
       "price": 320.72,
       "upside": 6.7,
       "pe": 15.4
-    },
-    {
-      "ticker": "KLAC",
-      "name": "KLA Corporation",
-      "score": 67,
-      "fin": 20,
-      "val": 0,
-      "grw": 16,
-      "moat": 15,
-      "inf": 7,
-      "cons": 9,
-      "tim": 0,
-      "verdict": "매수",
-      "price": 254.54,
-      "upside": -24.3,
-      "pe": 71.9
     },
     {
       "ticker": "MSCI",

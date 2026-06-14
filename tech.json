@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-13T19:23:58.095671+00:00",
-  "last_updated_kst": "2026-06-14 04:23 KST",
+  "last_updated": "2026-06-14T10:47:26.656100+00:00",
+  "last_updated_kst": "2026-06-14 19:47 KST",
   "version": "tech-2.0",
   "universe": "S&P 500",
   "basis": "yfinance 일봉(1년) · 기술적 분석 2강 4대 축 · 유동성은 캔들 프록시(★)",
@@ -10,7 +10,7 @@
     "시간": "RSI 에너지",
     "유동성": "꼬리 사냥 프록시"
   },
-  "count": 2763,
+  "count": 2762,
   "stocks": [
     {
       "struct": 2,
@@ -34843,24 +34843,6 @@
       "sector": "SmallCap"
     },
     {
-      "struct": 0,
-      "price": 2,
-      "time": 1,
-      "liq": 1,
-      "score": 4,
-      "verdict": "신중·관망",
-      "d_struct": "하락추세(역배열)",
-      "d_price": "범위 하단(7%)·싸다",
-      "d_time": "중립(RSI 41)",
-      "d_liq": "중립",
-      "close": 10.12,
-      "rsi": 41.2,
-      "range_pct": 7,
-      "ticker": "PMT",
-      "name": "Westlake Village, California",
-      "sector": "SmallCap"
-    },
-    {
       "struct": 2,
       "price": 0,
       "time": 0,
@@ -46211,7 +46193,7 @@
       "d_price": "범위 상단(100%)·비싸다",
       "d_time": "과매수(RSI 71)·에너지 소진",
       "d_liq": "중립",
-      "close": 96.0,
+      "close": 80.0,
       "rsi": 71.0,
       "range_pct": 100,
       "ticker": "ATRO",

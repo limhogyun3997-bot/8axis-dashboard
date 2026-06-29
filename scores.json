@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-28T00:09:32.954546+00:00",
-  "last_updated_kst": "2026-06-28 09:09 KST",
+  "last_updated": "2026-06-29T00:15:18.548266+00:00",
+  "last_updated_kst": "2026-06-29 09:15 KST",
   "version": "scores-1.0",
   "basis": "yfinance 펀더멘털 · 자산네제곱 2·3·6단계 채점 · 해자/변곡점은 프록시(★)",
   "scoring": {
@@ -1641,8 +1641,8 @@
       "cons": 9,
       "tim": 0,
       "verdict": "매수",
-      "price": 404.7,
-      "upside": 39.6,
+      "price": 404.27,
+      "upside": 39.8,
       "pe": 49.2
     },
     {
@@ -2122,7 +2122,7 @@
       "tim": 0,
       "verdict": "매수",
       "price": 76.55,
-      "upside": 51.3,
+      "upside": 51.2,
       "pe": 8.1
     },
     {
@@ -2985,8 +2985,8 @@
       "cons": 5,
       "tim": 2,
       "verdict": "매수",
-      "price": 17.88,
-      "upside": 16.9,
+      "price": 17.85,
+      "upside": 17.1,
       "pe": 39.7
     },
     {
@@ -3978,7 +3978,7 @@
       "tim": 0,
       "verdict": "관망",
       "price": 94.81,
-      "upside": 100.7,
+      "upside": 100.4,
       "pe": 14.6
     },
     {
@@ -5246,6 +5246,22 @@
       "pe": 34.7
     },
     {
+      "ticker": "CCL",
+      "name": "Carnival Corporation",
+      "score": 56,
+      "fin": 7,
+      "val": 12,
+      "grw": 7,
+      "moat": 13,
+      "inf": 8,
+      "cons": 5,
+      "tim": 4,
+      "verdict": "관망",
+      "price": 29.07,
+      "upside": 22.4,
+      "pe": 13.1
+    },
+    {
       "ticker": "DLTR",
       "name": "Dollar Tree",
       "score": 56,
@@ -5788,22 +5804,6 @@
       "price": 16.33,
       "upside": 9.1,
       "pe": null
-    },
-    {
-      "ticker": "CCL",
-      "name": "Carnival Corporation",
-      "score": 53,
-      "fin": 4,
-      "val": 12,
-      "grw": 7,
-      "moat": 13,
-      "inf": 8,
-      "cons": 5,
-      "tim": 4,
-      "verdict": "관망",
-      "price": 29.07,
-      "upside": 22.4,
-      "pe": 13.1
     },
     {
       "ticker": "CRL",
@@ -6974,22 +6974,6 @@
       "pe": 36.2
     },
     {
-      "ticker": "HON",
-      "name": "Honeywell",
-      "score": 48,
-      "fin": 11,
-      "val": 4,
-      "grw": 5,
-      "moat": 11,
-      "inf": 8,
-      "cons": 4,
-      "tim": 5,
-      "verdict": "회피",
-      "price": 232.21,
-      "upside": 6.7,
-      "pe": 18.5
-    },
-    {
       "ticker": "HUM",
       "name": "Humana",
       "score": 48,
@@ -7258,7 +7242,7 @@
       "tim": 0,
       "verdict": "회피",
       "price": 4.86,
-      "upside": 50.6,
+      "upside": 50.4,
       "pe": null
     },
     {
@@ -7996,6 +7980,22 @@
       "price": 149.21,
       "upside": 4.3,
       "pe": 33.5
+    },
+    {
+      "ticker": "HON",
+      "name": "Honeywell",
+      "score": 40,
+      "fin": 11,
+      "val": 4,
+      "grw": 5,
+      "moat": 11,
+      "inf": 5,
+      "cons": 4,
+      "tim": 0,
+      "verdict": "회피",
+      "price": 232.21,
+      "upside": 6.7,
+      "pe": 18.5
     },
     {
       "ticker": "PSKY",

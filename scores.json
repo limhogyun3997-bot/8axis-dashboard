@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-07-04T00:11:03.011269+00:00",
-  "last_updated_kst": "2026-07-04 09:11 KST",
+  "last_updated": "2026-07-05T00:07:23.581918+00:00",
+  "last_updated_kst": "2026-07-05 09:07 KST",
   "version": "scores-1.0",
   "basis": "yfinance 펀더멘털 · 자산네제곱 2·3·6단계 채점 · 해자/변곡점은 프록시(★)",
   "scoring": {
@@ -58,24 +58,8 @@
       "tim": 5,
       "verdict": "강력매수",
       "price": 434.16,
-      "upside": 12.3,
+      "upside": 12.9,
       "pe": 37.7
-    },
-    {
-      "ticker": "PTC",
-      "name": "PTC Inc.",
-      "score": 88,
-      "fin": 22,
-      "val": 15,
-      "grw": 20,
-      "moat": 15,
-      "inf": 7,
-      "cons": 9,
-      "tim": 0,
-      "verdict": "강력매수",
-      "price": 124.55,
-      "upside": 43.9,
-      "pe": 12.0
     },
     {
       "ticker": "WDC",
@@ -124,6 +108,22 @@
       "price": 582.9,
       "upside": 42.1,
       "pe": 21.2
+    },
+    {
+      "ticker": "PTC",
+      "name": "PTC Inc.",
+      "score": 87,
+      "fin": 22,
+      "val": 14,
+      "grw": 20,
+      "moat": 15,
+      "inf": 7,
+      "cons": 9,
+      "tim": 0,
+      "verdict": "강력매수",
+      "price": 124.55,
+      "upside": 43.9,
+      "pe": 12.0
     },
     {
       "ticker": "INCY",
@@ -332,6 +332,22 @@
       "price": 270.41,
       "upside": 13.2,
       "pe": 62.9
+    },
+    {
+      "ticker": "TER",
+      "name": "Teradyne",
+      "score": 82,
+      "fin": 25,
+      "val": 5,
+      "grw": 20,
+      "moat": 13,
+      "inf": 7,
+      "cons": 10,
+      "tim": 2,
+      "verdict": "강력매수",
+      "price": 369.09,
+      "upside": 12.9,
+      "pe": 68.5
     },
     {
       "ticker": "V",
@@ -556,38 +572,6 @@
       "price": 97.6,
       "upside": -8.1,
       "pe": 47.1
-    },
-    {
-      "ticker": "NFLX",
-      "name": "Netflix",
-      "score": 80,
-      "fin": 22,
-      "val": 10,
-      "grw": 18,
-      "moat": 13,
-      "inf": 7,
-      "cons": 10,
-      "tim": 0,
-      "verdict": "강력매수",
-      "price": 77.65,
-      "upside": 46.7,
-      "pe": 25.0
-    },
-    {
-      "ticker": "TER",
-      "name": "Teradyne",
-      "score": 80,
-      "fin": 25,
-      "val": 3,
-      "grw": 20,
-      "moat": 13,
-      "inf": 7,
-      "cons": 10,
-      "tim": 2,
-      "verdict": "강력매수",
-      "price": 369.09,
-      "upside": 12.9,
-      "pe": 68.5
     },
     {
       "ticker": "APH",
@@ -844,6 +828,22 @@
       "price": 1288.16,
       "upside": 38.9,
       "pe": 92.6
+    },
+    {
+      "ticker": "NFLX",
+      "name": "Netflix",
+      "score": 78,
+      "fin": 22,
+      "val": 8,
+      "grw": 18,
+      "moat": 13,
+      "inf": 7,
+      "cons": 10,
+      "tim": 0,
+      "verdict": "매수",
+      "price": 77.65,
+      "upside": 46.7,
+      "pe": 25.0
     },
     {
       "ticker": "NOW",
@@ -2398,22 +2398,6 @@
       "pe": 21.3
     },
     {
-      "ticker": "SYK",
-      "name": "Stryker Corporation",
-      "score": 69,
-      "fin": 19,
-      "val": 5,
-      "grw": 12,
-      "moat": 11,
-      "inf": 10,
-      "cons": 10,
-      "tim": 2,
-      "verdict": "매수",
-      "price": 326.54,
-      "upside": 18.5,
-      "pe": 37.8
-    },
-    {
       "ticker": "TDY",
       "name": "Teledyne Technologies",
       "score": 69,
@@ -2538,7 +2522,7 @@
       "tim": 5,
       "verdict": "매수",
       "price": 963.53,
-      "upside": -1.3,
+      "upside": -0.6,
       "pe": 48.1
     },
     {
@@ -2750,20 +2734,20 @@
       "pe": 22.7
     },
     {
-      "ticker": "STE",
-      "name": "Steris",
+      "ticker": "SYK",
+      "name": "Stryker Corporation",
       "score": 67,
-      "fin": 21,
-      "val": 4,
-      "grw": 14,
-      "moat": 7,
+      "fin": 19,
+      "val": 3,
+      "grw": 12,
+      "moat": 11,
       "inf": 10,
-      "cons": 9,
+      "cons": 10,
       "tim": 2,
       "verdict": "매수",
-      "price": 218.2,
-      "upside": 17.7,
-      "pe": 27.6
+      "price": 326.54,
+      "upside": 18.5,
+      "pe": 37.8
     },
     {
       "ticker": "TKO",
@@ -2780,22 +2764,6 @@
       "price": 194.42,
       "upside": 20.6,
       "pe": 72.5
-    },
-    {
-      "ticker": "TYL",
-      "name": "Tyler Technologies",
-      "score": 67,
-      "fin": 24,
-      "val": 8,
-      "grw": 11,
-      "moat": 4,
-      "inf": 10,
-      "cons": 8,
-      "tim": 2,
-      "verdict": "매수",
-      "price": 318.1,
-      "upside": 37.5,
-      "pe": 43.9
     },
     {
       "ticker": "BIIB",
@@ -3166,6 +3134,22 @@
       "pe": 18.5
     },
     {
+      "ticker": "STE",
+      "name": "Steris",
+      "score": 65,
+      "fin": 21,
+      "val": 4,
+      "grw": 14,
+      "moat": 7,
+      "inf": 10,
+      "cons": 7,
+      "tim": 2,
+      "verdict": "매수",
+      "price": 218.2,
+      "upside": 17.7,
+      "pe": 27.6
+    },
+    {
       "ticker": "TDG",
       "name": "TransDigm Group",
       "score": 65,
@@ -3180,6 +3164,22 @@
       "price": 1348.49,
       "upside": 13.1,
       "pe": 42.0
+    },
+    {
+      "ticker": "TYL",
+      "name": "Tyler Technologies",
+      "score": 65,
+      "fin": 24,
+      "val": 6,
+      "grw": 11,
+      "moat": 4,
+      "inf": 10,
+      "cons": 8,
+      "tim": 2,
+      "verdict": "매수",
+      "price": 318.1,
+      "upside": 37.5,
+      "pe": 43.9
     },
     {
       "ticker": "UBER",
@@ -3674,7 +3674,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 377.52,
-      "upside": -5.1,
+      "upside": -4.0,
       "pe": 47.0
     },
     {
@@ -4138,7 +4138,7 @@
       "tim": 4,
       "verdict": "관망",
       "price": 112.73,
-      "upside": -7.0,
+      "upside": -6.4,
       "pe": 54.7
     },
     {
@@ -5226,7 +5226,7 @@
       "tim": 0,
       "verdict": "관망",
       "price": 137.47,
-      "upside": 27.0,
+      "upside": 24.4,
       "pe": 13.1
     },
     {
@@ -5356,22 +5356,6 @@
       "price": 1308.43,
       "upside": 0.2,
       "pe": 30.8
-    },
-    {
-      "ticker": "AMCR",
-      "name": "Amcor",
-      "score": 55,
-      "fin": 9,
-      "val": 5,
-      "grw": 13,
-      "moat": 4,
-      "inf": 10,
-      "cons": 10,
-      "tim": 4,
-      "verdict": "관망",
-      "price": 45.0,
-      "upside": 7.1,
-      "pe": 36.0
     },
     {
       "ticker": "AEE",
@@ -5532,6 +5516,22 @@
       "price": 95.4,
       "upside": 22.3,
       "pe": 26.7
+    },
+    {
+      "ticker": "AMCR",
+      "name": "Amcor",
+      "score": 54,
+      "fin": 9,
+      "val": 5,
+      "grw": 13,
+      "moat": 4,
+      "inf": 10,
+      "cons": 9,
+      "tim": 4,
+      "verdict": "관망",
+      "price": 45.0,
+      "upside": 7.1,
+      "pe": 36.0
     },
     {
       "ticker": "BA",
@@ -5882,7 +5882,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 104.27,
-      "upside": 1.9,
+      "upside": 1.6,
       "pe": 79.6
     },
     {
@@ -6506,7 +6506,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 78.83,
-      "upside": 16.0,
+      "upside": 16.3,
       "pe": 61.6
     },
     {
@@ -6698,7 +6698,7 @@
       "tim": 2,
       "verdict": "관망",
       "price": 100.46,
-      "upside": 11.3,
+      "upside": 13.6,
       "pe": null
     },
     {
@@ -7546,7 +7546,7 @@
       "tim": 0,
       "verdict": "회피",
       "price": 165.48,
-      "upside": 38.6,
+      "upside": 38.5,
       "pe": 61.1
     },
     {
@@ -7786,7 +7786,7 @@
       "tim": 2,
       "verdict": "회피",
       "price": 229.86,
-      "upside": 5.0,
+      "upside": 4.6,
       "pe": 18.3
     },
     {

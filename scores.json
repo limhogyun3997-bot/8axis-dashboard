@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-07-05T00:07:23.581918+00:00",
-  "last_updated_kst": "2026-07-05 09:07 KST",
+  "last_updated": "2026-07-06T00:13:36.833907+00:00",
+  "last_updated_kst": "2026-07-06 09:13 KST",
   "version": "scores-1.0",
   "basis": "yfinance 펀더멘털 · 자산네제곱 2·3·6단계 채점 · 해자/변곡점은 프록시(★)",
   "scoring": {
@@ -302,6 +302,22 @@
       "pe": 26.2
     },
     {
+      "ticker": "APP",
+      "name": "AppLovin",
+      "score": 82,
+      "fin": 18,
+      "val": 7,
+      "grw": 20,
+      "moat": 15,
+      "inf": 10,
+      "cons": 10,
+      "tim": 2,
+      "verdict": "강력매수",
+      "price": 527.06,
+      "upside": 24.2,
+      "pe": 45.9
+    },
+    {
       "ticker": "ANET",
       "name": "Arista Networks",
       "score": 82,
@@ -460,22 +476,6 @@
       "price": 120.88,
       "upside": -7.0,
       "pe": 13.8
-    },
-    {
-      "ticker": "APP",
-      "name": "AppLovin",
-      "score": 80,
-      "fin": 18,
-      "val": 5,
-      "grw": 20,
-      "moat": 15,
-      "inf": 10,
-      "cons": 10,
-      "tim": 2,
-      "verdict": "강력매수",
-      "price": 527.06,
-      "upside": 24.2,
-      "pe": 45.9
     },
     {
       "ticker": "BKNG",
@@ -2686,6 +2686,22 @@
       "pe": 42.7
     },
     {
+      "ticker": "MRVL",
+      "name": "Marvell Technology",
+      "score": 67,
+      "fin": 21,
+      "val": 4,
+      "grw": 13,
+      "moat": 11,
+      "inf": 8,
+      "cons": 5,
+      "tim": 5,
+      "verdict": "매수",
+      "price": 245.29,
+      "upside": 1.6,
+      "pe": 84.0
+    },
+    {
       "ticker": "MSCI",
       "name": "MSCI Inc.",
       "score": 67,
@@ -3086,22 +3102,6 @@
       "pe": 14.1
     },
     {
-      "ticker": "MRVL",
-      "name": "Marvell Technology",
-      "score": 65,
-      "fin": 21,
-      "val": 2,
-      "grw": 13,
-      "moat": 11,
-      "inf": 8,
-      "cons": 5,
-      "tim": 5,
-      "verdict": "매수",
-      "price": 245.29,
-      "upside": 1.6,
-      "pe": 84.0
-    },
-    {
       "ticker": "MS",
       "name": "Morgan Stanley",
       "score": 65,
@@ -3276,22 +3276,6 @@
       "price": 30.0,
       "upside": 58.3,
       "pe": 428.6
-    },
-    {
-      "ticker": "CRWD",
-      "name": "CrowdStrike",
-      "score": 64,
-      "fin": 20,
-      "val": 2,
-      "grw": 16,
-      "moat": 6,
-      "inf": 8,
-      "cons": 7,
-      "tim": 5,
-      "verdict": "관망",
-      "price": 193.98,
-      "upside": -7.4,
-      "pe": null
     },
     {
       "ticker": "DVA",
@@ -3916,6 +3900,22 @@
       "price": 166.97,
       "upside": 20.0,
       "pe": 18.8
+    },
+    {
+      "ticker": "CRWD",
+      "name": "CrowdStrike",
+      "score": 62,
+      "fin": 20,
+      "val": 0,
+      "grw": 16,
+      "moat": 6,
+      "inf": 8,
+      "cons": 7,
+      "tim": 5,
+      "verdict": "관망",
+      "price": 193.98,
+      "upside": -7.4,
+      "pe": null
     },
     {
       "ticker": "CSX",
@@ -5114,7 +5114,7 @@
       "tim": 4,
       "verdict": "관망",
       "price": 81.62,
-      "upside": 9.6,
+      "upside": 9.9,
       "pe": 18.1
     },
     {
@@ -5370,7 +5370,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 115.02,
-      "upside": 4.5,
+      "upside": 5.0,
       "pe": 20.7
     },
     {
@@ -5386,7 +5386,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 129.6,
-      "upside": 6.5,
+      "upside": 6.9,
       "pe": 19.9
     },
     {
@@ -5450,7 +5450,7 @@
       "tim": 2,
       "verdict": "관망",
       "price": 60.91,
-      "upside": 10.2,
+      "upside": 10.4,
       "pe": 30.2
     },
     {
@@ -5594,7 +5594,7 @@
       "tim": 4,
       "verdict": "관망",
       "price": 74.44,
-      "upside": -2.6,
+      "upside": -2.2,
       "pe": 15.9
     },
     {
@@ -5754,7 +5754,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 113.99,
-      "upside": -3.4,
+      "upside": -3.1,
       "pe": 19.2
     },
     {
@@ -6058,7 +6058,7 @@
       "tim": 4,
       "verdict": "관망",
       "price": 48.53,
-      "upside": 7.6,
+      "upside": 7.9,
       "pe": 26.4
     },
     {
@@ -6234,7 +6234,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 138.51,
-      "upside": 4.8,
+      "upside": 5.0,
       "pe": 20.5
     },
     {
@@ -6538,7 +6538,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 115.11,
-      "upside": 6.3,
+      "upside": 6.6,
       "pe": 29.3
     },
     {
@@ -7086,6 +7086,22 @@
       "pe": 34.1
     },
     {
+      "ticker": "NCLH",
+      "name": "Norwegian Cruise Line Holdings",
+      "score": 48,
+      "fin": 2,
+      "val": 9,
+      "grw": 10,
+      "moat": 11,
+      "inf": 8,
+      "cons": 6,
+      "tim": 2,
+      "verdict": "회피",
+      "price": 19.78,
+      "upside": 9.1,
+      "pe": 16.0
+    },
+    {
       "ticker": "TSN",
       "name": "Tyson Foods",
       "score": 48,
@@ -7114,7 +7130,7 @@
       "tim": 5,
       "verdict": "회피",
       "price": 81.96,
-      "upside": 11.7,
+      "upside": 12.0,
       "pe": 23.6
     },
     {
@@ -7198,22 +7214,6 @@
       "pe": 26.4
     },
     {
-      "ticker": "NCLH",
-      "name": "Norwegian Cruise Line Holdings",
-      "score": 47,
-      "fin": 2,
-      "val": 8,
-      "grw": 10,
-      "moat": 11,
-      "inf": 8,
-      "cons": 6,
-      "tim": 2,
-      "verdict": "회피",
-      "price": 19.78,
-      "upside": 9.1,
-      "pe": 16.0
-    },
-    {
       "ticker": "Q",
       "name": "Qnity Electronics",
       "score": 47,
@@ -7292,22 +7292,6 @@
       "price": 40.47,
       "upside": 49.9,
       "pe": 11.3
-    },
-    {
-      "ticker": "HD",
-      "name": "Home Depot (The)",
-      "score": 46,
-      "fin": 9,
-      "val": 3,
-      "grw": 5,
-      "moat": 13,
-      "inf": 8,
-      "cons": 4,
-      "tim": 4,
-      "verdict": "회피",
-      "price": 357.9,
-      "upside": 3.5,
-      "pe": 25.4
     },
     {
       "ticker": "IFF",
@@ -7598,6 +7582,22 @@
       "pe": 26.1
     },
     {
+      "ticker": "HD",
+      "name": "Home Depot (The)",
+      "score": 44,
+      "fin": 9,
+      "val": 1,
+      "grw": 5,
+      "moat": 13,
+      "inf": 8,
+      "cons": 4,
+      "tim": 4,
+      "verdict": "회피",
+      "price": 357.9,
+      "upside": 3.5,
+      "pe": 25.4
+    },
+    {
       "ticker": "ODFL",
       "name": "Old Dominion",
       "score": 44,
@@ -7802,7 +7802,7 @@
       "tim": 5,
       "verdict": "회피",
       "price": 97.98,
-      "upside": 3.2,
+      "upside": 3.5,
       "pe": 25.1
     },
     {
@@ -7946,7 +7946,7 @@
       "tim": 5,
       "verdict": "회피",
       "price": 69.75,
-      "upside": -0.6,
+      "upside": -0.2,
       "pe": 20.6
     },
     {
@@ -8170,7 +8170,7 @@
       "tim": 5,
       "verdict": "회피",
       "price": 154.06,
-      "upside": 3.6,
+      "upside": 4.0,
       "pe": 25.3
     },
     {

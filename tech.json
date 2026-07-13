@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-07-12T00:06:32.613181+00:00",
-  "last_updated_kst": "2026-07-12 09:06 KST",
+  "last_updated": "2026-07-13T00:06:26.362817+00:00",
+  "last_updated_kst": "2026-07-13 09:06 KST",
   "version": "tech-2.0",
   "universe": "S&P 500",
   "basis": "yfinance 일봉(1년) · 기술적 분석 2강 4대 축 · 유동성은 캔들 프록시(★)",
@@ -10,7 +10,7 @@
     "시간": "RSI 에너지",
     "유동성": "꼬리 사냥 프록시"
   },
-  "count": 2756,
+  "count": 2757,
   "stocks": [
     {
       "struct": 2,
@@ -1234,6 +1234,24 @@
       "range_pct": 21,
       "ticker": "ACVA",
       "name": "ACV Auctions Inc. Class A Common Stock",
+      "sector": "Russell2K"
+    },
+    {
+      "struct": 2,
+      "price": 2,
+      "time": 1,
+      "liq": 2,
+      "score": 7,
+      "verdict": "적극 진입",
+      "d_struct": "상승추세(고점·저점 상승)",
+      "d_price": "범위 하단(33%)·싸다",
+      "d_time": "중립(RSI 60)",
+      "d_liq": "긴 아래꼬리+회복(사냥 완료 가능)",
+      "close": 8.83,
+      "rsi": 60.2,
+      "range_pct": 33,
+      "ticker": "SVC",
+      "name": "Service Properties Trust Common Shares o",
       "sector": "Russell2K"
     },
     {
@@ -3088,24 +3106,6 @@
       "range_pct": 32,
       "ticker": "MANH",
       "name": "Manhattan Associates",
-      "sector": "MidCap"
-    },
-    {
-      "struct": 1,
-      "price": 1,
-      "time": 2,
-      "liq": 2,
-      "score": 6,
-      "verdict": "분할 진입",
-      "d_struct": "횡보",
-      "d_price": "범위 중간(36%)",
-      "d_time": "과매도(RSI 26)·에너지 축적",
-      "d_liq": "긴 아래꼬리+회복(사냥 완료 가능)",
-      "close": 135.67,
-      "rsi": 26.4,
-      "range_pct": 36,
-      "ticker": "MIDD",
-      "name": "Middleby",
       "sector": "MidCap"
     },
     {
@@ -13466,6 +13466,24 @@
       "score": 5,
       "verdict": "분할 진입",
       "d_struct": "상승추세(정배열)",
+      "d_price": "범위 상단(84%)·비싸다",
+      "d_time": "중립(RSI 46)",
+      "d_liq": "긴 아래꼬리+회복(사냥 완료 가능)",
+      "close": 135.67,
+      "rsi": 46.1,
+      "range_pct": 84,
+      "ticker": "MIDD",
+      "name": "Middleby",
+      "sector": "MidCap"
+    },
+    {
+      "struct": 2,
+      "price": 0,
+      "time": 1,
+      "liq": 2,
+      "score": 5,
+      "verdict": "분할 진입",
+      "d_struct": "상승추세(정배열)",
       "d_price": "범위 상단(79%)·비싸다",
       "d_time": "중립(RSI 43)",
       "d_liq": "긴 아래꼬리+회복(사냥 완료 가능)",
@@ -16138,6 +16156,24 @@
       "range_pct": 89,
       "ticker": "FCPT",
       "name": "Mill Valley, California",
+      "sector": "SmallCap"
+    },
+    {
+      "struct": 0,
+      "price": 2,
+      "time": 1,
+      "liq": 2,
+      "score": 5,
+      "verdict": "분할 진입",
+      "d_struct": "하락추세(역배열)",
+      "d_price": "범위 하단(9%)·싸다",
+      "d_time": "중립(RSI 55)",
+      "d_liq": "긴 아래꼬리+회복(사냥 완료 가능)",
+      "close": 28.3,
+      "rsi": 54.7,
+      "range_pct": 9,
+      "ticker": "DMC",
+      "name": "Del Monte Corporation",
       "sector": "SmallCap"
     },
     {
@@ -40906,24 +40942,6 @@
       "range_pct": 44,
       "ticker": "GOLD",
       "name": "Gold.com Inc. Common Stock",
-      "sector": "Russell2K"
-    },
-    {
-      "struct": 2,
-      "price": 0,
-      "time": 0,
-      "liq": 2,
-      "score": 4,
-      "verdict": "신중·관망",
-      "d_struct": "상승추세(정배열)",
-      "d_price": "범위 상단(100%)·비싸다",
-      "d_time": "과매수(RSI 98)·에너지 소진",
-      "d_liq": "긴 아래꼬리+회복(사냥 완료 가능)",
-      "close": 8.83,
-      "rsi": 98.1,
-      "range_pct": 100,
-      "ticker": "SVC",
-      "name": "Service Properties Trust Common Shares o",
       "sector": "Russell2K"
     },
     {

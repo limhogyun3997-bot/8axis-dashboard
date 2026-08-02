@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-08-01T00:03:25.079426+00:00",
-  "last_updated_kst": "2026-08-01 09:03 KST",
+  "last_updated": "2026-08-01T23:58:39.219657+00:00",
+  "last_updated_kst": "2026-08-02 08:58 KST",
   "version": "v3.0",
   "prices": {
     "sp500": {
@@ -15,7 +15,7 @@
       "source": "Yahoo"
     },
     "nasdaq": {
-      "value": 25373.8535,
+      "value": 25373.8496,
       "prev": 25122.1797,
       "change_pct": 1.0,
       "change_5d_pct": 1.59,
@@ -37,13 +37,13 @@
       "source": "Yahoo"
     },
     "rut": {
-      "value": 2931.3391,
+      "value": 2931.3401,
       "prev": 2946.1001,
       "change_pct": -0.5,
       "change_5d_pct": 0.05,
       "change_1m_pct": -2.7,
       "high_1m": 3046.5901,
-      "low_1m": 2902.4678,
+      "low_1m": 2902.47,
       "trade_date": "2026-07-31",
       "source": "Yahoo"
     },
@@ -92,22 +92,22 @@
       "source": "Yahoo"
     },
     "dxy": {
-      "value": 99.803,
+      "value": 99.8,
       "prev": 100.01,
       "change_pct": -0.21,
-      "change_5d_pct": -1.64,
-      "change_1m_pct": -1.37,
+      "change_5d_pct": -1.65,
+      "change_1m_pct": -1.57,
       "high_1m": 101.64,
-      "low_1m": 99.692,
+      "low_1m": 99.69,
       "trade_date": "2026-07-31",
       "source": "Yahoo"
     },
     "wti": {
-      "value": 86.8,
+      "value": 84.67,
       "prev": 83.59,
-      "change_pct": 3.84,
-      "change_5d_pct": -2.81,
-      "change_1m_pct": 24.89,
+      "change_pct": 1.29,
+      "change_5d_pct": -5.2,
+      "change_1m_pct": 23.46,
       "high_1m": 93.5,
       "low_1m": 67.04,
       "trade_date": "2026-07-31",
@@ -118,51 +118,51 @@
       "prev": 89.03,
       "change_pct": 1.22,
       "change_5d_pct": -6.88,
-      "change_1m_pct": 23.59,
+      "change_1m_pct": 25.92,
       "high_1m": 102.01,
       "low_1m": 70.14,
       "trade_date": "2026-07-31",
       "source": "Yahoo"
     },
     "copper": {
-      "value": 6.5075,
+      "value": 6.436,
       "prev": 6.4445,
-      "change_pct": 0.98,
-      "change_5d_pct": 2.97,
-      "change_1m_pct": 5.09,
-      "high_1m": 6.545,
+      "change_pct": -0.13,
+      "change_5d_pct": 1.84,
+      "change_1m_pct": 5.1,
+      "high_1m": 6.521,
       "low_1m": 6.0155,
       "trade_date": "2026-07-31",
       "source": "Yahoo"
     },
     "gold": {
-      "value": 4098.6001,
+      "value": 4049.1001,
       "prev": 4100.1001,
-      "change_pct": -0.04,
-      "change_5d_pct": 0.76,
-      "change_1m_pct": 1.88,
+      "change_pct": -1.24,
+      "change_5d_pct": -0.45,
+      "change_1m_pct": -0.47,
       "high_1m": 4199.7002,
-      "low_1m": 3962.5,
+      "low_1m": 3963.0,
       "trade_date": "2026-07-31",
       "source": "Yahoo"
     },
     "silver": {
-      "value": 57.775,
+      "value": 57.591,
       "prev": 58.815,
-      "change_pct": -1.77,
-      "change_5d_pct": -1.5,
-      "change_1m_pct": -2.86,
+      "change_pct": -2.08,
+      "change_5d_pct": -1.82,
+      "change_1m_pct": -4.15,
       "high_1m": 62.62,
       "low_1m": 55.015,
       "trade_date": "2026-07-31",
       "source": "Yahoo"
     },
     "btc": {
-      "value": 62897.6484,
-      "prev": 64725.3086,
-      "change_pct": -2.82,
-      "change_5d_pct": -3.74,
-      "change_1m_pct": 4.82,
+      "value": 62763.8281,
+      "prev": 62813.7461,
+      "change_pct": -0.08,
+      "change_5d_pct": -1.51,
+      "change_1m_pct": 4.6,
       "high_1m": 66910.0625,
       "low_1m": 57747.7656,
       "trade_date": "2026-08-01",
@@ -1112,7 +1112,7 @@
       "freq": "분기"
     },
     "dollar": {
-      "rating": "중립",
+      "rating": "긍정",
       "metrics": [
         {
           "k": "DXY",
@@ -1122,18 +1122,18 @@
         },
         {
           "k": "WTI",
-          "v": "$86.80",
-          "tone": "neu",
+          "v": "$84.67",
+          "tone": "pos",
           "source": "Yahoo:CL=F"
         },
         {
           "k": "구리",
-          "v": "$6.51/lb",
+          "v": "$6.44/lb",
           "tone": "pos",
           "source": "Yahoo:HG=F"
         }
       ],
-      "summary": "DXY 99.8, WTI $87 — 혼재",
+      "summary": "DXY 99.8, WTI $85, 구리 $6.44 — 양호",
       "pdfTip": "유가 $100+ 지속 시 Fed 매파 회귀. 구리=닥터 코퍼.",
       "as_of": "2026-07-31",
       "freq": "매일"
@@ -1172,7 +1172,7 @@
       "metrics": [
         {
           "k": "이익증가 비율",
-          "v": "72%",
+          "v": "79%",
           "tone": "pos",
           "source": "yfinance 표본 29"
         },
@@ -1183,10 +1183,10 @@
           "source": "recommendationMean"
         }
       ],
-      "summary": "대형주 29곳 중 이익 증가 72%, 애널리스트 매수우위(평균 1.7)",
+      "summary": "대형주 29곳 중 이익 증가 79%, 애널리스트 매수우위(평균 1.7)",
       "pdfTip": "실적보다 가이던스. 대형주 표본 집계로 매일 자동 갱신.",
-      "last_manual": "2026-08-01",
-      "as_of": "2026-08-01",
+      "last_manual": "2026-08-02",
+      "as_of": "2026-08-02",
       "freq": "매일(집계)"
     },
     "margin": {
@@ -1194,21 +1194,21 @@
       "metrics": [
         {
           "k": "영업이익률(중앙값)",
-          "v": "32.4%",
+          "v": "33.0%",
           "tone": "pos",
           "source": "yfinance 표본"
         },
         {
           "k": "마진 확대 종목",
-          "v": "62%",
+          "v": "69%",
           "tone": "pos",
           "source": "이익성장>매출성장"
         }
       ],
-      "summary": "대형주 영업이익률 중앙값 32.4%, 마진 확대 종목 62%",
+      "summary": "대형주 영업이익률 중앙값 33.0%, 마진 확대 종목 69%",
       "pdfTip": "이익성장 > 매출성장 = 마진 확대(영업레버리지).",
-      "last_manual": "2026-08-01",
-      "as_of": "2026-08-01",
+      "last_manual": "2026-08-02",
+      "as_of": "2026-08-02",
       "freq": "매일(집계)"
     }
   },
@@ -1222,28 +1222,35 @@
         "direction": "up"
       },
       {
+        "axis": "dollar",
+        "from": "중립",
+        "to": "긍정",
+        "direction": "up"
+      },
+      {
         "axis": "vix",
         "from": "중립",
         "to": "긍정",
         "direction": "up"
       }
     ],
-    "count": 2,
+    "count": 3,
     "is_inflection": false,
-    "summary": "2개 축 변동",
+    "summary": "3개 축 변동",
     "first_run": false
   },
   "action": {
-    "signal": "신중 매수",
-    "level": "cautious_buy",
-    "confidence": "중간",
-    "cash_ratio": "20~30%",
-    "reason": "긍정 3 / 부정 0 — 강세 우위 (4축 미달)",
-    "backtest_note": "백테스트: 강세 3 → 3M 후 평균 +2.02%, 분할 매수 권장",
-    "allocation": "대형 우량주 50% + 방어주 20% + 현금 20~30%",
+    "signal": "매수 권장",
+    "level": "buy",
+    "confidence": "높음",
+    "cash_ratio": "10~20%",
+    "reason": "긍정 신호 4개 — 강세장 (4-4-반반 충족)",
+    "backtest_note": "백테스트: 강세 4+ → 3M 후 71.7% 확률 상승, 평균 +2.46%",
+    "allocation": "대형 우량주 60% + 성장주 20% + 현금 10~20%",
     "contrarian": null,
     "buy_triggers": [],
     "sell_triggers": [
+      "달러/원자재 긍정→중립 전환",
       "VIX 긍정→중립 전환"
     ],
     "vix_state": null
@@ -1260,12 +1267,12 @@
     }
   ],
   "summary": {
-    "positive": 3,
-    "neutral": 5,
+    "positive": 4,
+    "neutral": 4,
     "negative": 0,
-    "score": 3,
-    "phase": "강세 우위 횡보",
-    "strategy": "중립 + 약공격"
+    "score": 4,
+    "phase": "강세장",
+    "strategy": "공격적"
   },
   "data_sources": {
     "yahoo": "yfinance + Stooq fallback — 시세 38개",

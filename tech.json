@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-08-22T23:31:43.280945+00:00",
-  "last_updated_kst": "2026-08-23 08:31 KST",
+  "last_updated": "2026-08-23T23:32:04.349993+00:00",
+  "last_updated_kst": "2026-08-24 08:32 KST",
   "version": "tech-2.0",
   "universe": "S&P 500",
   "basis": "yfinance 일봉(1년) · 기술적 분석 2강 4대 축 · 유동성은 캔들 프록시(★)",
@@ -3610,6 +3610,24 @@
       "range_pct": 67,
       "ticker": "HXL",
       "name": "Hexcel",
+      "sector": "MidCap"
+    },
+    {
+      "struct": 2,
+      "price": 1,
+      "time": 2,
+      "liq": 1,
+      "score": 6,
+      "verdict": "분할 진입",
+      "d_struct": "상승추세(고점·저점 상승)",
+      "d_price": "범위 중간(64%)",
+      "d_time": "과매도(RSI 33)·에너지 축적",
+      "d_liq": "중립",
+      "close": 613.26,
+      "rsi": 32.8,
+      "range_pct": 64,
+      "ticker": "IESC",
+      "name": "IES Holdings",
       "sector": "MidCap"
     },
     {
@@ -31798,24 +31816,6 @@
       "range_pct": 83,
       "ticker": "HWC",
       "name": "Hancock Whitney",
-      "sector": "MidCap"
-    },
-    {
-      "struct": 1,
-      "price": 0,
-      "time": 1,
-      "liq": 2,
-      "score": 4,
-      "verdict": "신중·관망",
-      "d_struct": "횡보",
-      "d_price": "범위 상단(76%)·비싸다",
-      "d_time": "중립(RSI 44)",
-      "d_liq": "긴 아래꼬리+회복(사냥 완료 가능)",
-      "close": 685.04,
-      "rsi": 43.6,
-      "range_pct": 76,
-      "ticker": "IESC",
-      "name": "IES Holdings",
       "sector": "MidCap"
     },
     {

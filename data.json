@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-08-22T23:23:01.728728+00:00",
-  "last_updated_kst": "2026-08-23 08:23 KST",
+  "last_updated": "2026-08-23T23:23:16.723763+00:00",
+  "last_updated_kst": "2026-08-24 08:23 KST",
   "version": "v3.0",
   "prices": {
     "sp500": {
@@ -92,80 +92,80 @@
       "source": "Yahoo"
     },
     "dxy": {
-      "value": 98.8,
-      "prev": 98.9,
-      "change_pct": -0.1,
-      "change_5d_pct": -0.87,
-      "change_1m_pct": -2.31,
+      "value": 98.861,
+      "prev": 98.8,
+      "change_pct": 0.06,
+      "change_5d_pct": -0.78,
+      "change_1m_pct": -2.53,
       "high_1m": 101.64,
       "low_1m": 98.56,
-      "trade_date": "2026-08-21",
+      "trade_date": "2026-08-23",
       "source": "Yahoo"
     },
     "wti": {
-      "value": 87.06,
-      "prev": 87.83,
-      "change_pct": -0.88,
-      "change_5d_pct": 5.66,
-      "change_1m_pct": 0.26,
+      "value": 86.13,
+      "prev": 87.06,
+      "change_pct": -1.07,
+      "change_5d_pct": 1.93,
+      "change_1m_pct": -6.57,
       "high_1m": 93.5,
       "low_1m": 74.24,
-      "trade_date": "2026-08-21",
+      "trade_date": "2026-08-23",
       "source": "Yahoo"
     },
     "brent": {
-      "value": 94.39,
-      "prev": 93.78,
-      "change_pct": 0.65,
-      "change_5d_pct": 6.63,
-      "change_1m_pct": 0.34,
+      "value": 93.43,
+      "prev": 94.39,
+      "change_pct": -1.02,
+      "change_5d_pct": 2.82,
+      "change_1m_pct": -7.21,
       "high_1m": 102.01,
       "low_1m": 78.13,
-      "trade_date": "2026-08-21",
+      "trade_date": "2026-08-23",
       "source": "Yahoo"
     },
     "copper": {
-      "value": 6.5795,
-      "prev": 6.46,
-      "change_pct": 1.85,
-      "change_5d_pct": -0.3,
-      "change_1m_pct": 1.99,
+      "value": 6.571,
+      "prev": 6.5795,
+      "change_pct": -0.13,
+      "change_5d_pct": -0.5,
+      "change_1m_pct": 4.22,
       "high_1m": 6.728,
       "low_1m": 6.2535,
-      "trade_date": "2026-08-21",
+      "trade_date": "2026-08-23",
       "source": "Yahoo"
     },
     "gold": {
-      "value": 4624.1001,
-      "prev": 4516.2998,
-      "change_pct": 2.39,
-      "change_5d_pct": 5.56,
-      "change_1m_pct": 11.51,
-      "high_1m": 4624.1001,
+      "value": 4665.2002,
+      "prev": 4624.1001,
+      "change_pct": 0.89,
+      "change_5d_pct": 5.6,
+      "change_1m_pct": 15.29,
+      "high_1m": 4684.0,
       "low_1m": 4017.8999,
-      "trade_date": "2026-08-21",
+      "trade_date": "2026-08-23",
       "source": "Yahoo"
     },
     "silver": {
-      "value": 69.466,
-      "prev": 68.026,
-      "change_pct": 2.12,
-      "change_5d_pct": 6.89,
-      "change_1m_pct": 15.74,
+      "value": 69.0,
+      "prev": 69.466,
+      "change_pct": -0.67,
+      "change_5d_pct": 4.35,
+      "change_1m_pct": 19.38,
       "high_1m": 69.85,
       "low_1m": 57.225,
-      "trade_date": "2026-08-21",
+      "trade_date": "2026-08-23",
       "source": "Yahoo"
     },
     "btc": {
-      "value": 76980.6484,
-      "prev": 78335.1875,
-      "change_pct": -1.73,
-      "change_5d_pct": 19.34,
-      "change_1m_pct": 16.46,
+      "value": 77496.3516,
+      "prev": 77083.4141,
+      "change_pct": 0.54,
+      "change_5d_pct": 19.81,
+      "change_1m_pct": 19.14,
       "high_1m": 79463.7109,
       "low_1m": 62226.5781,
-      "trade_date": "2026-08-22",
+      "trade_date": "2026-08-23",
       "source": "Yahoo"
     },
     "qqq": {
@@ -538,8 +538,8 @@
   },
   "spread_2s10s_history": [
     {
-      "date": "2021-08-23",
-      "spread": 1.02
+      "date": "2021-08-24",
+      "spread": 1.05
     },
     {
       "date": "2021-09-01",
@@ -1120,24 +1120,24 @@
       "metrics": [
         {
           "k": "DXY",
-          "v": "98.80",
+          "v": "98.86",
           "tone": "neu",
           "source": "Yahoo:DX-Y.NYB"
         },
         {
           "k": "WTI",
-          "v": "$87.06",
+          "v": "$86.13",
           "tone": "neu",
           "source": "Yahoo:CL=F"
         },
         {
           "k": "구리",
-          "v": "$6.58/lb",
+          "v": "$6.57/lb",
           "tone": "pos",
           "source": "Yahoo:HG=F"
         }
       ],
-      "summary": "DXY 98.8, WTI $87 — 혼재",
+      "summary": "DXY 98.9, WTI $86 — 혼재",
       "pdfTip": "유가 $100+ 지속 시 Fed 매파 회귀. 구리=닥터 코퍼.",
       "as_of": "2026-08-21",
       "freq": "매일"
@@ -1189,8 +1189,8 @@
       ],
       "summary": "대형주 29곳 중 이익 증가 83%, 애널리스트 매수우위(평균 1.7)",
       "pdfTip": "실적보다 가이던스. 대형주 표본 집계로 매일 자동 갱신.",
-      "last_manual": "2026-08-23",
-      "as_of": "2026-08-23",
+      "last_manual": "2026-08-24",
+      "as_of": "2026-08-24",
       "freq": "매일(집계)"
     },
     "margin": {
@@ -1211,8 +1211,8 @@
       ],
       "summary": "대형주 영업이익률 중앙값 33.0%, 마진 확대 종목 66%",
       "pdfTip": "이익성장 > 매출성장 = 마진 확대(영업레버리지).",
-      "last_manual": "2026-08-23",
-      "as_of": "2026-08-23",
+      "last_manual": "2026-08-24",
+      "as_of": "2026-08-24",
       "freq": "매일(집계)"
     }
   },

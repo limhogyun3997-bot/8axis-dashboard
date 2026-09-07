@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-09-06T00:45:39.513880+00:00",
-  "last_updated_kst": "2026-09-06 09:45 KST",
+  "last_updated": "2026-09-07T00:50:14.970360+00:00",
+  "last_updated_kst": "2026-09-07 09:50 KST",
   "version": "scores-1.0",
   "basis": "yfinance 펀더멘털 · 자산네제곱 2·3·6단계 채점 · 해자/변곡점은 프록시(★)",
   "scoring": {
@@ -60,6 +60,22 @@
       "price": 428.91,
       "upside": 28.8,
       "pe": 31.8
+    },
+    {
+      "ticker": "WDC",
+      "name": "Western Digital",
+      "score": 91,
+      "fin": 25,
+      "val": 14,
+      "grw": 20,
+      "moat": 13,
+      "inf": 7,
+      "cons": 10,
+      "tim": 2,
+      "verdict": "강력매수",
+      "price": 467.46,
+      "upside": 42.2,
+      "pe": 17.4
     },
     {
       "ticker": "GOOGL",
@@ -126,20 +142,20 @@
       "pe": 61.3
     },
     {
-      "ticker": "WDC",
-      "name": "Western Digital",
+      "ticker": "KEYS",
+      "name": "Keysight Technologies",
       "score": 88,
-      "fin": 25,
-      "val": 14,
+      "fin": 22,
+      "val": 8,
       "grw": 20,
       "moat": 13,
-      "inf": 7,
-      "cons": 7,
-      "tim": 2,
+      "inf": 10,
+      "cons": 10,
+      "tim": 5,
       "verdict": "강력매수",
-      "price": 467.46,
-      "upside": 42.2,
-      "pe": 17.4
+      "price": 327.21,
+      "upside": 26.9,
+      "pe": 44.3
     },
     {
       "ticker": "AMAT",
@@ -186,7 +202,7 @@
       "tim": 5,
       "verdict": "강력매수",
       "price": 126.75,
-      "upside": 0.3,
+      "upside": 0.8,
       "pe": 16.1
     },
     {
@@ -222,6 +238,22 @@
       "pe": 27.9
     },
     {
+      "ticker": "PLTR",
+      "name": "Palantir Technologies",
+      "score": 86,
+      "fin": 25,
+      "val": 3,
+      "grw": 20,
+      "moat": 15,
+      "inf": 10,
+      "cons": 9,
+      "tim": 4,
+      "verdict": "강력매수",
+      "price": 174.33,
+      "upside": 11.2,
+      "pe": 149.0
+    },
+    {
       "ticker": "ASML",
       "name": "ASML",
       "score": 86,
@@ -234,7 +266,7 @@
       "tim": 2,
       "verdict": "강력매수",
       "price": 1714.88,
-      "upside": 26.3,
+      "upside": 26.4,
       "pe": 58.1
     },
     {
@@ -270,22 +302,6 @@
       "pe": 24.6
     },
     {
-      "ticker": "KEYS",
-      "name": "Keysight Technologies",
-      "score": 85,
-      "fin": 22,
-      "val": 8,
-      "grw": 20,
-      "moat": 13,
-      "inf": 10,
-      "cons": 7,
-      "tim": 5,
-      "verdict": "강력매수",
-      "price": 327.21,
-      "upside": 26.9,
-      "pe": 44.3
-    },
-    {
       "ticker": "MPWR",
       "name": "Monolithic Power Systems",
       "score": 85,
@@ -300,22 +316,6 @@
       "price": 1223.86,
       "upside": 50.3,
       "pe": 74.6
-    },
-    {
-      "ticker": "PLTR",
-      "name": "Palantir Technologies",
-      "score": 85,
-      "fin": 25,
-      "val": 2,
-      "grw": 20,
-      "moat": 15,
-      "inf": 10,
-      "cons": 9,
-      "tim": 4,
-      "verdict": "강력매수",
-      "price": 174.33,
-      "upside": 10.0,
-      "pe": 149.0
     },
     {
       "ticker": "RDDT",
@@ -396,22 +396,6 @@
       "price": 1740.0,
       "upside": 22.1,
       "pe": 23.6
-    },
-    {
-      "ticker": "BLK",
-      "name": "BlackRock",
-      "score": 83,
-      "fin": 24,
-      "val": 7,
-      "grw": 20,
-      "moat": 7,
-      "inf": 10,
-      "cons": 10,
-      "tim": 5,
-      "verdict": "강력매수",
-      "price": 1122.29,
-      "upside": 17.7,
-      "pe": 26.9
     },
     {
       "ticker": "CVX",
@@ -650,7 +634,7 @@
       "tim": 5,
       "verdict": "강력매수",
       "price": 82.78,
-      "upside": 16.0,
+      "upside": 19.8,
       "pe": 41.4
     },
     {
@@ -682,8 +666,24 @@
       "tim": 5,
       "verdict": "강력매수",
       "price": 42.77,
-      "upside": 3.1,
+      "upside": 3.9,
       "pe": 9.0
+    },
+    {
+      "ticker": "BLK",
+      "name": "BlackRock",
+      "score": 80,
+      "fin": 24,
+      "val": 7,
+      "grw": 20,
+      "moat": 7,
+      "inf": 10,
+      "cons": 7,
+      "tim": 5,
+      "verdict": "강력매수",
+      "price": 1122.29,
+      "upside": 17.7,
+      "pe": 26.9
     },
     {
       "ticker": "CBOE",
@@ -814,6 +814,22 @@
       "pe": null
     },
     {
+      "ticker": "STX",
+      "name": "Seagate Technology",
+      "score": 79,
+      "fin": 18,
+      "val": 9,
+      "grw": 20,
+      "moat": 13,
+      "inf": 7,
+      "cons": 10,
+      "tim": 2,
+      "verdict": "매수",
+      "price": 849.28,
+      "upside": 32.5,
+      "pe": 61.0
+    },
+    {
       "ticker": "VRT",
       "name": "Vertiv",
       "score": 79,
@@ -926,22 +942,6 @@
       "pe": 13.5
     },
     {
-      "ticker": "BRK-B",
-      "name": "Berkshire Hathaway",
-      "score": 77,
-      "fin": 25,
-      "val": 5,
-      "grw": 16,
-      "moat": 7,
-      "inf": 10,
-      "cons": 9,
-      "tim": 5,
-      "verdict": "매수",
-      "price": 506.03,
-      "upside": 8.2,
-      "pe": 12.7
-    },
-    {
       "ticker": "BSX",
       "name": "Boston Scientific",
       "score": 77,
@@ -1006,22 +1006,6 @@
       "pe": 24.6
     },
     {
-      "ticker": "SMCI",
-      "name": "Supermicro",
-      "score": 77,
-      "fin": 14,
-      "val": 10,
-      "grw": 20,
-      "moat": 11,
-      "inf": 10,
-      "cons": 7,
-      "tim": 5,
-      "verdict": "매수",
-      "price": 39.59,
-      "upside": 7.0,
-      "pe": 12.1
-    },
-    {
       "ticker": "SE",
       "name": "Sea Ltd",
       "score": 77,
@@ -1057,10 +1041,10 @@
       "ticker": "CIEN",
       "name": "Ciena",
       "score": 76,
-      "fin": 19,
+      "fin": 21,
       "val": 10,
       "grw": 20,
-      "moat": 11,
+      "moat": 9,
       "inf": 7,
       "cons": 9,
       "tim": 0,
@@ -1116,22 +1100,6 @@
       "price": 227.84,
       "upside": 36.5,
       "pe": 19.5
-    },
-    {
-      "ticker": "STX",
-      "name": "Seagate Technology",
-      "score": 76,
-      "fin": 18,
-      "val": 9,
-      "grw": 20,
-      "moat": 13,
-      "inf": 7,
-      "cons": 7,
-      "tim": 2,
-      "verdict": "매수",
-      "price": 849.28,
-      "upside": 32.5,
-      "pe": 61.0
     },
     {
       "ticker": "TEL",
@@ -1214,6 +1182,22 @@
       "pe": 98.0
     },
     {
+      "ticker": "BRK-B",
+      "name": "Berkshire Hathaway",
+      "score": 75,
+      "fin": 25,
+      "val": 5,
+      "grw": 16,
+      "moat": 7,
+      "inf": 10,
+      "cons": 7,
+      "tim": 5,
+      "verdict": "매수",
+      "price": 506.03,
+      "upside": 8.2,
+      "pe": 12.7
+    },
+    {
       "ticker": "CSGP",
       "name": "CoStar Group",
       "score": 75,
@@ -1274,7 +1258,7 @@
       "tim": 5,
       "verdict": "매수",
       "price": 388.9,
-      "upside": -16.0,
+      "upside": -14.3,
       "pe": 13.5
     },
     {
@@ -1306,7 +1290,7 @@
       "tim": 5,
       "verdict": "매수",
       "price": 493.55,
-      "upside": 13.6,
+      "upside": 13.8,
       "pe": 31.4
     },
     {
@@ -1340,6 +1324,22 @@
       "price": 178.29,
       "upside": 4.3,
       "pe": 15.6
+    },
+    {
+      "ticker": "SMCI",
+      "name": "Supermicro",
+      "score": 75,
+      "fin": 14,
+      "val": 10,
+      "grw": 20,
+      "moat": 11,
+      "inf": 10,
+      "cons": 5,
+      "tim": 5,
+      "verdict": "매수",
+      "price": 39.59,
+      "upside": 7.0,
+      "pe": 12.1
     },
     {
       "ticker": "AFRM",
@@ -1468,6 +1468,22 @@
       "price": 156.29,
       "upside": 3.8,
       "pe": 55.2
+    },
+    {
+      "ticker": "GE",
+      "name": "GE Aerospace",
+      "score": 74,
+      "fin": 19,
+      "val": 3,
+      "grw": 20,
+      "moat": 13,
+      "inf": 7,
+      "cons": 10,
+      "tim": 2,
+      "verdict": "매수",
+      "price": 337.12,
+      "upside": 20.1,
+      "pe": 39.7
     },
     {
       "ticker": "HIG",
@@ -1710,22 +1726,6 @@
       "pe": 15.1
     },
     {
-      "ticker": "JPM",
-      "name": "JPMorgan Chase",
-      "score": 73,
-      "fin": 14,
-      "val": 6,
-      "grw": 20,
-      "moat": 9,
-      "inf": 10,
-      "cons": 9,
-      "tim": 5,
-      "verdict": "매수",
-      "price": 358.64,
-      "upside": 4.4,
-      "pe": 15.4
-    },
-    {
       "ticker": "LITE",
       "name": "Lumentum",
       "score": 73,
@@ -1740,22 +1740,6 @@
       "price": 881.25,
       "upside": 30.3,
       "pe": null
-    },
-    {
-      "ticker": "NDSN",
-      "name": "Nordson Corporation",
-      "score": 73,
-      "fin": 20,
-      "val": 2,
-      "grw": 16,
-      "moat": 11,
-      "inf": 10,
-      "cons": 9,
-      "tim": 5,
-      "verdict": "매수",
-      "price": 318.36,
-      "upside": 9.8,
-      "pe": 32.3
     },
     {
       "ticker": "ORCL",
@@ -1802,7 +1786,7 @@
       "tim": 4,
       "verdict": "매수",
       "price": 443.51,
-      "upside": 17.1,
+      "upside": 17.3,
       "pe": 27.0
     },
     {
@@ -1818,7 +1802,7 @@
       "tim": 4,
       "verdict": "매수",
       "price": 259.23,
-      "upside": 4.5,
+      "upside": 5.0,
       "pe": 23.8
     },
     {
@@ -1867,7 +1851,7 @@
       "verdict": "매수",
       "price": 157.12,
       "upside": 11.1,
-      "pe": 20.4
+      "pe": 20.6
     },
     {
       "ticker": "FIX",
@@ -1915,7 +1899,7 @@
       "verdict": "매수",
       "price": 174.27,
       "upside": 11.3,
-      "pe": 11.7
+      "pe": 11.6
     },
     {
       "ticker": "ISRG",
@@ -1994,7 +1978,7 @@
       "tim": 5,
       "verdict": "매수",
       "price": 96.31,
-      "upside": 17.7,
+      "upside": 18.4,
       "pe": 24.3
     },
     {
@@ -2106,7 +2090,7 @@
       "tim": 2,
       "verdict": "매수",
       "price": 109.51,
-      "upside": 44.6,
+      "upside": 46.6,
       "pe": 42.4
     },
     {
@@ -2126,20 +2110,36 @@
       "pe": 17.0
     },
     {
-      "ticker": "GE",
-      "name": "GE Aerospace",
+      "ticker": "JPM",
+      "name": "JPMorgan Chase",
       "score": 71,
-      "fin": 19,
-      "val": 3,
+      "fin": 14,
+      "val": 6,
       "grw": 20,
-      "moat": 13,
-      "inf": 7,
+      "moat": 9,
+      "inf": 10,
       "cons": 7,
-      "tim": 2,
+      "tim": 5,
       "verdict": "매수",
-      "price": 337.12,
-      "upside": 20.1,
-      "pe": 39.7
+      "price": 358.64,
+      "upside": 4.4,
+      "pe": 15.4
+    },
+    {
+      "ticker": "NDSN",
+      "name": "Nordson Corporation",
+      "score": 71,
+      "fin": 20,
+      "val": 2,
+      "grw": 16,
+      "moat": 11,
+      "inf": 10,
+      "cons": 7,
+      "tim": 5,
+      "verdict": "매수",
+      "price": 318.36,
+      "upside": 9.8,
+      "pe": 32.3
     },
     {
       "ticker": "NTRS",
@@ -2236,6 +2236,22 @@
       "price": 390.47,
       "upside": 11.7,
       "pe": 31.2
+    },
+    {
+      "ticker": "FICO",
+      "name": "Fair Isaac",
+      "score": 70,
+      "fin": 14,
+      "val": 11,
+      "grw": 20,
+      "moat": 9,
+      "inf": 7,
+      "cons": 9,
+      "tim": 0,
+      "verdict": "매수",
+      "price": 932.26,
+      "upside": 57.0,
+      "pe": 27.0
     },
     {
       "ticker": "FOX",
@@ -2350,22 +2366,6 @@
       "pe": 14.8
     },
     {
-      "ticker": "FICO",
-      "name": "Fair Isaac",
-      "score": 69,
-      "fin": 14,
-      "val": 10,
-      "grw": 20,
-      "moat": 9,
-      "inf": 7,
-      "cons": 9,
-      "tim": 0,
-      "verdict": "매수",
-      "price": 932.26,
-      "upside": 57.0,
-      "pe": 32.4
-    },
-    {
       "ticker": "GEN",
       "name": "Gen Digital",
       "score": 69,
@@ -2379,7 +2379,7 @@
       "verdict": "매수",
       "price": 30.65,
       "upside": 7.7,
-      "pe": 18.4
+      "pe": 17.9
     },
     {
       "ticker": "IDXX",
@@ -2474,7 +2474,7 @@
       "tim": 4,
       "verdict": "매수",
       "price": 564.12,
-      "upside": 10.6,
+      "upside": 10.7,
       "pe": 20.5
     },
     {
@@ -2571,7 +2571,7 @@
       "verdict": "매수",
       "price": 92.53,
       "upside": 18.5,
-      "pe": 16.6
+      "pe": 16.5
     },
     {
       "ticker": "HUM",
@@ -2602,7 +2602,7 @@
       "tim": 5,
       "verdict": "매수",
       "price": 122.11,
-      "upside": 2.7,
+      "upside": 1.0,
       "pe": 54.0
     },
     {
@@ -2714,7 +2714,7 @@
       "tim": 4,
       "verdict": "매수",
       "price": 161.26,
-      "upside": 15.7,
+      "upside": 15.8,
       "pe": 22.7
     },
     {
@@ -2730,7 +2730,7 @@
       "tim": 2,
       "verdict": "매수",
       "price": 332.7,
-      "upside": 23.7,
+      "upside": 21.9,
       "pe": 20.2
     },
     {
@@ -2747,7 +2747,7 @@
       "verdict": "매수",
       "price": 273.77,
       "upside": 11.6,
-      "pe": 37.9
+      "pe": 38.9
     },
     {
       "ticker": "PNC",
@@ -2779,7 +2779,7 @@
       "verdict": "매수",
       "price": 827.72,
       "upside": 1.5,
-      "pe": 20.9
+      "pe": 20.5
     },
     {
       "ticker": "ROP",
@@ -3180,22 +3180,6 @@
       "price": 216.88,
       "upside": 6.5,
       "pe": 20.8
-    },
-    {
-      "ticker": "FIS",
-      "name": "Fidelity National Information Services",
-      "score": 65,
-      "fin": 11,
-      "val": 13,
-      "grw": 16,
-      "moat": 11,
-      "inf": 8,
-      "cons": 4,
-      "tim": 2,
-      "verdict": "매수",
-      "price": 41.89,
-      "upside": 20.2,
-      "pe": 6.4
     },
     {
       "ticker": "GEHC",
@@ -4222,6 +4206,22 @@
       "pe": 15.4
     },
     {
+      "ticker": "FIS",
+      "name": "Fidelity National Information Services",
+      "score": 60,
+      "fin": 11,
+      "val": 13,
+      "grw": 16,
+      "moat": 11,
+      "inf": 5,
+      "cons": 4,
+      "tim": 0,
+      "verdict": "관망",
+      "price": 41.89,
+      "upside": 20.2,
+      "pe": 6.4
+    },
+    {
       "ticker": "HON",
       "name": "Honeywell Technologies",
       "score": 60,
@@ -4234,7 +4234,7 @@
       "tim": 0,
       "verdict": "관망",
       "price": 209.61,
-      "upside": 25.7,
+      "upside": 26.1,
       "pe": 8.1
     },
     {
@@ -4268,22 +4268,6 @@
       "price": 63.52,
       "upside": 7.6,
       "pe": null
-    },
-    {
-      "ticker": "MTB",
-      "name": "M&T Bank",
-      "score": 60,
-      "fin": 14,
-      "val": 9,
-      "grw": 14,
-      "moat": 7,
-      "inf": 7,
-      "cons": 7,
-      "tim": 2,
-      "verdict": "관망",
-      "price": 239.84,
-      "upside": 7.3,
-      "pe": 12.7
     },
     {
       "ticker": "MAS",
@@ -4394,7 +4378,7 @@
       "tim": 2,
       "verdict": "관망",
       "price": 169.8,
-      "upside": 21.7,
+      "upside": 21.5,
       "pe": null
     },
     {
@@ -4411,7 +4395,7 @@
       "verdict": "관망",
       "price": 2983.29,
       "upside": 32.1,
-      "pe": 20.4
+      "pe": 20.5
     },
     {
       "ticker": "BALL",
@@ -4475,7 +4459,7 @@
       "verdict": "관망",
       "price": 131.59,
       "upside": 29.2,
-      "pe": 56.2
+      "pe": 56.5
     },
     {
       "ticker": "ECL",
@@ -4570,7 +4554,7 @@
       "tim": 2,
       "verdict": "관망",
       "price": 31.4,
-      "upside": 14.5,
+      "upside": 14.8,
       "pe": 20.3
     },
     {
@@ -4782,22 +4766,6 @@
       "pe": 43.5
     },
     {
-      "ticker": "DASH",
-      "name": "DoorDash",
-      "score": 58,
-      "fin": 18,
-      "val": 3,
-      "grw": 13,
-      "moat": 6,
-      "inf": 8,
-      "cons": 5,
-      "tim": 5,
-      "verdict": "관망",
-      "price": 211.73,
-      "upside": 20.2,
-      "pe": 110.9
-    },
-    {
       "ticker": "EXE",
       "name": "Expand Energy",
       "score": 58,
@@ -4810,40 +4778,24 @@
       "tim": 2,
       "verdict": "관망",
       "price": 97.91,
-      "upside": 27.6,
+      "upside": 28.2,
       "pe": 8.4
     },
     {
-      "ticker": "HBAN",
-      "name": "Huntington Bancshares",
+      "ticker": "MTB",
+      "name": "M&T Bank",
       "score": 58,
       "fin": 14,
-      "val": 8,
-      "grw": 13,
-      "moat": 4,
+      "val": 9,
+      "grw": 14,
+      "moat": 7,
       "inf": 7,
-      "cons": 10,
+      "cons": 5,
       "tim": 2,
       "verdict": "관망",
-      "price": 17.03,
-      "upside": 19.2,
-      "pe": 13.1
-    },
-    {
-      "ticker": "PYPL",
-      "name": "PayPal",
-      "score": 58,
-      "fin": 19,
-      "val": 10,
-      "grw": 5,
-      "moat": 11,
-      "inf": 8,
-      "cons": 0,
-      "tim": 5,
-      "verdict": "관망",
-      "price": 54.96,
-      "upside": 3.8,
-      "pe": 10.4
+      "price": 239.84,
+      "upside": 7.3,
+      "pe": 12.7
     },
     {
       "ticker": "ROL",
@@ -4874,8 +4826,8 @@
       "tim": 4,
       "verdict": "관망",
       "price": 141.26,
-      "upside": -0.1,
-      "pe": 91.1
+      "upside": 0.4,
+      "pe": 88.3
     },
     {
       "ticker": "TMO",
@@ -4924,22 +4876,6 @@
       "price": 158.63,
       "upside": 31.5,
       "pe": 27.5
-    },
-    {
-      "ticker": "ELV",
-      "name": "Elevance Health",
-      "score": 57,
-      "fin": 18,
-      "val": 9,
-      "grw": 5,
-      "moat": 7,
-      "inf": 8,
-      "cons": 5,
-      "tim": 5,
-      "verdict": "관망",
-      "price": 407.5,
-      "upside": 10.2,
-      "pe": 18.0
     },
     {
       "ticker": "EQT",
@@ -5020,6 +4956,22 @@
       "price": 281.86,
       "upside": 47.4,
       "pe": 68.4
+    },
+    {
+      "ticker": "DASH",
+      "name": "DoorDash",
+      "score": 56,
+      "fin": 18,
+      "val": 1,
+      "grw": 13,
+      "moat": 6,
+      "inf": 8,
+      "cons": 5,
+      "tim": 5,
+      "verdict": "관망",
+      "price": 211.73,
+      "upside": 19.9,
+      "pe": 110.9
     },
     {
       "ticker": "GILD",
@@ -5246,6 +5198,22 @@
       "pe": 14.8
     },
     {
+      "ticker": "HBAN",
+      "name": "Huntington Bancshares",
+      "score": 55,
+      "fin": 14,
+      "val": 8,
+      "grw": 13,
+      "moat": 4,
+      "inf": 7,
+      "cons": 7,
+      "tim": 2,
+      "verdict": "관망",
+      "price": 17.03,
+      "upside": 19.2,
+      "pe": 13.1
+    },
+    {
       "ticker": "INTC",
       "name": "Intel",
       "score": 55,
@@ -5322,7 +5290,7 @@
       "tim": 2,
       "verdict": "관망",
       "price": 168.74,
-      "upside": 14.4,
+      "upside": 14.9,
       "pe": 19.3
     },
     {
@@ -5338,7 +5306,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 337.18,
-      "upside": 21.6,
+      "upside": 22.6,
       "pe": null
     },
     {
@@ -5390,6 +5358,22 @@
       "pe": 91.9
     },
     {
+      "ticker": "ELV",
+      "name": "Elevance Health",
+      "score": 54,
+      "fin": 18,
+      "val": 9,
+      "grw": 5,
+      "moat": 7,
+      "inf": 8,
+      "cons": 2,
+      "tim": 5,
+      "verdict": "관망",
+      "price": 407.5,
+      "upside": 10.2,
+      "pe": 18.0
+    },
+    {
       "ticker": "FITB",
       "name": "Fifth Third Bancorp",
       "score": 54,
@@ -5420,54 +5404,6 @@
       "price": 311.18,
       "upside": 13.4,
       "pe": 45.7
-    },
-    {
-      "ticker": "LYV",
-      "name": "Live Nation Entertainment",
-      "score": 54,
-      "fin": 11,
-      "val": 1,
-      "grw": 14,
-      "moat": 9,
-      "inf": 7,
-      "cons": 10,
-      "tim": 2,
-      "verdict": "관망",
-      "price": 173.5,
-      "upside": 16.4,
-      "pe": null
-    },
-    {
-      "ticker": "NWSA",
-      "name": "News Corp (Class A)",
-      "score": 54,
-      "fin": 19,
-      "val": 2,
-      "grw": 9,
-      "moat": 6,
-      "inf": 8,
-      "cons": 5,
-      "tim": 5,
-      "verdict": "관망",
-      "price": 30.39,
-      "upside": 19.0,
-      "pe": 29.5
-    },
-    {
-      "ticker": "NWS",
-      "name": "News Corp (Class B)",
-      "score": 54,
-      "fin": 19,
-      "val": 2,
-      "grw": 9,
-      "moat": 6,
-      "inf": 8,
-      "cons": 5,
-      "tim": 5,
-      "verdict": "관망",
-      "price": 33.9,
-      "upside": null,
-      "pe": 32.9
     },
     {
       "ticker": "NCLH",
@@ -5611,7 +5547,7 @@
       "verdict": "관망",
       "price": 120.47,
       "upside": 46.7,
-      "pe": 42.4
+      "pe": 43.2
     },
     {
       "ticker": "SHW",
@@ -5726,6 +5662,22 @@
       "pe": 4.0
     },
     {
+      "ticker": "CMG",
+      "name": "Chipotle Mexican Grill",
+      "score": 52,
+      "fin": 11,
+      "val": 3,
+      "grw": 7,
+      "moat": 13,
+      "inf": 8,
+      "cons": 5,
+      "tim": 5,
+      "verdict": "관망",
+      "price": 36.96,
+      "upside": 18.4,
+      "pe": 34.2
+    },
+    {
       "ticker": "EG",
       "name": "Everest Group",
       "score": 52,
@@ -5806,22 +5758,6 @@
       "pe": 32.9
     },
     {
-      "ticker": "LULU",
-      "name": "Lululemon Athletica",
-      "score": 52,
-      "fin": 19,
-      "val": 13,
-      "grw": 0,
-      "moat": 15,
-      "inf": 5,
-      "cons": 0,
-      "tim": 0,
-      "verdict": "관망",
-      "price": 100.61,
-      "upside": 26.6,
-      "pe": 8.3
-    },
-    {
       "ticker": "MKC",
       "name": "McCormick & Company",
       "score": 52,
@@ -5866,7 +5802,7 @@
       "tim": 5,
       "verdict": "관망",
       "price": 907.99,
-      "upside": 8.7,
+      "upside": 8.0,
       "pe": 24.3
     },
     {
@@ -5884,6 +5820,22 @@
       "price": 119.02,
       "upside": 58.6,
       "pe": 31.0
+    },
+    {
+      "ticker": "PYPL",
+      "name": "PayPal",
+      "score": 52,
+      "fin": 19,
+      "val": 10,
+      "grw": 5,
+      "moat": 11,
+      "inf": 5,
+      "cons": 0,
+      "tim": 2,
+      "verdict": "관망",
+      "price": 54.96,
+      "upside": 3.8,
+      "pe": 10.4
     },
     {
       "ticker": "PCG",
@@ -5979,7 +5931,7 @@
       "verdict": "관망",
       "price": 45.15,
       "upside": 10.6,
-      "pe": 19.3
+      "pe": 19.0
     },
     {
       "ticker": "AIG",
@@ -6012,22 +5964,6 @@
       "price": 63.5,
       "upside": 13.6,
       "pe": 20.4
-    },
-    {
-      "ticker": "CMG",
-      "name": "Chipotle Mexican Grill",
-      "score": 51,
-      "fin": 11,
-      "val": 3,
-      "grw": 7,
-      "moat": 13,
-      "inf": 8,
-      "cons": 5,
-      "tim": 4,
-      "verdict": "관망",
-      "price": 36.96,
-      "upside": 18.4,
-      "pe": 34.2
     },
     {
       "ticker": "CHD",
@@ -6078,6 +6014,22 @@
       "pe": 34.3
     },
     {
+      "ticker": "LYV",
+      "name": "Live Nation Entertainment",
+      "score": 51,
+      "fin": 11,
+      "val": 1,
+      "grw": 14,
+      "moat": 9,
+      "inf": 7,
+      "cons": 7,
+      "tim": 2,
+      "verdict": "관망",
+      "price": 173.5,
+      "upside": 16.4,
+      "pe": null
+    },
+    {
       "ticker": "MAR",
       "name": "Marriott International",
       "score": 51,
@@ -6108,6 +6060,38 @@
       "price": 1345.26,
       "upside": 7.9,
       "pe": 30.3
+    },
+    {
+      "ticker": "NWSA",
+      "name": "News Corp (Class A)",
+      "score": 51,
+      "fin": 19,
+      "val": 2,
+      "grw": 9,
+      "moat": 6,
+      "inf": 8,
+      "cons": 2,
+      "tim": 5,
+      "verdict": "관망",
+      "price": 30.39,
+      "upside": 19.0,
+      "pe": 29.5
+    },
+    {
+      "ticker": "NWS",
+      "name": "News Corp (Class B)",
+      "score": 51,
+      "fin": 19,
+      "val": 2,
+      "grw": 9,
+      "moat": 6,
+      "inf": 8,
+      "cons": 2,
+      "tim": 5,
+      "verdict": "관망",
+      "price": 33.9,
+      "upside": null,
+      "pe": 32.9
     },
     {
       "ticker": "PCAR",
@@ -6222,22 +6206,6 @@
       "pe": 39.2
     },
     {
-      "ticker": "CTVA",
-      "name": "Corteva",
-      "score": 50,
-      "fin": 24,
-      "val": 4,
-      "grw": 0,
-      "moat": 4,
-      "inf": 8,
-      "cons": 5,
-      "tim": 5,
-      "verdict": "관망",
-      "price": 87.86,
-      "upside": 4.8,
-      "pe": 53.9
-    },
-    {
       "ticker": "FERG",
       "name": "Ferguson Enterprises",
       "score": 50,
@@ -6268,6 +6236,22 @@
       "price": 76.36,
       "upside": 26.0,
       "pe": 31.6
+    },
+    {
+      "ticker": "LULU",
+      "name": "Lululemon Athletica",
+      "score": 50,
+      "fin": 19,
+      "val": 11,
+      "grw": 0,
+      "moat": 15,
+      "inf": 5,
+      "cons": 0,
+      "tim": 0,
+      "verdict": "관망",
+      "price": 100.61,
+      "upside": 10.1,
+      "pe": 8.3
     },
     {
       "ticker": "RKLB",
@@ -6330,7 +6314,7 @@
       "tim": 5,
       "verdict": "회피",
       "price": 82.76,
-      "upside": 18.5,
+      "upside": 18.6,
       "pe": 147.8
     },
     {
@@ -6346,8 +6330,24 @@
       "tim": 0,
       "verdict": "회피",
       "price": 26.73,
-      "upside": 5.1,
+      "upside": 5.7,
       "pe": 17.2
+    },
+    {
+      "ticker": "CTVA",
+      "name": "Corteva",
+      "score": 49,
+      "fin": 24,
+      "val": 4,
+      "grw": 0,
+      "moat": 4,
+      "inf": 8,
+      "cons": 4,
+      "tim": 5,
+      "verdict": "회피",
+      "price": 87.86,
+      "upside": 4.8,
+      "pe": 53.2
     },
     {
       "ticker": "FISV",
@@ -6714,7 +6714,7 @@
       "tim": 2,
       "verdict": "회피",
       "price": 116.86,
-      "upside": 25.0,
+      "upside": 25.1,
       "pe": 82.9
     },
     {
@@ -6731,7 +6731,7 @@
       "verdict": "회피",
       "price": 44.37,
       "upside": 33.1,
-      "pe": 17.3
+      "pe": 17.2
     },
     {
       "ticker": "MLM",
@@ -6875,7 +6875,7 @@
       "verdict": "회피",
       "price": 56.94,
       "upside": 12.9,
-      "pe": 30.4
+      "pe": 30.1
     },
     {
       "ticker": "LDOS",
@@ -6906,7 +6906,7 @@
       "tim": 5,
       "verdict": "회피",
       "price": 150.33,
-      "upside": -1.1,
+      "upside": -0.6,
       "pe": 120.3
     },
     {
@@ -6972,6 +6972,22 @@
       "price": 60.21,
       "upside": 26.7,
       "pe": 15.5
+    },
+    {
+      "ticker": "PPG",
+      "name": "PPG Industries",
+      "score": 47,
+      "fin": 13,
+      "val": 7,
+      "grw": 7,
+      "moat": 9,
+      "inf": 5,
+      "cons": 4,
+      "tim": 2,
+      "verdict": "회피",
+      "price": 112.53,
+      "upside": 12.1,
+      "pe": 16.1
     },
     {
       "ticker": "PPL",
@@ -7086,22 +7102,6 @@
       "pe": 14.5
     },
     {
-      "ticker": "CNP",
-      "name": "CenterPoint Energy",
-      "score": 46,
-      "fin": 4,
-      "val": 6,
-      "grw": 16,
-      "moat": 4,
-      "inf": 7,
-      "cons": 9,
-      "tim": 0,
-      "verdict": "회피",
-      "price": 39.67,
-      "upside": 15.3,
-      "pe": 23.6
-    },
-    {
       "ticker": "COO",
       "name": "Cooper Companies (The)",
       "score": 46,
@@ -7116,22 +7116,6 @@
       "price": 69.59,
       "upside": 17.1,
       "pe": 59.0
-    },
-    {
-      "ticker": "DUK",
-      "name": "Duke Energy",
-      "score": 46,
-      "fin": 7,
-      "val": 5,
-      "grw": 12,
-      "moat": 6,
-      "inf": 7,
-      "cons": 9,
-      "tim": 0,
-      "verdict": "회피",
-      "price": 120.22,
-      "upside": 14.2,
-      "pe": 18.1
     },
     {
       "ticker": "LOW",
@@ -7163,7 +7147,7 @@
       "verdict": "회피",
       "price": 28.45,
       "upside": 0.5,
-      "pe": 37.9
+      "pe": 37.4
     },
     {
       "ticker": "SBAC",
@@ -7196,6 +7180,22 @@
       "price": 214.69,
       "upside": 33.6,
       "pe": null
+    },
+    {
+      "ticker": "TSN",
+      "name": "Tyson Foods",
+      "score": 46,
+      "fin": 13,
+      "val": 8,
+      "grw": 7,
+      "moat": 4,
+      "inf": 7,
+      "cons": 7,
+      "tim": 0,
+      "verdict": "회피",
+      "price": 51.42,
+      "upside": 33.7,
+      "pe": 31.7
     },
     {
       "ticker": "VTR",
@@ -7259,7 +7259,7 @@
       "verdict": "회피",
       "price": 329.46,
       "upside": 10.9,
-      "pe": 27.9
+      "pe": 28.1
     },
     {
       "ticker": "PM",
@@ -7276,22 +7276,6 @@
       "price": 182.53,
       "upside": 13.5,
       "pe": 25.1
-    },
-    {
-      "ticker": "PPG",
-      "name": "PPG Industries",
-      "score": 45,
-      "fin": 13,
-      "val": 7,
-      "grw": 7,
-      "moat": 9,
-      "inf": 5,
-      "cons": 2,
-      "tim": 2,
-      "verdict": "회피",
-      "price": 112.53,
-      "upside": 12.1,
-      "pe": 16.1
     },
     {
       "ticker": "SJM",
@@ -7358,20 +7342,20 @@
       "pe": 321.9
     },
     {
-      "ticker": "TSN",
-      "name": "Tyson Foods",
+      "ticker": "TSCO",
+      "name": "Tractor Supply",
       "score": 45,
-      "fin": 13,
-      "val": 7,
-      "grw": 7,
-      "moat": 4,
-      "inf": 7,
-      "cons": 7,
-      "tim": 0,
+      "fin": 7,
+      "val": 6,
+      "grw": 5,
+      "moat": 13,
+      "inf": 8,
+      "cons": 4,
+      "tim": 2,
       "verdict": "회피",
-      "price": 51.42,
-      "upside": 28.5,
-      "pe": 31.7
+      "price": 34.99,
+      "upside": 1.8,
+      "pe": 18.2
     },
     {
       "ticker": "UDR",
@@ -7422,20 +7406,36 @@
       "pe": null
     },
     {
-      "ticker": "AEE",
-      "name": "Ameren",
+      "ticker": "CNP",
+      "name": "CenterPoint Energy",
+      "score": 44,
+      "fin": 4,
+      "val": 6,
+      "grw": 16,
+      "moat": 4,
+      "inf": 7,
+      "cons": 7,
+      "tim": 0,
+      "verdict": "회피",
+      "price": 39.67,
+      "upside": 15.3,
+      "pe": 23.6
+    },
+    {
+      "ticker": "DUK",
+      "name": "Duke Energy",
       "score": 44,
       "fin": 7,
       "val": 5,
-      "grw": 7,
-      "moat": 9,
+      "grw": 12,
+      "moat": 6,
       "inf": 7,
-      "cons": 9,
+      "cons": 7,
       "tim": 0,
       "verdict": "회피",
-      "price": 106.47,
-      "upside": 13.1,
-      "pe": 18.8
+      "price": 120.22,
+      "upside": 14.2,
+      "pe": 18.1
     },
     {
       "ticker": "KMB",
@@ -7550,6 +7550,22 @@
       "pe": 20.9
     },
     {
+      "ticker": "IFF",
+      "name": "International Flavors & Fragrances",
+      "score": 43,
+      "fin": 10,
+      "val": 6,
+      "grw": 5,
+      "moat": 4,
+      "inf": 8,
+      "cons": 5,
+      "tim": 5,
+      "verdict": "회피",
+      "price": 86.35,
+      "upside": 10.8,
+      "pe": null
+    },
+    {
       "ticker": "KHC",
       "name": "Kraft Heinz",
       "score": 43,
@@ -7564,22 +7580,6 @@
       "price": 24.85,
       "upside": 1.2,
       "pe": null
-    },
-    {
-      "ticker": "TSCO",
-      "name": "Tractor Supply",
-      "score": 43,
-      "fin": 7,
-      "val": 6,
-      "grw": 5,
-      "moat": 13,
-      "inf": 8,
-      "cons": 2,
-      "tim": 2,
-      "verdict": "회피",
-      "price": 34.99,
-      "upside": 1.8,
-      "pe": 18.2
     },
     {
       "ticker": "WEC",
@@ -7614,6 +7614,22 @@
       "pe": null
     },
     {
+      "ticker": "AEE",
+      "name": "Ameren",
+      "score": 42,
+      "fin": 7,
+      "val": 5,
+      "grw": 7,
+      "moat": 9,
+      "inf": 7,
+      "cons": 7,
+      "tim": 0,
+      "verdict": "회피",
+      "price": 106.47,
+      "upside": 13.1,
+      "pe": 18.8
+    },
+    {
       "ticker": "CMCSA",
       "name": "Comcast",
       "score": 42,
@@ -7643,7 +7659,7 @@
       "verdict": "회피",
       "price": 139.25,
       "upside": 13.8,
-      "pe": 31.2
+      "pe": 30.7
     },
     {
       "ticker": "IP",
@@ -7870,54 +7886,6 @@
       "pe": null
     },
     {
-      "ticker": "IFF",
-      "name": "International Flavors & Fragrances",
-      "score": 40,
-      "fin": 10,
-      "val": 6,
-      "grw": 5,
-      "moat": 4,
-      "inf": 8,
-      "cons": 2,
-      "tim": 5,
-      "verdict": "회피",
-      "price": 86.35,
-      "upside": 10.8,
-      "pe": null
-    },
-    {
-      "ticker": "VMRK",
-      "name": "Vivmark Residential",
-      "score": 40,
-      "fin": 14,
-      "val": 4,
-      "grw": 5,
-      "moat": 6,
-      "inf": 5,
-      "cons": 4,
-      "tim": 2,
-      "verdict": "회피",
-      "price": 65.35,
-      "upside": 13.2,
-      "pe": 24.9
-    },
-    {
-      "ticker": "FE",
-      "name": "FirstEnergy",
-      "score": 39,
-      "fin": 4,
-      "val": 4,
-      "grw": 11,
-      "moat": 6,
-      "inf": 7,
-      "cons": 7,
-      "tim": 0,
-      "verdict": "회피",
-      "price": 46.77,
-      "upside": 13.7,
-      "pe": 25.0
-    },
-    {
       "ticker": "SWKS",
       "name": "Skyworks Solutions",
       "score": 39,
@@ -7962,7 +7930,7 @@
       "tim": 5,
       "verdict": "회피",
       "price": 87.76,
-      "upside": 15.7,
+      "upside": 15.8,
       "pe": 39.2
     },
     {
@@ -7996,6 +7964,22 @@
       "price": 21.54,
       "upside": 21.3,
       "pe": 34.7
+    },
+    {
+      "ticker": "VMRK",
+      "name": "Vivmark Residential",
+      "score": 38,
+      "fin": 14,
+      "val": 2,
+      "grw": 5,
+      "moat": 6,
+      "inf": 5,
+      "cons": 4,
+      "tim": 2,
+      "verdict": "회피",
+      "price": 65.35,
+      "upside": 13.2,
+      "pe": 25.0
     },
     {
       "ticker": "HIMS",
@@ -8046,6 +8030,22 @@
       "pe": 38.6
     },
     {
+      "ticker": "FE",
+      "name": "FirstEnergy",
+      "score": 37,
+      "fin": 4,
+      "val": 4,
+      "grw": 11,
+      "moat": 6,
+      "inf": 7,
+      "cons": 5,
+      "tim": 0,
+      "verdict": "회피",
+      "price": 46.77,
+      "upside": 13.7,
+      "pe": 25.0
+    },
+    {
       "ticker": "FDXF",
       "name": "FedEx Freight",
       "score": 36,
@@ -8059,7 +8059,7 @@
       "verdict": "회피",
       "price": 129.45,
       "upside": 30.9,
-      "pe": 29.1
+      "pe": 29.6
     },
     {
       "ticker": "KIM",
@@ -8363,7 +8363,7 @@
       "verdict": "회피",
       "price": 65.79,
       "upside": 22.7,
-      "pe": 70.0
+      "pe": 71.5
     },
     {
       "ticker": "PNW",

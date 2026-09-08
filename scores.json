@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-09-07T00:50:14.970360+00:00",
-  "last_updated_kst": "2026-09-07 09:50 KST",
+  "last_updated": "2026-09-08T01:06:48.158927+00:00",
+  "last_updated_kst": "2026-09-08 10:06 KST",
   "version": "scores-1.0",
   "basis": "yfinance 펀더멘털 · 자산네제곱 2·3·6단계 채점 · 해자/변곡점은 프록시(★)",
   "scoring": {
@@ -266,7 +266,7 @@
       "tim": 2,
       "verdict": "강력매수",
       "price": 1714.88,
-      "upside": 26.4,
+      "upside": 26.5,
       "pe": 58.1
     },
     {
@@ -1006,6 +1006,22 @@
       "pe": 24.6
     },
     {
+      "ticker": "SMCI",
+      "name": "Supermicro",
+      "score": 77,
+      "fin": 14,
+      "val": 10,
+      "grw": 20,
+      "moat": 11,
+      "inf": 10,
+      "cons": 7,
+      "tim": 5,
+      "verdict": "매수",
+      "price": 39.59,
+      "upside": 7.0,
+      "pe": 12.1
+    },
+    {
       "ticker": "SE",
       "name": "Sea Ltd",
       "score": 77,
@@ -1326,22 +1342,6 @@
       "pe": 15.6
     },
     {
-      "ticker": "SMCI",
-      "name": "Supermicro",
-      "score": 75,
-      "fin": 14,
-      "val": 10,
-      "grw": 20,
-      "moat": 11,
-      "inf": 10,
-      "cons": 5,
-      "tim": 5,
-      "verdict": "매수",
-      "price": 39.59,
-      "upside": 7.0,
-      "pe": 12.1
-    },
-    {
       "ticker": "AFRM",
       "name": "Affirm",
       "score": 75,
@@ -1468,22 +1468,6 @@
       "price": 156.29,
       "upside": 3.8,
       "pe": 55.2
-    },
-    {
-      "ticker": "GE",
-      "name": "GE Aerospace",
-      "score": 74,
-      "fin": 19,
-      "val": 3,
-      "grw": 20,
-      "moat": 13,
-      "inf": 7,
-      "cons": 10,
-      "tim": 2,
-      "verdict": "매수",
-      "price": 337.12,
-      "upside": 20.1,
-      "pe": 39.7
     },
     {
       "ticker": "HIG",
@@ -2110,6 +2094,22 @@
       "pe": 17.0
     },
     {
+      "ticker": "GE",
+      "name": "GE Aerospace",
+      "score": 71,
+      "fin": 19,
+      "val": 3,
+      "grw": 20,
+      "moat": 13,
+      "inf": 7,
+      "cons": 7,
+      "tim": 2,
+      "verdict": "매수",
+      "price": 337.12,
+      "upside": 20.1,
+      "pe": 39.7
+    },
+    {
       "ticker": "JPM",
       "name": "JPMorgan Chase",
       "score": 71,
@@ -2602,7 +2602,7 @@
       "tim": 5,
       "verdict": "매수",
       "price": 122.11,
-      "upside": 1.0,
+      "upside": 2.7,
       "pe": 54.0
     },
     {
@@ -2618,7 +2618,7 @@
       "tim": 0,
       "verdict": "매수",
       "price": 82.21,
-      "upside": 41.6,
+      "upside": 41.4,
       "pe": 8.9
     },
     {
@@ -4234,7 +4234,7 @@
       "tim": 0,
       "verdict": "관망",
       "price": 209.61,
-      "upside": 26.1,
+      "upside": 25.7,
       "pe": 8.1
     },
     {
@@ -4766,6 +4766,22 @@
       "pe": 43.5
     },
     {
+      "ticker": "DASH",
+      "name": "DoorDash",
+      "score": 58,
+      "fin": 18,
+      "val": 3,
+      "grw": 13,
+      "moat": 6,
+      "inf": 8,
+      "cons": 5,
+      "tim": 5,
+      "verdict": "관망",
+      "price": 211.73,
+      "upside": 20.2,
+      "pe": 110.9
+    },
+    {
       "ticker": "EXE",
       "name": "Expand Energy",
       "score": 58,
@@ -4778,7 +4794,7 @@
       "tim": 2,
       "verdict": "관망",
       "price": 97.91,
-      "upside": 28.2,
+      "upside": 27.5,
       "pe": 8.4
     },
     {
@@ -4958,22 +4974,6 @@
       "pe": 68.4
     },
     {
-      "ticker": "DASH",
-      "name": "DoorDash",
-      "score": 56,
-      "fin": 18,
-      "val": 1,
-      "grw": 13,
-      "moat": 6,
-      "inf": 8,
-      "cons": 5,
-      "tim": 5,
-      "verdict": "관망",
-      "price": 211.73,
-      "upside": 19.9,
-      "pe": 110.9
-    },
-    {
       "ticker": "GILD",
       "name": "Gilead Sciences",
       "score": 56,
@@ -5114,7 +5114,7 @@
       "tim": 2,
       "verdict": "관망",
       "price": 46.6,
-      "upside": 1.2,
+      "upside": 1.3,
       "pe": 11.4
     },
     {
@@ -6490,7 +6490,7 @@
       "tim": 0,
       "verdict": "회피",
       "price": 113.24,
-      "upside": 65.4,
+      "upside": 65.2,
       "pe": 25.6
     },
     {
@@ -6794,7 +6794,7 @@
       "tim": 0,
       "verdict": "회피",
       "price": 3.8,
-      "upside": 73.1,
+      "upside": 72.8,
       "pe": null
     },
     {

@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-10-03T01:46:58.923847+00:00",
-  "last_updated_kst": "2026-10-03 10:46 KST",
+  "last_updated": "2026-10-04T02:26:56.092714+00:00",
+  "last_updated_kst": "2026-10-04 11:26 KST",
   "version": "v3.0",
   "prices": {
     "sp500": {
@@ -15,7 +15,7 @@
       "source": "Yahoo"
     },
     "nasdaq": {
-      "value": 27190.8633,
+      "value": 27190.8594,
       "prev": 26871.5996,
       "change_pct": 1.19,
       "change_5d_pct": 0.45,
@@ -37,7 +37,7 @@
       "source": "Yahoo"
     },
     "rut": {
-      "value": 2832.8948,
+      "value": 2832.8999,
       "prev": 2806.6299,
       "change_pct": 0.94,
       "change_5d_pct": -0.16,
@@ -92,80 +92,80 @@
       "source": "Yahoo"
     },
     "dxy": {
-      "value": 101.924,
+      "value": 101.93,
       "prev": 102.1,
       "change_pct": -0.17,
-      "change_5d_pct": 0.94,
-      "change_1m_pct": 2.37,
+      "change_5d_pct": 0.95,
+      "change_1m_pct": 2.96,
       "high_1m": 102.21,
       "low_1m": 98.6,
       "trade_date": "2026-10-02",
       "source": "Yahoo"
     },
     "wti": {
-      "value": 91.26,
+      "value": 91.11,
       "prev": 92.87,
-      "change_pct": -1.73,
-      "change_5d_pct": -1.24,
-      "change_1m_pct": 0.27,
+      "change_pct": -1.9,
+      "change_5d_pct": -1.41,
+      "change_1m_pct": -0.21,
       "high_1m": 106.75,
       "low_1m": 88.06,
       "trade_date": "2026-10-02",
       "source": "Yahoo"
     },
     "brent": {
-      "value": 102.7,
+      "value": 102.25,
       "prev": 102.31,
-      "change_pct": 0.38,
-      "change_5d_pct": -1.55,
-      "change_1m_pct": 7.39,
+      "change_pct": -0.06,
+      "change_5d_pct": -1.98,
+      "change_1m_pct": 7.05,
       "high_1m": 110.19,
       "low_1m": 93.17,
       "trade_date": "2026-10-02",
       "source": "Yahoo"
     },
     "copper": {
-      "value": 6.579,
+      "value": 6.492,
       "prev": 6.482,
-      "change_pct": 1.5,
-      "change_5d_pct": -1.74,
-      "change_1m_pct": 1.2,
+      "change_pct": 0.15,
+      "change_5d_pct": -3.04,
+      "change_1m_pct": -1.29,
       "high_1m": 6.83,
       "low_1m": 6.281,
       "trade_date": "2026-10-02",
       "source": "Yahoo"
     },
     "gold": {
-      "value": 4172.1001,
+      "value": 4162.2998,
       "prev": 4202.2998,
-      "change_pct": -0.72,
-      "change_5d_pct": -3.45,
-      "change_1m_pct": -5.49,
+      "change_pct": -0.95,
+      "change_5d_pct": -3.68,
+      "change_1m_pct": -8.32,
       "high_1m": 4558.5,
       "low_1m": 4143.1001,
       "trade_date": "2026-10-02",
       "source": "Yahoo"
     },
     "silver": {
-      "value": 60.71,
+      "value": 59.977,
       "prev": 60.725,
-      "change_pct": -0.02,
-      "change_5d_pct": -5.5,
-      "change_1m_pct": -6.2,
+      "change_pct": -1.23,
+      "change_5d_pct": -6.64,
+      "change_1m_pct": -10.45,
       "high_1m": 68.105,
-      "low_1m": 59.985,
+      "low_1m": 59.977,
       "trade_date": "2026-10-02",
       "source": "Yahoo"
     },
     "btc": {
-      "value": 84630.7734,
-      "prev": 84853.1016,
-      "change_pct": -0.26,
-      "change_5d_pct": 0.2,
-      "change_1m_pct": 4.13,
+      "value": 84822.7109,
+      "prev": 84497.2109,
+      "change_pct": 0.39,
+      "change_5d_pct": 1.58,
+      "change_1m_pct": 6.46,
       "high_1m": 87363.7578,
       "low_1m": 74944.5938,
-      "trade_date": "2026-10-03",
+      "trade_date": "2026-10-04",
       "source": "Yahoo"
     },
     "qqq": {
@@ -538,8 +538,8 @@
   },
   "spread_2s10s_history": [
     {
-      "date": "2021-10-04",
-      "spread": 1.22
+      "date": "2021-10-05",
+      "spread": 1.26
     },
     {
       "date": "2021-11-01",
@@ -1120,19 +1120,19 @@
       "metrics": [
         {
           "k": "DXY",
-          "v": "101.92",
+          "v": "101.93",
           "tone": "neu",
           "source": "Yahoo:DX-Y.NYB"
         },
         {
           "k": "WTI",
-          "v": "$91.26",
+          "v": "$91.11",
           "tone": "neu",
           "source": "Yahoo:CL=F"
         },
         {
           "k": "구리",
-          "v": "$6.58/lb",
+          "v": "$6.49/lb",
           "tone": "pos",
           "source": "Yahoo:HG=F"
         }
@@ -1189,8 +1189,8 @@
       ],
       "summary": "대형주 29곳 중 이익 증가 83%, 애널리스트 매수우위(평균 1.7)",
       "pdfTip": "실적보다 가이던스. 대형주 표본 집계로 매일 자동 갱신.",
-      "last_manual": "2026-10-03",
-      "as_of": "2026-10-03",
+      "last_manual": "2026-10-04",
+      "as_of": "2026-10-04",
       "freq": "매일(집계)"
     },
     "margin": {
@@ -1211,8 +1211,8 @@
       ],
       "summary": "대형주 영업이익률 중앙값 33.0%, 마진 확대 종목 66%",
       "pdfTip": "이익성장 > 매출성장 = 마진 확대(영업레버리지).",
-      "last_manual": "2026-10-03",
-      "as_of": "2026-10-03",
+      "last_manual": "2026-10-04",
+      "as_of": "2026-10-04",
       "freq": "매일(집계)"
     }
   },

@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-09-28T01:27:30.583706+00:00",
+  "last_updated": "2026-10-05T01:43:33.943693+00:00",
   "period_start": "2021-01-04",
-  "period_end": "2026-09-28",
-  "total_points": 271,
+  "period_end": "2026-10-05",
+  "total_points": 272,
   "results": [
     {
       "date": "2021-01-04",
@@ -2068,16 +2068,16 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "부정",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 0,
-      "neutral": 3,
-      "negative": 3,
+      "neutral": 2,
+      "negative": 4,
       "none": 0,
-      "score": -3,
-      "phase": "약세 우위",
+      "score": -4,
+      "phase": "약세장",
       "ret_1m": -1.81,
       "ret_3m": 1.2,
       "ret_6m": 6.14,
@@ -2089,15 +2089,15 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "부정",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 0,
-      "neutral": 4,
-      "negative": 2,
+      "neutral": 3,
+      "negative": 3,
       "none": 0,
-      "score": -2,
+      "score": -3,
       "phase": "약세 우위",
       "ret_1m": -4.56,
       "ret_3m": 0.46,
@@ -2110,15 +2110,15 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "부정",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": -3.65,
       "ret_3m": 1.24,
@@ -2131,16 +2131,16 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "부정",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 0,
-      "neutral": 3,
-      "negative": 3,
+      "neutral": 2,
+      "negative": 4,
       "none": 0,
-      "score": -3,
-      "phase": "약세 우위",
+      "score": -4,
+      "phase": "약세장",
       "ret_1m": -0.52,
       "ret_3m": -3.38,
       "ret_6m": 8.73,
@@ -2152,15 +2152,15 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": 2.91,
       "ret_3m": 3.51,
@@ -2173,16 +2173,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": 4.46,
       "ret_3m": 3.45,
       "ret_6m": 12.59,
@@ -2190,6 +2190,132 @@
     },
     {
       "date": "2023-01-02",
+      "ratings": {
+        "interest": "부정",
+        "flow": "중립",
+        "employment": "중립",
+        "consumption": "부정",
+        "dollar": "긍정",
+        "vix": "중립"
+      },
+      "positive": 1,
+      "neutral": 3,
+      "negative": 2,
+      "none": 0,
+      "score": -1,
+      "phase": "약세 우위",
+      "ret_1m": 7.29,
+      "ret_3m": 7.42,
+      "ret_6m": 16.05,
+      "sp500": 3839.5
+    },
+    {
+      "date": "2023-01-09",
+      "ratings": {
+        "interest": "부정",
+        "flow": "긍정",
+        "employment": "중립",
+        "consumption": "부정",
+        "dollar": "긍정",
+        "vix": "중립"
+      },
+      "positive": 2,
+      "neutral": 2,
+      "negative": 2,
+      "none": 0,
+      "score": 0,
+      "phase": "균형",
+      "ret_1m": 5.8,
+      "ret_3m": 5.58,
+      "ret_6m": 13.29,
+      "sp500": 3892.09
+    },
+    {
+      "date": "2023-01-16",
+      "ratings": {
+        "interest": "부정",
+        "flow": "긍정",
+        "employment": "중립",
+        "consumption": "중립",
+        "dollar": "긍정",
+        "vix": "긍정"
+      },
+      "positive": 3,
+      "neutral": 2,
+      "negative": 1,
+      "none": 0,
+      "score": 2,
+      "phase": "강세 우위",
+      "ret_1m": 3.71,
+      "ret_3m": 3.81,
+      "ret_6m": 13.1,
+      "sp500": 3999.09
+    },
+    {
+      "date": "2023-01-23",
+      "ratings": {
+        "interest": "부정",
+        "flow": "긍정",
+        "employment": "중립",
+        "consumption": "중립",
+        "dollar": "긍정",
+        "vix": "긍정"
+      },
+      "positive": 3,
+      "neutral": 2,
+      "negative": 1,
+      "none": 0,
+      "score": 2,
+      "phase": "강세 우위",
+      "ret_1m": -0.72,
+      "ret_3m": 2.92,
+      "ret_6m": 13.3,
+      "sp500": 4019.81
+    },
+    {
+      "date": "2023-01-30",
+      "ratings": {
+        "interest": "부정",
+        "flow": "중립",
+        "employment": "중립",
+        "consumption": "중립",
+        "dollar": "긍정",
+        "vix": "긍정"
+      },
+      "positive": 2,
+      "neutral": 3,
+      "negative": 1,
+      "none": 0,
+      "score": 1,
+      "phase": "강세 우위",
+      "ret_1m": -1.65,
+      "ret_3m": 3.74,
+      "ret_6m": 14.22,
+      "sp500": 4017.77
+    },
+    {
+      "date": "2023-02-06",
+      "ratings": {
+        "interest": "부정",
+        "flow": "긍정",
+        "employment": "중립",
+        "consumption": "중립",
+        "dollar": "긍정",
+        "vix": "긍정"
+      },
+      "positive": 3,
+      "neutral": 2,
+      "negative": 1,
+      "none": 0,
+      "score": 2,
+      "phase": "강세 우위",
+      "ret_1m": -2.9,
+      "ret_3m": 0.66,
+      "ret_6m": 9.91,
+      "sp500": 4111.08
+    },
+    {
+      "date": "2023-02-13",
       "ratings": {
         "interest": "부정",
         "flow": "중립",
@@ -2204,132 +2330,6 @@
       "none": 0,
       "score": 0,
       "phase": "균형",
-      "ret_1m": 7.29,
-      "ret_3m": 7.42,
-      "ret_6m": 16.05,
-      "sp500": 3839.5
-    },
-    {
-      "date": "2023-01-09",
-      "ratings": {
-        "interest": "부정",
-        "flow": "긍정",
-        "employment": "중립",
-        "consumption": "중립",
-        "dollar": "긍정",
-        "vix": "중립"
-      },
-      "positive": 2,
-      "neutral": 3,
-      "negative": 1,
-      "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
-      "ret_1m": 5.8,
-      "ret_3m": 5.58,
-      "ret_6m": 13.29,
-      "sp500": 3892.09
-    },
-    {
-      "date": "2023-01-16",
-      "ratings": {
-        "interest": "부정",
-        "flow": "긍정",
-        "employment": "중립",
-        "consumption": "긍정",
-        "dollar": "긍정",
-        "vix": "긍정"
-      },
-      "positive": 4,
-      "neutral": 1,
-      "negative": 1,
-      "none": 0,
-      "score": 3,
-      "phase": "강세장",
-      "ret_1m": 3.71,
-      "ret_3m": 3.81,
-      "ret_6m": 13.1,
-      "sp500": 3999.09
-    },
-    {
-      "date": "2023-01-23",
-      "ratings": {
-        "interest": "부정",
-        "flow": "긍정",
-        "employment": "중립",
-        "consumption": "긍정",
-        "dollar": "긍정",
-        "vix": "긍정"
-      },
-      "positive": 4,
-      "neutral": 1,
-      "negative": 1,
-      "none": 0,
-      "score": 3,
-      "phase": "강세장",
-      "ret_1m": -0.72,
-      "ret_3m": 2.92,
-      "ret_6m": 13.3,
-      "sp500": 4019.81
-    },
-    {
-      "date": "2023-01-30",
-      "ratings": {
-        "interest": "부정",
-        "flow": "중립",
-        "employment": "중립",
-        "consumption": "긍정",
-        "dollar": "긍정",
-        "vix": "긍정"
-      },
-      "positive": 3,
-      "neutral": 2,
-      "negative": 1,
-      "none": 0,
-      "score": 2,
-      "phase": "강세 우위",
-      "ret_1m": -1.65,
-      "ret_3m": 3.74,
-      "ret_6m": 14.22,
-      "sp500": 4017.77
-    },
-    {
-      "date": "2023-02-06",
-      "ratings": {
-        "interest": "부정",
-        "flow": "긍정",
-        "employment": "중립",
-        "consumption": "긍정",
-        "dollar": "긍정",
-        "vix": "긍정"
-      },
-      "positive": 4,
-      "neutral": 1,
-      "negative": 1,
-      "none": 0,
-      "score": 3,
-      "phase": "강세장",
-      "ret_1m": -2.9,
-      "ret_3m": 0.66,
-      "ret_6m": 9.91,
-      "sp500": 4111.08
-    },
-    {
-      "date": "2023-02-13",
-      "ratings": {
-        "interest": "부정",
-        "flow": "중립",
-        "employment": "중립",
-        "consumption": "긍정",
-        "dollar": "긍정",
-        "vix": "중립"
-      },
-      "positive": 2,
-      "neutral": 3,
-      "negative": 1,
-      "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
       "ret_1m": -5.93,
       "ret_3m": -0.02,
       "ret_6m": 8.52,
@@ -2341,16 +2341,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": -3.48,
       "ret_3m": 2.78,
       "ret_6m": 7.86,
@@ -2362,15 +2362,15 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": 1.14,
       "ret_3m": 5.61,
@@ -2383,15 +2383,15 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 3,
-      "neutral": 2,
-      "negative": 1,
+      "neutral": 1,
+      "negative": 2,
       "none": 0,
-      "score": 2,
+      "score": 1,
       "phase": "강세 우위",
       "ret_1m": 1.04,
       "ret_3m": 5.57,
@@ -2404,15 +2404,15 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": 6.13,
       "ret_3m": 12.53,
@@ -2698,16 +2698,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": 3.54,
       "ret_3m": 1.0,
       "ret_6m": 7.51,
@@ -2719,15 +2719,15 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 0,
-      "neutral": 4,
-      "negative": 2,
+      "neutral": 3,
+      "negative": 3,
       "none": 0,
-      "score": -2,
+      "score": -3,
       "phase": "약세 우위",
       "ret_1m": 5.5,
       "ret_3m": 0.2,
@@ -2740,16 +2740,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 1.3,
       "ret_3m": -3.75,
       "ret_6m": 6.45,
@@ -2761,15 +2761,15 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 3,
-      "neutral": 2,
-      "negative": 1,
+      "neutral": 1,
+      "negative": 2,
       "none": 0,
-      "score": 2,
+      "score": 1,
       "phase": "강세 우위",
       "ret_1m": 1.32,
       "ret_3m": -1.68,
@@ -2782,16 +2782,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": -2.62,
       "ret_3m": -3.3,
       "ret_6m": 5.38,
@@ -2803,15 +2803,15 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": -2.6,
       "ret_3m": -7.41,
@@ -2824,16 +2824,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": -1.61,
       "ret_3m": -9.2,
       "ret_6m": 7.39,
@@ -2845,16 +2845,16 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 2,
-      "neutral": 2,
-      "negative": 2,
+      "neutral": 1,
+      "negative": 3,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": -1.17,
       "ret_3m": -3.37,
       "ret_6m": 9.39,
@@ -2866,16 +2866,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": -0.5,
       "ret_3m": -1.74,
       "ret_6m": 11.85,
@@ -2887,16 +2887,16 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 2,
-      "neutral": 2,
-      "negative": 2,
+      "neutral": 1,
+      "negative": 3,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 0.06,
       "ret_3m": 3.35,
       "ret_6m": 13.09,
@@ -2908,16 +2908,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": -3.58,
       "ret_3m": 2.64,
       "ret_6m": 14.35,
@@ -2929,16 +2929,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": -5.58,
       "ret_3m": 1.2,
       "ret_6m": 13.62,
@@ -2950,15 +2950,15 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 0,
-      "neutral": 5,
-      "negative": 1,
+      "neutral": 4,
+      "negative": 2,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": -2.46,
       "ret_3m": 3.01,
@@ -2971,15 +2971,15 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "부정",
         "vix": "중립"
       },
       "positive": 0,
-      "neutral": 4,
-      "negative": 2,
+      "neutral": 3,
+      "negative": 3,
       "none": 0,
-      "score": -2,
+      "score": -3,
       "phase": "약세 우위",
       "ret_1m": -3.12,
       "ret_3m": 6.45,
@@ -2992,16 +2992,16 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "부정",
         "vix": "긍정"
       },
       "positive": 1,
-      "neutral": 2,
-      "negative": 3,
+      "neutral": 1,
+      "negative": 4,
       "none": 0,
-      "score": -2,
-      "phase": "약세 우위",
+      "score": -3,
+      "phase": "약세장",
       "ret_1m": -3.47,
       "ret_3m": 10.08,
       "ret_6m": 20.31,
@@ -3013,15 +3013,15 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "부정",
         "vix": "긍정"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": -1.18,
       "ret_3m": 10.6,
@@ -3034,15 +3034,15 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "부정",
         "vix": "긍정"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": 1.09,
       "ret_3m": 9.87,
@@ -3055,15 +3055,15 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "부정",
         "vix": "긍정"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": 2.96,
       "ret_3m": 8.97,
@@ -3076,16 +3076,16 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "부정",
         "vix": "중립"
       },
       "positive": 0,
-      "neutral": 3,
-      "negative": 3,
+      "neutral": 2,
+      "negative": 4,
       "none": 0,
-      "score": -3,
-      "phase": "약세 우위",
+      "score": -4,
+      "phase": "약세장",
       "ret_1m": 8.05,
       "ret_3m": 15.02,
       "ret_6m": 18.82,
@@ -3097,15 +3097,15 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "긍정"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": 9.21,
       "ret_3m": 18.27,
@@ -3118,16 +3118,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 4.2,
       "ret_3m": 13.21,
       "ret_6m": 18.66,
@@ -3139,15 +3139,15 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "중립"
       },
       "positive": 0,
-      "neutral": 5,
-      "negative": 1,
+      "neutral": 4,
+      "negative": 2,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": 6.7,
       "ret_3m": 13.83,
@@ -3433,16 +3433,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 4.38,
       "ret_3m": 6.04,
       "ret_6m": 12.04,
@@ -3454,16 +3454,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 3.53,
       "ret_3m": 4.67,
       "ret_6m": 10.8,
@@ -3475,16 +3475,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": 1.57,
       "ret_3m": 2.97,
       "ret_6m": 7.76,
@@ -3496,16 +3496,16 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 2,
-      "neutral": 2,
-      "negative": 2,
+      "neutral": 1,
+      "negative": 3,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 0.83,
       "ret_3m": 4.75,
       "ret_6m": 6.9,
@@ -3517,16 +3517,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": -2.47,
       "ret_3m": 6.29,
       "ret_6m": 9.39,
@@ -3538,16 +3538,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": -2.81,
       "ret_3m": 4.4,
       "ret_6m": 9.59,
@@ -3559,16 +3559,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": -4.3,
       "ret_3m": 4.41,
       "ret_6m": 9.89,
@@ -3580,16 +3580,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "긍정"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": -0.28,
       "ret_3m": 7.12,
       "ret_6m": 9.49,
@@ -3601,15 +3601,15 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "중립",
         "vix": "긍정"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": 4.87,
       "ret_3m": 11.25,
@@ -3622,16 +3622,16 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 2,
-      "neutral": 2,
-      "negative": 2,
+      "neutral": 1,
+      "negative": 3,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 5.92,
       "ret_3m": 11.05,
       "ret_6m": 16.83,
@@ -3643,16 +3643,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": 2.95,
       "ret_3m": 6.79,
       "ret_6m": 13.83,
@@ -3664,16 +3664,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": 3.34,
       "ret_3m": 0.11,
       "ret_6m": 10.27,
@@ -3685,16 +3685,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 3.82,
       "ret_3m": 2.36,
       "ret_6m": 14.94,
@@ -3706,16 +3706,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": 3.11,
       "ret_3m": 5.65,
       "ret_6m": 11.03,
@@ -3727,16 +3727,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 3.26,
       "ret_3m": 5.88,
       "ret_6m": 12.87,
@@ -3748,16 +3748,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 4.8,
       "ret_3m": 4.65,
       "ret_6m": 14.46,
@@ -3769,16 +3769,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 5.09,
       "ret_3m": 2.06,
       "ret_6m": 12.91,
@@ -3790,16 +3790,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 2.1,
       "ret_3m": 2.92,
       "ret_6m": 10.98,
@@ -3811,15 +3811,15 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 3,
-      "negative": 2,
+      "neutral": 2,
+      "negative": 3,
       "none": 0,
-      "score": -1,
+      "score": -2,
       "phase": "약세 우위",
       "ret_1m": -0.38,
       "ret_3m": 4.97,
@@ -3832,16 +3832,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 1,
-      "neutral": 4,
-      "negative": 1,
+      "neutral": 3,
+      "negative": 2,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 0.86,
       "ret_3m": 5.25,
       "ret_6m": 7.89,
@@ -3853,16 +3853,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "중립",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 3,
-      "negative": 1,
+      "neutral": 2,
+      "negative": 2,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": -6.7,
       "ret_3m": 2.21,
       "ret_6m": 7.22,
@@ -3979,16 +3979,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "부정",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "중립"
       },
       "positive": 2,
-      "neutral": 2,
-      "negative": 2,
+      "neutral": 1,
+      "negative": 3,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 0.18,
       "ret_3m": 5.09,
       "ret_6m": 9.3,
@@ -4000,16 +4000,16 @@
         "interest": "부정",
         "flow": "긍정",
         "employment": "부정",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 3,
-      "neutral": 1,
-      "negative": 2,
+      "neutral": 0,
+      "negative": 3,
       "none": 0,
-      "score": 1,
-      "phase": "강세 우위",
+      "score": 0,
+      "phase": "균형",
       "ret_1m": 1.88,
       "ret_3m": 6.6,
       "ret_6m": 6.52,
@@ -4021,16 +4021,16 @@
         "interest": "부정",
         "flow": "중립",
         "employment": "부정",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 2,
-      "neutral": 2,
-      "negative": 2,
+      "neutral": 1,
+      "negative": 3,
       "none": 0,
-      "score": 0,
-      "phase": "균형",
+      "score": -1,
+      "phase": "약세 우위",
       "ret_1m": 1.08,
       "ret_3m": 7.06,
       "ret_6m": 3.56,
@@ -4042,16 +4042,16 @@
         "interest": "부정",
         "flow": "부정",
         "employment": "부정",
-        "consumption": "중립",
+        "consumption": "부정",
         "dollar": "긍정",
         "vix": "긍정"
       },
       "positive": 2,
-      "neutral": 1,
-      "negative": 3,
+      "neutral": 0,
+      "negative": 4,
       "none": 0,
-      "score": -1,
-      "phase": "약세 우위",
+      "score": -2,
+      "phase": "약세장",
       "ret_1m": 5.87,
       "ret_3m": 10.63,
       "ret_6m": 2.62,
@@ -5691,72 +5691,93 @@
       "ret_3m": 8.97,
       "ret_6m": NaN,
       "sp500": 6795.99
+    },
+    {
+      "date": "2026-03-16",
+      "ratings": {
+        "interest": "중립",
+        "flow": "중립",
+        "employment": "중립",
+        "consumption": "중립",
+        "dollar": "중립",
+        "vix": "중립"
+      },
+      "positive": 0,
+      "neutral": 6,
+      "negative": 0,
+      "none": 0,
+      "score": 0,
+      "phase": "균형",
+      "ret_1m": 4.83,
+      "ret_3m": 12.76,
+      "ret_6m": 13.74,
+      "sp500": 6699.38
     }
   ],
   "stats": {
     "by_signal": {
       "strong_bull": {
-        "count": 46,
-        "avg_1m": 0.58,
+        "count": 43,
+        "avg_1m": 0.62,
         "avg_3m": 2.46,
-        "avg_6m": 1.36,
-        "std_3m": 4.8,
-        "hit_3m_positive": 71.7,
-        "pct": 17.0
+        "avg_6m": 0.61,
+        "std_3m": 4.96,
+        "hit_3m_positive": 69.8,
+        "pct": 15.8
       },
       "bull_lean": {
-        "count": 51,
+        "count": 53,
         "avg_1m": 1.04,
-        "avg_3m": 2.02,
-        "avg_6m": 4.23,
-        "std_3m": 7.69,
-        "hit_3m_positive": 66.7,
-        "pct": 18.8
+        "avg_3m": 2.01,
+        "avg_6m": 4.48,
+        "std_3m": 7.54,
+        "hit_3m_positive": 67.9,
+        "pct": 19.5
       },
       "balanced": {
-        "count": 59,
-        "avg_1m": 1.63,
+        "count": 55,
+        "avg_1m": 1.05,
         "avg_3m": NaN,
         "avg_6m": NaN,
         "std_3m": NaN,
-        "hit_3m_positive": 72.9,
-        "pct": 21.8
+        "hit_3m_positive": 70.9,
+        "pct": 20.2
       },
       "bear_lean": {
-        "count": 19,
-        "avg_1m": 3.33,
-        "avg_3m": 4.62,
-        "avg_6m": 6.37,
-        "std_3m": 6.15,
-        "hit_3m_positive": 78.9,
-        "pct": 7.0
+        "count": 35,
+        "avg_1m": 2.35,
+        "avg_3m": 5.01,
+        "avg_6m": 9.27,
+        "std_3m": 5.73,
+        "hit_3m_positive": 85.7,
+        "pct": 12.9
       },
       "strong_bear": {
-        "count": 2,
-        "avg_1m": 4.03,
-        "avg_3m": 3.86,
-        "avg_6m": -0.27,
-        "std_3m": 8.15,
-        "hit_3m_positive": 50.0,
-        "pct": 0.7
+        "count": 7,
+        "avg_1m": 2.31,
+        "avg_3m": 5.9,
+        "avg_6m": 8.01,
+        "std_3m": 7.14,
+        "hit_3m_positive": 71.4,
+        "pct": 2.6
       }
     },
     "overall": {
-      "total_points": 271,
-      "bull_hit_3m": 71.7,
-      "bear_hit_3m": 50.0,
-      "avg_score": 0.86,
+      "total_points": 272,
+      "bull_hit_3m": 69.8,
+      "bear_hit_3m": 28.6,
+      "avg_score": 0.62,
       "avg_3m_all": NaN
     },
     "strategy": {
       "description": "신호 기반 포지션 조정: 강세4+ 100%, 강세3 75%, 균형 50%, 약세3 25%, 약세4+ 0%",
-      "portfolio_total_return": 37.15,
-      "bnh_total_return": 81.68,
-      "portfolio_sharpe_annualized": 1.476,
-      "bnh_sharpe_annualized": 1.719,
+      "portfolio_total_return": 35.43,
+      "bnh_total_return": 83.71,
+      "portfolio_sharpe_annualized": 1.44,
+      "bnh_sharpe_annualized": 1.744,
       "portfolio_max_drawdown": 15.55,
       "bnh_max_drawdown": 18.61,
-      "outperformance": -44.54
+      "outperformance": -48.28
     },
     "equity_curve": [
       {
@@ -6251,888 +6272,893 @@
       },
       {
         "date": "2022-11-21",
-        "portfolio": 103.56,
+        "portfolio": 103.66,
         "bnh": 107.9
       },
       {
         "date": "2022-11-28",
-        "portfolio": 103.01,
+        "portfolio": 103.39,
         "bnh": 106.76
       },
       {
         "date": "2022-12-05",
-        "portfolio": 102.58,
+        "portfolio": 103.17,
         "bnh": 105.86
       },
       {
         "date": "2022-12-12",
-        "portfolio": 102.55,
+        "portfolio": 103.17,
         "bnh": 105.74
       },
       {
         "date": "2022-12-19",
-        "portfolio": 102.89,
+        "portfolio": 103.35,
         "bnh": 106.45
       },
       {
         "date": "2022-12-26",
-        "portfolio": 103.42,
+        "portfolio": 103.88,
         "bnh": 107.54
       },
       {
         "date": "2023-01-02",
-        "portfolio": 104.29,
+        "portfolio": 104.75,
         "bnh": 109.35
       },
       {
         "date": "2023-01-09",
-        "portfolio": 104.99,
+        "portfolio": 105.45,
         "bnh": 110.82
       },
       {
         "date": "2023-01-16",
-        "portfolio": 105.89,
+        "portfolio": 106.13,
         "bnh": 111.77
       },
       {
         "date": "2023-01-23",
-        "portfolio": 105.71,
+        "portfolio": 106.0,
         "bnh": 111.58
       },
       {
         "date": "2023-01-30",
-        "portfolio": 105.41,
+        "portfolio": 105.8,
         "bnh": 111.16
       },
       {
         "date": "2023-02-06",
-        "portfolio": 104.7,
+        "portfolio": 105.27,
         "bnh": 110.41
       },
       {
         "date": "2023-02-13",
-        "portfolio": 103.99,
+        "portfolio": 104.55,
         "bnh": 108.9
       },
       {
         "date": "2023-02-20",
-        "portfolio": 103.57,
+        "portfolio": 104.13,
         "bnh": 108.02
       },
       {
         "date": "2023-02-27",
-        "portfolio": 103.71,
+        "portfolio": 104.19,
         "bnh": 108.31
       },
       {
         "date": "2023-03-06",
-        "portfolio": 103.89,
+        "portfolio": 104.38,
         "bnh": 108.57
       },
       {
         "date": "2023-03-13",
-        "portfolio": 104.63,
+        "portfolio": 104.75,
         "bnh": 110.11
       },
       {
         "date": "2023-03-20",
-        "portfolio": 105.25,
+        "portfolio": 105.37,
         "bnh": 111.41
       },
       {
         "date": "2023-03-27",
-        "portfolio": 105.49,
+        "portfolio": 105.61,
         "bnh": 111.92
       },
       {
         "date": "2023-04-03",
-        "portfolio": 105.34,
+        "portfolio": 105.46,
         "bnh": 111.71
       },
       {
         "date": "2023-04-10",
-        "portfolio": 105.42,
+        "portfolio": 105.55,
         "bnh": 111.89
       },
       {
         "date": "2023-04-17",
-        "portfolio": 105.46,
+        "portfolio": 105.58,
         "bnh": 111.93
       },
       {
         "date": "2023-04-24",
-        "portfolio": 105.42,
+        "portfolio": 105.55,
         "bnh": 111.8
       },
       {
         "date": "2023-05-01",
-        "portfolio": 105.46,
+        "portfolio": 105.58,
         "bnh": 111.87
       },
       {
         "date": "2023-05-08",
-        "portfolio": 105.84,
+        "portfolio": 105.96,
         "bnh": 112.68
       },
       {
         "date": "2023-05-15",
-        "portfolio": 106.54,
+        "portfolio": 106.66,
         "bnh": 114.17
       },
       {
         "date": "2023-05-22",
-        "portfolio": 107.3,
+        "portfolio": 107.43,
         "bnh": 115.25
       },
       {
         "date": "2023-05-29",
-        "portfolio": 107.8,
+        "portfolio": 107.93,
         "bnh": 116.34
       },
       {
         "date": "2023-06-05",
-        "portfolio": 108.31,
+        "portfolio": 108.44,
         "bnh": 117.43
       },
       {
         "date": "2023-06-12",
-        "portfolio": 108.69,
+        "portfolio": 108.82,
         "bnh": 118.26
       },
       {
         "date": "2023-06-19",
-        "portfolio": 109.14,
+        "portfolio": 109.27,
         "bnh": 119.23
       },
       {
         "date": "2023-06-26",
-        "portfolio": 109.83,
+        "portfolio": 109.61,
         "bnh": 120.74
       },
       {
         "date": "2023-07-03",
-        "portfolio": 110.0,
+        "portfolio": 109.78,
         "bnh": 121.1
       },
       {
         "date": "2023-07-10",
-        "portfolio": 110.25,
+        "portfolio": 110.03,
         "bnh": 121.47
       },
       {
         "date": "2023-07-17",
-        "portfolio": 109.91,
+        "portfolio": 109.7,
         "bnh": 120.74
       },
       {
         "date": "2023-07-24",
-        "portfolio": 109.58,
+        "portfolio": 109.53,
         "bnh": 120.01
       },
       {
         "date": "2023-07-31",
-        "portfolio": 109.38,
+        "portfolio": 109.33,
         "bnh": 119.57
       },
       {
         "date": "2023-08-07",
-        "portfolio": 109.23,
+        "portfolio": 109.25,
         "bnh": 119.24
       },
       {
         "date": "2023-08-14",
-        "portfolio": 109.17,
+        "portfolio": 109.19,
         "bnh": 119.11
       },
       {
         "date": "2023-08-21",
-        "portfolio": 109.18,
+        "portfolio": 109.19,
         "bnh": 119.12
       },
       {
         "date": "2023-08-28",
-        "portfolio": 108.73,
+        "portfolio": 108.74,
         "bnh": 118.14
       },
       {
         "date": "2023-09-04",
-        "portfolio": 108.02,
+        "portfolio": 108.04,
         "bnh": 116.62
       },
       {
         "date": "2023-09-11",
-        "portfolio": 107.72,
+        "portfolio": 107.74,
         "bnh": 115.95
       },
       {
         "date": "2023-09-18",
-        "portfolio": 107.33,
+        "portfolio": 107.54,
         "bnh": 115.12
       },
       {
         "date": "2023-09-25",
-        "portfolio": 107.11,
+        "portfolio": 107.54,
         "bnh": 114.2
       },
       {
         "date": "2023-10-02",
-        "portfolio": 106.97,
+        "portfolio": 107.47,
         "bnh": 113.88
       },
       {
         "date": "2023-10-09",
-        "portfolio": 107.1,
+        "portfolio": 107.54,
         "bnh": 114.17
       },
       {
         "date": "2023-10-16",
-        "portfolio": 107.47,
+        "portfolio": 107.72,
         "bnh": 114.95
       },
       {
         "date": "2023-10-23",
-        "portfolio": 107.97,
+        "portfolio": 107.72,
         "bnh": 117.09
       },
       {
         "date": "2023-10-30",
-        "portfolio": 109.12,
+        "portfolio": 108.29,
         "bnh": 119.58
       },
       {
         "date": "2023-11-06",
-        "portfolio": 109.65,
+        "portfolio": 108.82,
         "bnh": 120.74
       },
       {
         "date": "2023-11-13",
-        "portfolio": 110.49,
+        "portfolio": 109.66,
         "bnh": 122.61
       },
       {
         "date": "2023-11-20",
-        "portfolio": 110.92,
+        "portfolio": 110.08,
         "bnh": 123.55
       },
       {
         "date": "2023-11-27",
-        "portfolio": 111.57,
+        "portfolio": 110.73,
         "bnh": 125.0
       },
       {
         "date": "2023-12-04",
-        "portfolio": 111.95,
+        "portfolio": 111.1,
         "bnh": 125.85
       },
       {
         "date": "2023-12-11",
-        "portfolio": 112.4,
+        "portfolio": 111.55,
         "bnh": 126.86
       },
       {
         "date": "2023-12-18",
-        "portfolio": 112.39,
+        "portfolio": 111.55,
         "bnh": 126.85
       },
       {
         "date": "2023-12-25",
-        "portfolio": 112.71,
+        "portfolio": 111.85,
         "bnh": 127.55
       },
       {
         "date": "2024-01-01",
-        "portfolio": 112.91,
+        "portfolio": 112.06,
         "bnh": 128.02
       },
       {
         "date": "2024-01-08",
-        "portfolio": 113.55,
+        "portfolio": 112.69,
         "bnh": 129.46
       },
       {
         "date": "2024-01-15",
-        "portfolio": 114.14,
+        "portfolio": 113.28,
         "bnh": 130.81
       },
       {
         "date": "2024-01-22",
-        "portfolio": 114.5,
+        "portfolio": 113.63,
         "bnh": 131.63
       },
       {
         "date": "2024-01-29",
-        "portfolio": 114.88,
+        "portfolio": 114.01,
         "bnh": 132.51
       },
       {
         "date": "2024-02-05",
-        "portfolio": 115.31,
+        "portfolio": 114.44,
         "bnh": 133.51
       },
       {
         "date": "2024-02-12",
-        "portfolio": 115.69,
+        "portfolio": 114.82,
         "bnh": 134.39
       },
       {
         "date": "2024-02-19",
-        "portfolio": 116.28,
+        "portfolio": 115.4,
         "bnh": 135.75
       },
       {
         "date": "2024-02-26",
-        "portfolio": 116.75,
+        "portfolio": 115.87,
         "bnh": 136.86
       },
       {
         "date": "2024-03-04",
-        "portfolio": 116.97,
+        "portfolio": 116.08,
         "bnh": 137.36
       },
       {
         "date": "2024-03-11",
-        "portfolio": 117.08,
+        "portfolio": 116.14,
         "bnh": 137.62
       },
       {
         "date": "2024-03-18",
-        "portfolio": 116.74,
+        "portfolio": 115.81,
         "bnh": 136.83
       },
       {
         "date": "2024-03-25",
-        "portfolio": 116.36,
+        "portfolio": 115.43,
         "bnh": 135.95
       },
       {
         "date": "2024-04-01",
-        "portfolio": 115.79,
+        "portfolio": 114.86,
         "bnh": 134.6
       },
       {
         "date": "2024-04-08",
-        "portfolio": 115.75,
+        "portfolio": 114.82,
         "bnh": 134.51
       },
       {
         "date": "2024-04-15",
-        "portfolio": 116.4,
+        "portfolio": 115.14,
         "bnh": 136.02
       },
       {
         "date": "2024-04-22",
-        "portfolio": 117.2,
+        "portfolio": 115.54,
         "bnh": 137.88
       },
       {
         "date": "2024-04-29",
-        "portfolio": 117.6,
+        "portfolio": 115.93,
         "bnh": 138.82
       },
       {
         "date": "2024-05-06",
-        "portfolio": 118.05,
+        "portfolio": 116.38,
         "bnh": 139.89
       },
       {
         "date": "2024-05-13",
-        "portfolio": 118.57,
+        "portfolio": 116.89,
         "bnh": 141.13
       },
       {
         "date": "2024-05-20",
-        "portfolio": 119.0,
+        "portfolio": 117.31,
         "bnh": 142.14
       },
       {
         "date": "2024-05-27",
-        "portfolio": 119.44,
+        "portfolio": 117.75,
         "bnh": 143.21
       },
       {
         "date": "2024-06-03",
-        "portfolio": 120.11,
+        "portfolio": 118.4,
         "bnh": 144.8
       },
       {
         "date": "2024-06-10",
-        "portfolio": 120.81,
+        "portfolio": 119.1,
         "bnh": 146.5
       },
       {
         "date": "2024-06-17",
-        "portfolio": 121.1,
+        "portfolio": 119.39,
         "bnh": 147.21
       },
       {
         "date": "2024-06-24",
-        "portfolio": 121.05,
+        "portfolio": 119.36,
         "bnh": 147.08
       },
       {
         "date": "2024-07-01",
-        "portfolio": 121.17,
+        "portfolio": 119.48,
         "bnh": 147.37
       },
       {
         "date": "2024-07-08",
-        "portfolio": 120.23,
+        "portfolio": 118.56,
         "bnh": 145.09
       },
       {
         "date": "2024-07-15",
-        "portfolio": 119.8,
+        "portfolio": 118.13,
         "bnh": 144.04
       },
       {
         "date": "2024-07-22",
-        "portfolio": 119.94,
+        "portfolio": 118.27,
         "bnh": 144.38
       },
       {
         "date": "2024-07-29",
-        "portfolio": 120.26,
+        "portfolio": 118.59,
         "bnh": 145.16
       },
       {
         "date": "2024-08-05",
-        "portfolio": 120.71,
+        "portfolio": 119.03,
         "bnh": 147.32
       },
       {
         "date": "2024-08-12",
-        "portfolio": 121.26,
+        "portfolio": 119.57,
         "bnh": 148.65
       },
       {
         "date": "2024-08-19",
-        "portfolio": 121.28,
+        "portfolio": 119.58,
         "bnh": 148.71
       },
       {
         "date": "2024-08-26",
-        "portfolio": 121.68,
+        "portfolio": 119.97,
         "bnh": 149.36
       },
       {
         "date": "2024-09-02",
-        "portfolio": 121.83,
+        "portfolio": 120.04,
         "bnh": 149.73
       },
       {
         "date": "2024-09-09",
-        "portfolio": 122.24,
+        "portfolio": 120.04,
         "bnh": 151.76
       },
       {
         "date": "2024-09-16",
-        "portfolio": 123.29,
+        "portfolio": 121.07,
         "bnh": 153.07
       },
       {
         "date": "2024-09-23",
-        "portfolio": 123.69,
+        "portfolio": 121.46,
         "bnh": 153.55
       },
       {
         "date": "2024-09-30",
-        "portfolio": 123.94,
+        "portfolio": 121.71,
         "bnh": 153.87
       },
       {
         "date": "2024-10-07",
-        "portfolio": 124.53,
+        "portfolio": 122.28,
         "bnh": 155.32
       },
       {
         "date": "2024-10-14",
-        "portfolio": 125.14,
+        "portfolio": 122.89,
         "bnh": 156.09
       },
       {
         "date": "2024-10-21",
-        "portfolio": 125.3,
+        "portfolio": 123.04,
         "bnh": 156.48
       },
       {
         "date": "2024-10-28",
-        "portfolio": 125.95,
+        "portfolio": 123.68,
         "bnh": 157.57
       },
       {
         "date": "2024-11-04",
-        "portfolio": 126.43,
+        "portfolio": 124.15,
         "bnh": 159.95
       },
       {
         "date": "2024-11-11",
-        "portfolio": 126.63,
+        "portfolio": 124.35,
         "bnh": 160.46
       },
       {
         "date": "2024-11-18",
-        "portfolio": 126.57,
+        "portfolio": 124.3,
         "bnh": 160.32
       },
       {
         "date": "2024-11-25",
-        "portfolio": 126.7,
+        "portfolio": 124.42,
         "bnh": 160.64
       },
       {
         "date": "2024-12-02",
-        "portfolio": 126.27,
+        "portfolio": 123.99,
         "bnh": 159.54
       },
       {
         "date": "2024-12-09",
-        "portfolio": 125.94,
+        "portfolio": 123.68,
         "bnh": 158.72
       },
       {
         "date": "2024-12-16",
-        "portfolio": 125.65,
+        "portfolio": 123.38,
         "bnh": 157.98
       },
       {
         "date": "2024-12-23",
-        "portfolio": 125.92,
+        "portfolio": 123.65,
         "bnh": 158.66
       },
       {
         "date": "2024-12-30",
-        "portfolio": 126.24,
+        "portfolio": 123.97,
         "bnh": 159.48
       },
       {
         "date": "2025-01-06",
-        "portfolio": 126.56,
+        "portfolio": 124.28,
         "bnh": 160.01
       },
       {
         "date": "2025-01-13",
-        "portfolio": 127.1,
+        "portfolio": 124.81,
         "bnh": 161.38
       },
       {
         "date": "2025-01-20",
-        "portfolio": 127.64,
+        "portfolio": 125.34,
         "bnh": 162.3
       },
       {
         "date": "2025-01-27",
-        "portfolio": 127.5,
+        "portfolio": 125.21,
         "bnh": 161.94
       },
       {
         "date": "2025-02-03",
-        "portfolio": 127.13,
+        "portfolio": 124.84,
         "bnh": 161.0
       },
       {
         "date": "2025-02-10",
-        "portfolio": 125.43,
+        "portfolio": 123.18,
         "bnh": 158.13
       },
       {
         "date": "2025-02-17",
-        "portfolio": 124.39,
+        "portfolio": 122.15,
         "bnh": 155.51
       },
       {
         "date": "2025-02-24",
-        "portfolio": 123.74,
+        "portfolio": 121.52,
         "bnh": 153.88
       },
       {
         "date": "2025-03-03",
-        "portfolio": 123.52,
+        "portfolio": 121.3,
         "bnh": 152.79
       },
       {
         "date": "2025-03-10",
-        "portfolio": 123.12,
+        "portfolio": 120.91,
         "bnh": 151.8
       },
       {
         "date": "2025-03-17",
-        "portfolio": 122.12,
+        "portfolio": 119.92,
         "bnh": 149.33
       },
       {
         "date": "2025-03-24",
-        "portfolio": 120.69,
+        "portfolio": 118.51,
         "bnh": 146.99
       },
       {
         "date": "2025-03-31",
-        "portfolio": 120.58,
+        "portfolio": 118.41,
         "bnh": 146.74
       },
       {
         "date": "2025-04-07",
-        "portfolio": 122.14,
+        "portfolio": 119.95,
         "bnh": 150.54
       },
       {
         "date": "2025-04-14",
-        "portfolio": 123.41,
+        "portfolio": 121.19,
         "bnh": 153.67
       },
       {
         "date": "2025-04-21",
-        "portfolio": 125.31,
+        "portfolio": 123.06,
         "bnh": 158.4
       },
       {
         "date": "2025-04-28",
-        "portfolio": 126.72,
+        "portfolio": 124.44,
         "bnh": 160.78
       },
       {
         "date": "2025-05-05",
-        "portfolio": 127.55,
+        "portfolio": 125.26,
         "bnh": 162.88
       },
       {
         "date": "2025-05-12",
-        "portfolio": 128.45,
+        "portfolio": 126.14,
         "bnh": 164.03
       },
       {
         "date": "2025-05-19",
-        "portfolio": 128.52,
+        "portfolio": 126.2,
         "bnh": 164.14
       },
       {
         "date": "2025-05-26",
-        "portfolio": 128.52,
+        "portfolio": 126.2,
         "bnh": 164.14
       },
       {
         "date": "2025-06-02",
-        "portfolio": 129.25,
+        "portfolio": 126.92,
         "bnh": 166.0
       },
       {
         "date": "2025-06-09",
-        "portfolio": 130.21,
+        "portfolio": 127.86,
         "bnh": 167.65
       },
       {
         "date": "2025-06-16",
-        "portfolio": 130.78,
+        "portfolio": 128.43,
         "bnh": 169.13
       },
       {
         "date": "2025-06-23",
-        "portfolio": 131.62,
+        "portfolio": 129.25,
         "bnh": 171.29
       },
       {
         "date": "2025-06-30",
-        "portfolio": 132.2,
+        "portfolio": 129.82,
         "bnh": 172.3
       },
       {
         "date": "2025-07-07",
-        "portfolio": 132.62,
+        "portfolio": 130.23,
         "bnh": 173.03
       },
       {
         "date": "2025-07-14",
-        "portfolio": 133.35,
+        "portfolio": 130.95,
         "bnh": 174.3
       },
       {
         "date": "2025-07-21",
-        "portfolio": 133.57,
+        "portfolio": 131.16,
         "bnh": 174.87
       },
       {
         "date": "2025-07-28",
-        "portfolio": 133.9,
+        "portfolio": 131.49,
         "bnh": 175.45
       },
       {
         "date": "2025-08-04",
-        "portfolio": 134.19,
+        "portfolio": 131.77,
         "bnh": 176.21
       },
       {
         "date": "2025-08-11",
-        "portfolio": 134.77,
+        "portfolio": 132.34,
         "bnh": 177.22
       },
       {
         "date": "2025-08-18",
-        "portfolio": 135.13,
+        "portfolio": 132.7,
         "bnh": 178.18
       },
       {
         "date": "2025-08-25",
-        "portfolio": 135.61,
+        "portfolio": 133.17,
         "bnh": 179.45
       },
       {
         "date": "2025-09-01",
-        "portfolio": 136.52,
+        "portfolio": 134.07,
         "bnh": 181.05
       },
       {
         "date": "2025-09-08",
-        "portfolio": 137.46,
+        "portfolio": 134.99,
         "bnh": 182.72
       },
       {
         "date": "2025-09-15",
-        "portfolio": 137.66,
+        "portfolio": 135.19,
         "bnh": 183.07
       },
       {
         "date": "2025-09-22",
-        "portfolio": 137.68,
+        "portfolio": 135.21,
         "bnh": 183.11
       },
       {
         "date": "2025-09-29",
-        "portfolio": 138.23,
+        "portfolio": 135.74,
         "bnh": 184.56
       },
       {
         "date": "2025-10-06",
-        "portfolio": 138.43,
+        "portfolio": 135.94,
         "bnh": 184.92
       },
       {
         "date": "2025-10-13",
-        "portfolio": 138.9,
+        "portfolio": 136.4,
         "bnh": 186.18
       },
       {
         "date": "2025-10-20",
-        "portfolio": 138.68,
+        "portfolio": 136.18,
         "bnh": 185.58
       },
       {
         "date": "2025-10-27",
-        "portfolio": 138.46,
+        "portfolio": 135.97,
         "bnh": 185.19
       },
       {
         "date": "2025-11-03",
-        "portfolio": 138.46,
+        "portfolio": 135.96,
         "bnh": 185.18
       },
       {
         "date": "2025-11-10",
-        "portfolio": 138.58,
+        "portfolio": 136.09,
         "bnh": 185.52
       },
       {
         "date": "2025-11-17",
-        "portfolio": 138.7,
+        "portfolio": 136.2,
         "bnh": 185.83
       },
       {
         "date": "2025-11-24",
-        "portfolio": 139.24,
+        "portfolio": 136.73,
         "bnh": 187.28
       },
       {
         "date": "2025-12-01",
-        "portfolio": 139.32,
+        "portfolio": 136.81,
         "bnh": 187.49
       },
       {
         "date": "2025-12-08",
-        "portfolio": 139.49,
+        "portfolio": 136.98,
         "bnh": 187.96
       },
       {
         "date": "2025-12-15",
-        "portfolio": 139.75,
+        "portfolio": 137.24,
         "bnh": 188.66
       },
       {
         "date": "2025-12-22",
-        "portfolio": 139.75,
+        "portfolio": 137.23,
         "bnh": 188.65
       },
       {
         "date": "2025-12-29",
-        "portfolio": 139.92,
+        "portfolio": 137.4,
         "bnh": 189.1
       },
       {
         "date": "2026-01-05",
-        "portfolio": 139.87,
+        "portfolio": 137.35,
         "bnh": 188.98
       },
       {
         "date": "2026-01-12",
-        "portfolio": 139.79,
+        "portfolio": 137.27,
         "bnh": 188.76
       },
       {
         "date": "2026-01-19",
-        "portfolio": 139.65,
+        "portfolio": 137.14,
         "bnh": 188.39
       },
       {
         "date": "2026-01-26",
-        "portfolio": 139.64,
+        "portfolio": 137.13,
         "bnh": 188.36
       },
       {
         "date": "2026-02-02",
-        "portfolio": 139.39,
+        "portfolio": 136.89,
         "bnh": 187.7
       },
       {
         "date": "2026-02-09",
-        "portfolio": 138.96,
+        "portfolio": 136.46,
         "bnh": 186.52
       },
       {
         "date": "2026-02-16",
-        "portfolio": 138.46,
+        "portfolio": 135.97,
         "bnh": 185.19
       },
       {
         "date": "2026-02-23",
-        "portfolio": 137.89,
+        "portfolio": 135.41,
         "bnh": 183.65
       },
       {
         "date": "2026-03-02",
-        "portfolio": 137.18,
+        "portfolio": 134.71,
         "bnh": 181.76
       },
       {
         "date": "2026-03-09",
-        "portfolio": 137.15,
+        "portfolio": 134.68,
         "bnh": 181.68
+      },
+      {
+        "date": "2026-03-16",
+        "portfolio": 135.43,
+        "bnh": 183.71
       }
     ],
     "out_of_sample": {
       "in_sample (2021-2023)": {
         "period": "2021-01 ~ 2023-12",
         "total_points": 156,
-        "bull_count": 41,
-        "bear_count": 2,
-        "bull_hit_3m": 70.7,
-        "bear_hit_3m": 50.0,
-        "avg_score": 0.97
+        "bull_count": 38,
+        "bear_count": 6,
+        "bull_hit_3m": 68.4,
+        "bear_hit_3m": 33.3,
+        "avg_score": 0.72
       },
       "out_of_sample (2024-)": {
         "period": "2024-01 ~ 현재",
-        "total_points": 115,
+        "total_points": 116,
         "bull_count": 5,
-        "bear_count": 0,
+        "bear_count": 1,
         "bull_hit_3m": 80.0,
-        "bear_hit_3m": 0,
-        "avg_score": 0.7
+        "bear_hit_3m": 0.0,
+        "avg_score": 0.47
       }
     },
     "rolling_hit_rate_6m": [
@@ -7446,119 +7472,19 @@
       },
       {
         "date": "2023-01-23",
-        "bull_hit_3m": 50.0
+        "bull_hit_3m": 0.0
       },
       {
         "date": "2023-01-30",
-        "bull_hit_3m": 66.7
+        "bull_hit_3m": 0.0
       },
       {
         "date": "2023-02-06",
-        "bull_hit_3m": 66.7
+        "bull_hit_3m": 0.0
       },
       {
         "date": "2023-02-13",
-        "bull_hit_3m": 75.0
-      },
-      {
-        "date": "2023-02-20",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-02-27",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-03-06",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-03-13",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-03-20",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-03-27",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-04-03",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-04-10",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-04-17",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-04-24",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-05-01",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-05-08",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-05-15",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-05-22",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-05-29",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-06-05",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-06-12",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-06-19",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-06-26",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-07-03",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-07-10",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-07-17",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-07-24",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-07-31",
-        "bull_hit_3m": 100.0
-      },
-      {
-        "date": "2023-08-07",
-        "bull_hit_3m": 100.0
+        "bull_hit_3m": 0.0
       },
       {
         "date": "2024-09-23",

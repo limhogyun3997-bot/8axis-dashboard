@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-10-19T00:54:59.850303+00:00",
+  "last_updated": "2026-10-26T01:02:18.666775+00:00",
   "period_start": "2021-01-04",
-  "period_end": "2026-10-19",
-  "total_points": 274,
+  "period_end": "2026-10-26",
+  "total_points": 275,
   "results": [
     {
       "date": "2021-01-04",
@@ -5754,6 +5754,27 @@
       "ret_3m": 17.29,
       "ret_6m": 21.12,
       "sp500": 6343.72
+    },
+    {
+      "date": "2026-04-06",
+      "ratings": {
+        "interest": "중립",
+        "flow": "긍정",
+        "employment": "중립",
+        "consumption": "중립",
+        "dollar": "부정",
+        "vix": "중립"
+      },
+      "positive": 1,
+      "neutral": 4,
+      "negative": 1,
+      "none": 0,
+      "score": 0,
+      "phase": "균형",
+      "ret_1m": 11.39,
+      "ret_3m": 14.0,
+      "ret_6m": 17.58,
+      "sp500": 6611.83
     }
   ],
   "stats": {
@@ -5765,7 +5786,7 @@
         "avg_6m": 0.61,
         "std_3m": 4.96,
         "hit_3m_positive": 69.8,
-        "pct": 15.7
+        "pct": 15.6
       },
       "bull_lean": {
         "count": 53,
@@ -5777,13 +5798,13 @@
         "pct": 19.3
       },
       "balanced": {
-        "count": 55,
-        "avg_1m": 1.05,
+        "count": 56,
+        "avg_1m": 1.24,
         "avg_3m": NaN,
         "avg_6m": NaN,
         "std_3m": NaN,
-        "hit_3m_positive": 70.9,
-        "pct": 20.1
+        "hit_3m_positive": 71.4,
+        "pct": 20.4
       },
       "bear_lean": {
         "count": 35,
@@ -5792,7 +5813,7 @@
         "avg_6m": 9.27,
         "std_3m": 5.73,
         "hit_3m_positive": 85.7,
-        "pct": 12.8
+        "pct": 12.7
       },
       "strong_bear": {
         "count": 7,
@@ -5801,11 +5822,11 @@
         "avg_6m": 8.01,
         "std_3m": 7.14,
         "hit_3m_positive": 71.4,
-        "pct": 2.6
+        "pct": 2.5
       }
     },
     "overall": {
-      "total_points": 274,
+      "total_points": 275,
       "bull_hit_3m": 69.8,
       "bear_hit_3m": 28.6,
       "avg_score": 0.6,
@@ -5813,13 +5834,13 @@
     },
     "strategy": {
       "description": "신호 기반 포지션 조정: 강세4+ 100%, 강세3 75%, 균형 50%, 약세3 25%, 약세4+ 0%",
-      "portfolio_total_return": 38.73,
-      "bnh_total_return": 92.7,
-      "portfolio_sharpe_annualized": 1.526,
-      "bnh_sharpe_annualized": 1.836,
+      "portfolio_total_return": 40.55,
+      "bnh_total_return": 97.77,
+      "portfolio_sharpe_annualized": 1.571,
+      "bnh_sharpe_annualized": 1.883,
       "portfolio_max_drawdown": 15.55,
       "bnh_max_drawdown": 18.61,
-      "outperformance": -53.98
+      "outperformance": -57.22
     },
     "equity_curve": [
       {
@@ -7191,6 +7212,11 @@
         "date": "2026-03-30",
         "portfolio": 138.73,
         "bnh": 192.7
+      },
+      {
+        "date": "2026-04-06",
+        "portfolio": 140.55,
+        "bnh": 197.77
       }
     ],
     "out_of_sample": {
@@ -7205,7 +7231,7 @@
       },
       "out_of_sample (2024-)": {
         "period": "2024-01 ~ 현재",
-        "total_points": 118,
+        "total_points": 119,
         "bull_count": 5,
         "bear_count": 1,
         "bull_hit_3m": 80.0,

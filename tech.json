@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-10-25T01:03:09.343596+00:00",
-  "last_updated_kst": "2026-10-25 10:03 KST",
+  "last_updated": "2026-10-26T01:09:00.722724+00:00",
+  "last_updated_kst": "2026-10-26 10:09 KST",
   "version": "tech-2.0",
   "universe": "S&P 500",
   "basis": "yfinance 일봉(1년) · 기술적 분석 2강 4대 축 · 유동성은 캔들 프록시(★)",
@@ -10,7 +10,7 @@
     "시간": "RSI 에너지",
     "유동성": "꼬리 사냥 프록시"
   },
-  "count": 2788,
+  "count": 2787,
   "stocks": [
     {
       "struct": 2,
@@ -39232,24 +39232,6 @@
       "range_pct": 78,
       "ticker": "SB",
       "name": "Safe Bulkers Inc Common Stock ($0.001 pa",
-      "sector": "Russell2K"
-    },
-    {
-      "struct": 2,
-      "price": 0,
-      "time": 0,
-      "liq": 2,
-      "score": 4,
-      "verdict": "신중·관망",
-      "d_struct": "상승추세(정배열)",
-      "d_price": "범위 상단(100%)·비싸다",
-      "d_time": "과매수(RSI 76)·에너지 소진",
-      "d_liq": "긴 아래꼬리+회복(사냥 완료 가능)",
-      "close": 53.9,
-      "rsi": 75.9,
-      "range_pct": 100,
-      "ticker": "BUUU",
-      "name": "BUUU Group Limited Class A Ordinary Shar",
       "sector": "Russell2K"
     },
     {

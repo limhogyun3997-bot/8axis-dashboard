@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-10-26T01:02:18.666775+00:00",
+  "last_updated": "2026-11-02T02:10:14.484009+00:00",
   "period_start": "2021-01-04",
-  "period_end": "2026-10-26",
-  "total_points": 275,
+  "period_end": "2026-11-02",
+  "total_points": 276,
   "results": [
     {
       "date": "2021-01-04",
@@ -5775,6 +5775,27 @@
       "ret_3m": 14.0,
       "ret_6m": 17.58,
       "sp500": 6611.83
+    },
+    {
+      "date": "2026-04-13",
+      "ratings": {
+        "interest": "중립",
+        "flow": "긍정",
+        "employment": "중립",
+        "consumption": "중립",
+        "dollar": "중립",
+        "vix": "긍정"
+      },
+      "positive": 2,
+      "neutral": 4,
+      "negative": 0,
+      "none": 0,
+      "score": 2,
+      "phase": "강세 우위",
+      "ret_1m": 8.1,
+      "ret_3m": 9.14,
+      "ret_6m": 13.37,
+      "sp500": 6886.24
     }
   ],
   "stats": {
@@ -5795,7 +5816,7 @@
         "avg_6m": 4.48,
         "std_3m": 7.54,
         "hit_3m_positive": 67.9,
-        "pct": 19.3
+        "pct": 19.2
       },
       "balanced": {
         "count": 56,
@@ -5804,7 +5825,7 @@
         "avg_6m": NaN,
         "std_3m": NaN,
         "hit_3m_positive": 71.4,
-        "pct": 20.4
+        "pct": 20.3
       },
       "bear_lean": {
         "count": 35,
@@ -5826,21 +5847,21 @@
       }
     },
     "overall": {
-      "total_points": 275,
+      "total_points": 276,
       "bull_hit_3m": 69.8,
       "bear_hit_3m": 28.6,
-      "avg_score": 0.6,
+      "avg_score": 0.61,
       "avg_3m_all": NaN
     },
     "strategy": {
       "description": "신호 기반 포지션 조정: 강세4+ 100%, 강세3 75%, 균형 50%, 약세3 25%, 약세4+ 0%",
-      "portfolio_total_return": 40.55,
-      "bnh_total_return": 97.77,
-      "portfolio_sharpe_annualized": 1.571,
-      "bnh_sharpe_annualized": 1.883,
+      "portfolio_total_return": 41.87,
+      "bnh_total_return": 101.47,
+      "portfolio_sharpe_annualized": 1.605,
+      "bnh_sharpe_annualized": 1.921,
       "portfolio_max_drawdown": 15.55,
       "bnh_max_drawdown": 18.61,
-      "outperformance": -57.22
+      "outperformance": -59.6
     },
     "equity_curve": [
       {
@@ -7217,6 +7238,11 @@
         "date": "2026-04-06",
         "portfolio": 140.55,
         "bnh": 197.77
+      },
+      {
+        "date": "2026-04-13",
+        "portfolio": 141.87,
+        "bnh": 201.47
       }
     ],
     "out_of_sample": {
@@ -7231,12 +7257,12 @@
       },
       "out_of_sample (2024-)": {
         "period": "2024-01 ~ 현재",
-        "total_points": 119,
+        "total_points": 120,
         "bull_count": 5,
         "bear_count": 1,
         "bull_hit_3m": 80.0,
         "bear_hit_3m": 0.0,
-        "avg_score": 0.44
+        "avg_score": 0.45
       }
     },
     "rolling_hit_rate_6m": [

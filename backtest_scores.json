@@ -1,5 +1,5 @@
 {
-  "last_updated_kst": "2026-10-26 10:02 KST",
+  "last_updated_kst": "2026-11-02 11:10 KST",
   "version": "score-bt-1.0",
   "universe_size": 94,
   "n_observations": 4371,
@@ -8,67 +8,67 @@
     "buckets": [
       {
         "range": "0-2 (약)",
-        "n": 225,
-        "mean_ret": 1.9,
-        "win_rate": 56.4
+        "n": 203,
+        "mean_ret": 3.05,
+        "win_rate": 62.6
       },
       {
         "range": "3-4 (중하)",
-        "n": 1697,
-        "mean_ret": 2.3,
+        "n": 1582,
+        "mean_ret": 1.45,
         "win_rate": 56.6
       },
       {
         "range": "5-6 (중상)",
-        "n": 2192,
-        "mean_ret": 1.86,
-        "win_rate": 53.7
+        "n": 2348,
+        "mean_ret": 2.55,
+        "win_rate": 56.2
       },
       {
         "range": "7-8 (강)",
-        "n": 257,
-        "mean_ret": 1.14,
-        "win_rate": 51.8
+        "n": 238,
+        "mean_ret": 4.29,
+        "win_rate": 56.3
       }
     ],
-    "ic": -0.025,
-    "spread": -0.77
+    "ic": 0.048,
+    "spread": 1.23
   },
   "forward_3m": {
     "buckets": [
       {
         "range": "0-2 (약)",
-        "n": 225,
-        "mean_ret": 3.79,
-        "win_rate": 60.4
+        "n": 203,
+        "mean_ret": 6.87,
+        "win_rate": 66.0
       },
       {
         "range": "3-4 (중하)",
-        "n": 1697,
-        "mean_ret": 7.14,
-        "win_rate": 63.8
+        "n": 1582,
+        "mean_ret": 5.56,
+        "win_rate": 60.9
       },
       {
         "range": "5-6 (중상)",
-        "n": 2192,
-        "mean_ret": 6.26,
-        "win_rate": 59.0
+        "n": 2348,
+        "mean_ret": 7.6,
+        "win_rate": 60.2
       },
       {
         "range": "7-8 (강)",
-        "n": 257,
-        "mean_ret": 7.98,
-        "win_rate": 61.5
+        "n": 238,
+        "mean_ret": 7.74,
+        "win_rate": 57.1
       }
     ],
-    "ic": 0.016,
-    "spread": 4.19
+    "ic": 0.047,
+    "spread": 0.87
   },
   "axis_ic_1m": {
-    "구조": -0.062,
-    "가격": 0.036,
-    "시간": 0.01,
-    "유동성": -0.018
+    "구조": -0.07,
+    "가격": 0.069,
+    "시간": 0.092,
+    "유동성": 0.007
   },
   "note": "기술 4축만 검증(펀더는 과거 데이터 불가). 현재 구성종목 기반이라 생존편향 있음 — 절대수익보다 점수 버킷 간 상대 비교로 해석."
 }

@@ -1,464 +1,464 @@
 {
-  "last_updated": "2026-11-09T02:27:36.573926+00:00",
-  "last_updated_kst": "2026-11-09 11:27 KST",
+  "last_updated": "2026-11-10T04:30:45.778355+00:00",
+  "last_updated_kst": "2026-11-10 13:30 KST",
   "version": "v3.0",
   "prices": {
     "sp500": {
-      "value": 7376.8599,
-      "prev": 7353.73,
-      "change_pct": 0.31,
-      "change_5d_pct": -2.68,
-      "change_1m_pct": -5.45,
+      "value": 7549.9399,
+      "prev": 7376.8599,
+      "change_pct": 2.35,
+      "change_5d_pct": 0.11,
+      "change_1m_pct": -3.3,
       "high_1m": 7821.6699,
       "low_1m": 7350.3501,
-      "trade_date": "2026-11-06",
-      "source": "Yahoo"
-    },
-    "nasdaq": {
-      "value": 24579.4297,
-      "prev": 24315.0,
-      "change_pct": 1.09,
-      "change_5d_pct": -3.37,
-      "change_1m_pct": -10.75,
-      "high_1m": 27547.1992,
-      "low_1m": 24262.1406,
-      "trade_date": "2026-11-06",
-      "source": "Yahoo"
-    },
-    "dow": {
-      "value": 51285.7305,
-      "prev": 51523.0586,
-      "change_pct": -0.46,
-      "change_5d_pct": -0.94,
-      "change_1m_pct": 0.21,
-      "high_1m": 53710.6094,
-      "low_1m": 50917.4219,
-      "trade_date": "2026-11-06",
-      "source": "Yahoo"
-    },
-    "rut": {
-      "value": 2754.1101,
-      "prev": 2729.8899,
-      "change_pct": 0.89,
-      "change_5d_pct": -2.05,
-      "change_1m_pct": -1.4,
-      "high_1m": 2875.1399,
-      "low_1m": 2716.23,
-      "trade_date": "2026-11-06",
-      "source": "Yahoo"
-    },
-    "vix": {
-      "value": 25.64,
-      "prev": 28.18,
-      "change_pct": -9.01,
-      "change_5d_pct": 32.03,
-      "change_1m_pct": 70.82,
-      "high_1m": 28.36,
-      "low_1m": 14.77,
-      "trade_date": "2026-11-06",
-      "source": "Yahoo"
-    },
-    "us10y": {
-      "value": 4.859,
-      "prev": 4.837,
-      "change_pct": 0.45,
-      "change_5d_pct": -1.42,
-      "change_1m_pct": -7.78,
-      "high_1m": 5.364,
-      "low_1m": 4.814,
-      "trade_date": "2026-11-06",
-      "source": "Yahoo"
-    },
-    "us2y": {
-      "value": 4.648,
-      "prev": 4.608,
-      "change_pct": 0.87,
-      "change_5d_pct": -1.55,
-      "change_1m_pct": -7.56,
-      "high_1m": 5.153,
-      "low_1m": 4.58,
-      "trade_date": "2026-11-06",
-      "source": "Yahoo"
-    },
-    "us3m": {
-      "value": 4.0,
-      "prev": 3.987,
-      "change_pct": 0.33,
-      "change_5d_pct": 0.68,
-      "change_1m_pct": -0.92,
-      "high_1m": 4.147,
-      "low_1m": 3.96,
-      "trade_date": "2026-11-06",
-      "source": "Yahoo"
-    },
-    "dxy": {
-      "value": 102.16,
-      "prev": 102.3,
-      "change_pct": -0.14,
-      "change_5d_pct": 0.4,
-      "change_1m_pct": 0.02,
-      "high_1m": 102.95,
-      "low_1m": 101.1,
-      "trade_date": "2026-11-08",
-      "source": "Yahoo"
-    },
-    "wti": {
-      "value": 90.58,
-      "prev": 90.83,
-      "change_pct": -0.28,
-      "change_5d_pct": -6.1,
-      "change_1m_pct": -0.99,
-      "high_1m": 110.48,
-      "low_1m": 86.65,
-      "trade_date": "2026-11-08",
-      "source": "Yahoo"
-    },
-    "brent": {
-      "value": 97.65,
-      "prev": 98.32,
-      "change_pct": -0.68,
-      "change_5d_pct": -6.8,
-      "change_1m_pct": -6.36,
-      "high_1m": 118.0,
-      "low_1m": 93.4,
-      "trade_date": "2026-11-08",
-      "source": "Yahoo"
-    },
-    "copper": {
-      "value": 6.325,
-      "prev": 6.218,
-      "change_pct": 1.72,
-      "change_5d_pct": -3.34,
-      "change_1m_pct": -2.98,
-      "high_1m": 6.7255,
-      "low_1m": 6.181,
-      "trade_date": "2026-11-08",
-      "source": "Yahoo"
-    },
-    "gold": {
-      "value": 4135.6001,
-      "prev": 4074.8999,
-      "change_pct": 1.49,
-      "change_5d_pct": 4.18,
-      "change_1m_pct": -0.51,
-      "high_1m": 4242.2998,
-      "low_1m": 3879.3,
-      "trade_date": "2026-11-08",
-      "source": "Yahoo"
-    },
-    "silver": {
-      "value": 53.26,
-      "prev": 51.803,
-      "change_pct": 2.81,
-      "change_5d_pct": 5.01,
-      "change_1m_pct": -9.83,
-      "high_1m": 60.755,
-      "low_1m": 48.55,
-      "trade_date": "2026-11-08",
-      "source": "Yahoo"
-    },
-    "btc": {
-      "value": 75449.4219,
-      "prev": 75747.5781,
-      "change_pct": -0.39,
-      "change_5d_pct": -2.45,
-      "change_1m_pct": -8.6,
-      "high_1m": 84840.0469,
-      "low_1m": 74508.4375,
       "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
+    "nasdaq": {
+      "value": 25253.1387,
+      "prev": 24579.4297,
+      "change_pct": 2.74,
+      "change_5d_pct": 0.35,
+      "change_1m_pct": -7.31,
+      "high_1m": 27376.6602,
+      "low_1m": 24262.1406,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "dow": {
+      "value": 52389.8008,
+      "prev": 51285.7305,
+      "change_pct": 2.15,
+      "change_5d_pct": 0.78,
+      "change_1m_pct": 1.04,
+      "high_1m": 53710.6094,
+      "low_1m": 50992.6094,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "rut": {
+      "value": 2840.8123,
+      "prev": 2754.1101,
+      "change_pct": 3.15,
+      "change_5d_pct": 1.24,
+      "change_1m_pct": 1.66,
+      "high_1m": 2875.1399,
+      "low_1m": 2716.23,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "vix": {
+      "value": 19.92,
+      "prev": 25.64,
+      "change_pct": -22.31,
+      "change_5d_pct": -5.82,
+      "change_1m_pct": 34.23,
+      "high_1m": 28.36,
+      "low_1m": 14.77,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "us10y": {
+      "value": 4.864,
+      "prev": 4.859,
+      "change_pct": 0.1,
+      "change_5d_pct": -0.61,
+      "change_1m_pct": -7.25,
+      "high_1m": 5.329,
+      "low_1m": 4.814,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "us2y": {
+      "value": 4.659,
+      "prev": 4.648,
+      "change_pct": 0.24,
+      "change_5d_pct": -0.72,
+      "change_1m_pct": -7.21,
+      "high_1m": 5.153,
+      "low_1m": 4.58,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "us3m": {
+      "value": 4.035,
+      "prev": 4.0,
+      "change_pct": 0.87,
+      "change_5d_pct": 1.33,
+      "change_1m_pct": -0.54,
+      "high_1m": 4.147,
+      "low_1m": 3.96,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "dxy": {
+      "value": 101.685,
+      "prev": 102.3,
+      "change_pct": -0.6,
+      "change_5d_pct": -0.06,
+      "change_1m_pct": -0.51,
+      "high_1m": 102.95,
+      "low_1m": 101.1,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "wti": {
+      "value": 85.93,
+      "prev": 90.83,
+      "change_pct": -5.39,
+      "change_5d_pct": -10.92,
+      "change_1m_pct": -6.45,
+      "high_1m": 110.48,
+      "low_1m": 85.52,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "brent": {
+      "value": 91.75,
+      "prev": 98.32,
+      "change_pct": -6.68,
+      "change_5d_pct": -12.43,
+      "change_1m_pct": -12.39,
+      "high_1m": 118.0,
+      "low_1m": 91.34,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "copper": {
+      "value": 6.3465,
+      "prev": 6.218,
+      "change_pct": 2.07,
+      "change_5d_pct": -3.01,
+      "change_1m_pct": -4.46,
+      "high_1m": 6.7255,
+      "low_1m": 6.181,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "gold": {
+      "value": 4122.7998,
+      "prev": 4074.8999,
+      "change_pct": 1.18,
+      "change_5d_pct": 3.86,
+      "change_1m_pct": -2.22,
+      "high_1m": 4242.2998,
+      "low_1m": 3879.3,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "silver": {
+      "value": 53.07,
+      "prev": 51.803,
+      "change_pct": 2.45,
+      "change_5d_pct": 4.63,
+      "change_1m_pct": -12.53,
+      "high_1m": 60.755,
+      "low_1m": 48.55,
+      "trade_date": "2026-11-09",
+      "source": "Yahoo"
+    },
+    "btc": {
+      "value": 74741.75,
+      "prev": 74584.6484,
+      "change_pct": 0.21,
+      "change_5d_pct": -7.04,
+      "change_1m_pct": -9.85,
+      "high_1m": 84840.0469,
+      "low_1m": 73691.7656,
+      "trade_date": "2026-11-10",
+      "source": "Yahoo"
+    },
     "qqq": {
-      "value": 656.1,
-      "prev": 647.05,
-      "change_pct": 1.4,
-      "change_5d_pct": -4.98,
-      "change_1m_pct": -13.41,
-      "high_1m": 758.3,
+      "value": 679.35,
+      "prev": 656.1,
+      "change_pct": 3.54,
+      "change_5d_pct": -0.26,
+      "change_1m_pct": -8.94,
+      "high_1m": 749.79,
       "low_1m": 647.05,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "spy": {
-      "value": 735.29,
-      "prev": 733.0,
-      "change_pct": 0.31,
-      "change_5d_pct": -2.7,
-      "change_1m_pct": -5.39,
-      "high_1m": 779.42,
+      "value": 752.69,
+      "prev": 735.29,
+      "change_pct": 2.37,
+      "change_5d_pct": 0.08,
+      "change_1m_pct": -3.27,
+      "high_1m": 779.4,
       "low_1m": 732.71,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "iwm": {
-      "value": 273.67,
-      "prev": 270.98,
-      "change_pct": 0.99,
-      "change_5d_pct": -2.03,
-      "change_1m_pct": -1.45,
+      "value": 282.51,
+      "prev": 273.67,
+      "change_pct": 3.23,
+      "change_5d_pct": 1.21,
+      "change_1m_pct": 1.66,
       "high_1m": 286.17,
       "low_1m": 269.88,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "dia": {
-      "value": 512.22,
-      "prev": 514.27,
-      "change_pct": -0.4,
-      "change_5d_pct": -0.95,
-      "change_1m_pct": 0.26,
+      "value": 523.33,
+      "prev": 512.22,
+      "change_pct": 2.17,
+      "change_5d_pct": 0.77,
+      "change_1m_pct": 1.07,
       "high_1m": 536.6,
-      "low_1m": 508.3488,
-      "trade_date": "2026-11-06",
+      "low_1m": 508.66,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xlk": {
-      "value": 164.74,
-      "prev": 162.38,
-      "change_pct": 1.45,
-      "change_5d_pct": -8.23,
-      "change_1m_pct": -18.2,
-      "high_1m": 201.56,
+      "value": 170.88,
+      "prev": 164.74,
+      "change_pct": 3.73,
+      "change_5d_pct": -1.92,
+      "change_1m_pct": -12.98,
+      "high_1m": 198.18,
       "low_1m": 162.14,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xlf": {
-      "value": 57.16,
-      "prev": 57.5,
-      "change_pct": -0.59,
-      "change_5d_pct": 1.15,
-      "change_1m_pct": 6.34,
+      "value": 57.99,
+      "prev": 57.16,
+      "change_pct": 1.45,
+      "change_5d_pct": 0.75,
+      "change_1m_pct": 5.34,
       "high_1m": 60.04,
-      "low_1m": 53.41,
-      "trade_date": "2026-11-06",
+      "low_1m": 54.02,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xle": {
-      "value": 61.62,
-      "prev": 61.63,
-      "change_pct": -0.02,
-      "change_5d_pct": -12.0,
-      "change_1m_pct": -2.75,
+      "value": 61.94,
+      "prev": 61.62,
+      "change_pct": 0.52,
+      "change_5d_pct": -7.9,
+      "change_1m_pct": -6.17,
       "high_1m": 70.15,
-      "low_1m": 61.21,
-      "trade_date": "2026-11-06",
+      "low_1m": 60.85,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xlv": {
-      "value": 184.8,
-      "prev": 184.91,
-      "change_pct": -0.06,
-      "change_5d_pct": -0.04,
-      "change_1m_pct": 9.47,
+      "value": 188.33,
+      "prev": 184.8,
+      "change_pct": 1.91,
+      "change_5d_pct": 2.02,
+      "change_1m_pct": 9.5,
       "high_1m": 192.32,
-      "low_1m": 165.19,
-      "trade_date": "2026-11-06",
+      "low_1m": 169.48,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xly": {
-      "value": 117.58,
-      "prev": 117.64,
-      "change_pct": -0.05,
-      "change_5d_pct": 1.91,
-      "change_1m_pct": 5.59,
+      "value": 121.01,
+      "prev": 117.58,
+      "change_pct": 2.92,
+      "change_5d_pct": 2.41,
+      "change_1m_pct": 7.78,
       "high_1m": 122.92,
-      "low_1m": 110.58,
-      "trade_date": "2026-11-06",
+      "low_1m": 110.67,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xlp": {
-      "value": 90.08,
-      "prev": 91.25,
-      "change_pct": -1.28,
-      "change_5d_pct": 0.74,
-      "change_1m_pct": 10.26,
+      "value": 90.89,
+      "prev": 90.08,
+      "change_pct": 0.9,
+      "change_5d_pct": 0.07,
+      "change_1m_pct": 7.68,
       "high_1m": 93.4,
-      "low_1m": 81.69,
-      "trade_date": "2026-11-06",
+      "low_1m": 83.39,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xli": {
-      "value": 162.67,
-      "prev": 162.47,
-      "change_pct": 0.12,
-      "change_5d_pct": -2.83,
-      "change_1m_pct": -3.08,
+      "value": 168.89,
+      "prev": 162.67,
+      "change_pct": 3.82,
+      "change_5d_pct": -0.48,
+      "change_1m_pct": -0.15,
       "high_1m": 172.4,
       "low_1m": 161.74,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xlu": {
-      "value": 43.13,
-      "prev": 43.3,
-      "change_pct": -0.39,
-      "change_5d_pct": -0.69,
-      "change_1m_pct": 4.81,
+      "value": 43.79,
+      "prev": 43.13,
+      "change_pct": 1.53,
+      "change_5d_pct": 0.27,
+      "change_1m_pct": 5.19,
       "high_1m": 44.09,
-      "low_1m": 40.64,
-      "trade_date": "2026-11-06",
+      "low_1m": 41.09,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xlb": {
-      "value": 51.95,
-      "prev": 52.33,
-      "change_pct": -0.73,
-      "change_5d_pct": -1.5,
-      "change_1m_pct": 6.06,
+      "value": 52.94,
+      "prev": 51.95,
+      "change_pct": 1.91,
+      "change_5d_pct": -1.36,
+      "change_1m_pct": 7.08,
       "high_1m": 54.63,
-      "low_1m": 48.7,
-      "trade_date": "2026-11-06",
+      "low_1m": 49.16,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xlre": {
-      "value": 44.0,
-      "prev": 44.3,
-      "change_pct": -0.68,
-      "change_5d_pct": 1.92,
-      "change_1m_pct": 8.45,
+      "value": 44.64,
+      "prev": 44.0,
+      "change_pct": 1.45,
+      "change_5d_pct": 2.29,
+      "change_1m_pct": 6.49,
       "high_1m": 45.342,
-      "low_1m": 40.285,
-      "trade_date": "2026-11-06",
+      "low_1m": 41.315,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "xlc": {
-      "value": 104.79,
-      "prev": 104.34,
-      "change_pct": 0.43,
-      "change_5d_pct": 4.89,
-      "change_1m_pct": -5.82,
+      "value": 107.36,
+      "prev": 104.79,
+      "change_pct": 2.45,
+      "change_5d_pct": 7.08,
+      "change_1m_pct": -3.67,
       "high_1m": 113.17,
       "low_1m": 99.325,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "tlt": {
-      "value": 81.92,
-      "prev": 81.93,
-      "change_pct": -0.01,
-      "change_5d_pct": 0.1,
-      "change_1m_pct": 6.18,
+      "value": 81.96,
+      "prev": 81.92,
+      "change_pct": 0.05,
+      "change_5d_pct": 0.28,
+      "change_1m_pct": 5.01,
       "high_1m": 82.42,
-      "low_1m": 76.43,
-      "trade_date": "2026-11-06",
+      "low_1m": 77.74,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "gld": {
-      "value": 372.52,
-      "prev": 375.49,
-      "change_pct": -0.79,
-      "change_5d_pct": 4.71,
-      "change_1m_pct": -0.89,
-      "high_1m": 385.17,
+      "value": 379.53,
+      "prev": 372.52,
+      "change_pct": 1.88,
+      "change_5d_pct": 4.94,
+      "change_1m_pct": -0.69,
+      "high_1m": 384.88,
       "low_1m": 354.67,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "sqqq": {
-      "value": 47.7,
-      "prev": 49.55,
-      "change_pct": -3.73,
-      "change_5d_pct": 14.03,
-      "change_1m_pct": 48.74,
+      "value": 42.79,
+      "prev": 47.7,
+      "change_pct": -10.29,
+      "change_5d_pct": -1.75,
+      "change_1m_pct": 27.24,
       "high_1m": 49.63,
-      "low_1m": 32.02,
-      "trade_date": "2026-11-06",
+      "low_1m": 33.17,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "vxx": {
-      "value": 21.95,
-      "prev": 22.2,
-      "change_pct": -1.13,
-      "change_5d_pct": 14.26,
-      "change_1m_pct": 29.88,
+      "value": 19.02,
+      "prev": 21.95,
+      "change_pct": -13.35,
+      "change_5d_pct": -1.25,
+      "change_1m_pct": 13.96,
       "high_1m": 22.3,
       "low_1m": 16.54,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "aapl": {
-      "value": 342.37,
-      "prev": 344.17,
-      "change_pct": -0.52,
-      "change_5d_pct": -0.66,
-      "change_1m_pct": 1.69,
+      "value": 350.69,
+      "prev": 342.37,
+      "change_pct": 2.43,
+      "change_5d_pct": 3.66,
+      "change_1m_pct": 2.85,
       "high_1m": 355.38,
       "low_1m": 325.33,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "msft": {
-      "value": 530.61,
-      "prev": 535.93,
-      "change_pct": -0.99,
-      "change_5d_pct": 1.67,
-      "change_1m_pct": 0.16,
+      "value": 545.18,
+      "prev": 530.61,
+      "change_pct": 2.75,
+      "change_5d_pct": 7.51,
+      "change_1m_pct": 0.74,
       "high_1m": 559.15,
       "low_1m": 504.96,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "googl": {
-      "value": 284.78,
-      "prev": 282.57,
-      "change_pct": 0.78,
-      "change_5d_pct": 1.77,
-      "change_1m_pct": -18.75,
+      "value": 288.15,
+      "prev": 284.78,
+      "change_pct": 1.18,
+      "change_5d_pct": 3.28,
+      "change_1m_pct": -18.31,
       "high_1m": 359.4,
       "low_1m": 276.92,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "amzn": {
-      "value": 259.3,
-      "prev": 260.21,
-      "change_pct": -0.35,
-      "change_5d_pct": 7.88,
-      "change_1m_pct": -0.24,
-      "high_1m": 273.23,
+      "value": 266.93,
+      "prev": 259.3,
+      "change_pct": 2.94,
+      "change_5d_pct": 8.67,
+      "change_1m_pct": 2.85,
+      "high_1m": 275.34,
       "low_1m": 229.36,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "meta": {
-      "value": 610.15,
-      "prev": 605.08,
-      "change_pct": 0.84,
-      "change_5d_pct": -0.79,
-      "change_1m_pct": -15.41,
+      "value": 641.37,
+      "prev": 610.15,
+      "change_pct": 5.12,
+      "change_5d_pct": 5.71,
+      "change_1m_pct": -13.67,
       "high_1m": 771.27,
       "low_1m": 583.8,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "nvda": {
-      "value": 186.64,
-      "prev": 181.6,
-      "change_pct": 2.78,
-      "change_5d_pct": -8.8,
-      "change_1m_pct": -21.4,
-      "high_1m": 239.08,
-      "low_1m": 181.46,
-      "trade_date": "2026-11-06",
+      "value": 178.67,
+      "prev": 186.64,
+      "change_pct": -4.27,
+      "change_5d_pct": -11.58,
+      "change_1m_pct": -21.05,
+      "high_1m": 228.86,
+      "low_1m": 170.24,
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     },
     "tsla": {
-      "value": 358.22,
-      "prev": 343.69,
-      "change_pct": 4.23,
-      "change_5d_pct": -10.4,
-      "change_1m_pct": -5.19,
+      "value": 378.05,
+      "prev": 358.22,
+      "change_pct": 5.54,
+      "change_5d_pct": -6.38,
+      "change_1m_pct": 0.01,
       "high_1m": 414.23,
       "low_1m": 338.15,
-      "trade_date": "2026-11-06",
+      "trade_date": "2026-11-09",
       "source": "Yahoo"
     }
   },
   "fred": {
     "DFF": {
       "value": 3.88,
-      "date": "2026-11-05",
+      "date": "2026-11-06",
       "series_id": "DFF",
       "label": "Fed 실효금리",
       "unit": "%"
@@ -501,8 +501,8 @@
       "unit": "%"
     },
     "DFII10": {
-      "value": 2.6,
-      "date": "2026-11-05",
+      "value": 2.63,
+      "date": "2026-11-06",
       "series_id": "DFII10",
       "label": "10Y 실질금리",
       "unit": "%"
@@ -525,20 +525,20 @@
     }
   },
   "yield_curve": {
-    "1M": 4.03,
-    "3M": 4.17,
-    "6M": 4.19,
-    "1Y": 4.28,
-    "2Y": 4.46,
-    "5Y": 4.59,
-    "7Y": 4.7,
-    "10Y": 4.84,
-    "20Y": 5.27,
-    "30Y": 5.25
+    "1M": 4.02,
+    "3M": 4.19,
+    "6M": 4.23,
+    "1Y": 4.33,
+    "2Y": 4.51,
+    "5Y": 4.64,
+    "7Y": 4.74,
+    "10Y": 4.86,
+    "20Y": 5.29,
+    "30Y": 5.26
   },
   "spread_2s10s_history": [
     {
-      "date": "2021-11-10",
+      "date": "2021-11-12",
       "spread": 1.05
     },
     {
@@ -796,214 +796,214 @@
       {
         "key": "XLC",
         "name": "통신",
-        "value": 104.79,
-        "chg_1d": 0.43,
-        "chg_5d": 4.89,
-        "chg_1m": -5.82
-      },
-      {
-        "key": "XLRE",
-        "name": "부동산",
-        "value": 44.0,
-        "chg_1d": -0.68,
-        "chg_5d": 1.92,
-        "chg_1m": 8.45
+        "value": 107.36,
+        "chg_1d": 2.45,
+        "chg_5d": 7.08,
+        "chg_1m": -3.67
       },
       {
         "key": "XLY",
         "name": "임의소비재",
-        "value": 117.58,
-        "chg_1d": -0.05,
-        "chg_5d": 1.91,
-        "chg_1m": 5.59
+        "value": 121.01,
+        "chg_1d": 2.92,
+        "chg_5d": 2.41,
+        "chg_1m": 7.78
       },
       {
-        "key": "XLF",
-        "name": "금융",
-        "value": 57.16,
-        "chg_1d": -0.59,
-        "chg_5d": 1.15,
-        "chg_1m": 6.34
-      },
-      {
-        "key": "XLP",
-        "name": "필수소비재",
-        "value": 90.08,
-        "chg_1d": -1.28,
-        "chg_5d": 0.74,
-        "chg_1m": 10.26
+        "key": "XLRE",
+        "name": "부동산",
+        "value": 44.64,
+        "chg_1d": 1.45,
+        "chg_5d": 2.29,
+        "chg_1m": 6.49
       },
       {
         "key": "XLV",
         "name": "헬스케어",
-        "value": 184.8,
-        "chg_1d": -0.06,
-        "chg_5d": -0.04,
-        "chg_1m": 9.47
+        "value": 188.33,
+        "chg_1d": 1.91,
+        "chg_5d": 2.02,
+        "chg_1m": 9.5
+      },
+      {
+        "key": "XLF",
+        "name": "금융",
+        "value": 57.99,
+        "chg_1d": 1.45,
+        "chg_5d": 0.75,
+        "chg_1m": 5.34
       },
       {
         "key": "XLU",
         "name": "유틸리티",
-        "value": 43.13,
-        "chg_1d": -0.39,
-        "chg_5d": -0.69,
-        "chg_1m": 4.81
+        "value": 43.79,
+        "chg_1d": 1.53,
+        "chg_5d": 0.27,
+        "chg_1m": 5.19
       },
       {
-        "key": "XLB",
-        "name": "소재",
-        "value": 51.95,
-        "chg_1d": -0.73,
-        "chg_5d": -1.5,
-        "chg_1m": 6.06
+        "key": "XLP",
+        "name": "필수소비재",
+        "value": 90.89,
+        "chg_1d": 0.9,
+        "chg_5d": 0.07,
+        "chg_1m": 7.68
       },
       {
         "key": "XLI",
         "name": "산업재",
-        "value": 162.67,
-        "chg_1d": 0.12,
-        "chg_5d": -2.83,
-        "chg_1m": -3.08
+        "value": 168.89,
+        "chg_1d": 3.82,
+        "chg_5d": -0.48,
+        "chg_1m": -0.15
+      },
+      {
+        "key": "XLB",
+        "name": "소재",
+        "value": 52.94,
+        "chg_1d": 1.91,
+        "chg_5d": -1.36,
+        "chg_1m": 7.08
       },
       {
         "key": "XLK",
         "name": "기술",
-        "value": 164.74,
-        "chg_1d": 1.45,
-        "chg_5d": -8.23,
-        "chg_1m": -18.2
+        "value": 170.88,
+        "chg_1d": 3.73,
+        "chg_5d": -1.92,
+        "chg_1m": -12.98
       },
       {
         "key": "XLE",
         "name": "에너지",
-        "value": 61.62,
-        "chg_1d": -0.02,
-        "chg_5d": -12.0,
-        "chg_1m": -2.75
+        "value": 61.94,
+        "chg_1d": 0.52,
+        "chg_5d": -7.9,
+        "chg_1m": -6.17
       }
     ],
     "top_3": [
       {
         "key": "XLC",
         "name": "통신",
-        "value": 104.79,
-        "chg_1d": 0.43,
-        "chg_5d": 4.89,
-        "chg_1m": -5.82
-      },
-      {
-        "key": "XLRE",
-        "name": "부동산",
-        "value": 44.0,
-        "chg_1d": -0.68,
-        "chg_5d": 1.92,
-        "chg_1m": 8.45
+        "value": 107.36,
+        "chg_1d": 2.45,
+        "chg_5d": 7.08,
+        "chg_1m": -3.67
       },
       {
         "key": "XLY",
         "name": "임의소비재",
-        "value": 117.58,
-        "chg_1d": -0.05,
-        "chg_5d": 1.91,
-        "chg_1m": 5.59
+        "value": 121.01,
+        "chg_1d": 2.92,
+        "chg_5d": 2.41,
+        "chg_1m": 7.78
+      },
+      {
+        "key": "XLRE",
+        "name": "부동산",
+        "value": 44.64,
+        "chg_1d": 1.45,
+        "chg_5d": 2.29,
+        "chg_1m": 6.49
       }
     ],
     "bottom_3": [
       {
         "key": "XLE",
         "name": "에너지",
-        "value": 61.62,
-        "chg_1d": -0.02,
-        "chg_5d": -12.0,
-        "chg_1m": -2.75
+        "value": 61.94,
+        "chg_1d": 0.52,
+        "chg_5d": -7.9,
+        "chg_1m": -6.17
       },
       {
         "key": "XLK",
         "name": "기술",
-        "value": 164.74,
-        "chg_1d": 1.45,
-        "chg_5d": -8.23,
-        "chg_1m": -18.2
+        "value": 170.88,
+        "chg_1d": 3.73,
+        "chg_5d": -1.92,
+        "chg_1m": -12.98
       },
       {
-        "key": "XLI",
-        "name": "산업재",
-        "value": 162.67,
-        "chg_1d": 0.12,
-        "chg_5d": -2.83,
-        "chg_1m": -3.08
+        "key": "XLB",
+        "name": "소재",
+        "value": 52.94,
+        "chg_1d": 1.91,
+        "chg_5d": -1.36,
+        "chg_1m": 7.08
       }
     ],
     "flow_pattern": {
-      "id": 4,
-      "name": "공포 정점",
-      "desc": "SQQQ 급증 → 역발상 매수 기회",
-      "rating": "neg_or_contrarian"
+      "id": 2,
+      "name": "중소형 선호",
+      "desc": "IWM > QQQ → 위험 선호↑",
+      "rating": "pos"
     }
   },
   "mag7": [
     {
       "ticker": "AAPL",
       "name": "Apple",
-      "value": 342.37,
-      "chg_1d": -0.52,
-      "chg_5d": -0.66,
-      "chg_1m": 1.69,
-      "trade_date": "2026-11-06"
+      "value": 350.69,
+      "chg_1d": 2.43,
+      "chg_5d": 3.66,
+      "chg_1m": 2.85,
+      "trade_date": "2026-11-09"
     },
     {
       "ticker": "MSFT",
       "name": "Microsoft",
-      "value": 530.61,
-      "chg_1d": -0.99,
-      "chg_5d": 1.67,
-      "chg_1m": 0.16,
-      "trade_date": "2026-11-06"
+      "value": 545.18,
+      "chg_1d": 2.75,
+      "chg_5d": 7.51,
+      "chg_1m": 0.74,
+      "trade_date": "2026-11-09"
     },
     {
       "ticker": "GOOGL",
       "name": "Alphabet",
-      "value": 284.78,
-      "chg_1d": 0.78,
-      "chg_5d": 1.77,
-      "chg_1m": -18.75,
-      "trade_date": "2026-11-06"
+      "value": 288.15,
+      "chg_1d": 1.18,
+      "chg_5d": 3.28,
+      "chg_1m": -18.31,
+      "trade_date": "2026-11-09"
     },
     {
       "ticker": "AMZN",
       "name": "Amazon",
-      "value": 259.3,
-      "chg_1d": -0.35,
-      "chg_5d": 7.88,
-      "chg_1m": -0.24,
-      "trade_date": "2026-11-06"
+      "value": 266.93,
+      "chg_1d": 2.94,
+      "chg_5d": 8.67,
+      "chg_1m": 2.85,
+      "trade_date": "2026-11-09"
     },
     {
       "ticker": "META",
       "name": "Meta",
-      "value": 610.15,
-      "chg_1d": 0.84,
-      "chg_5d": -0.79,
-      "chg_1m": -15.41,
-      "trade_date": "2026-11-06"
+      "value": 641.37,
+      "chg_1d": 5.12,
+      "chg_5d": 5.71,
+      "chg_1m": -13.67,
+      "trade_date": "2026-11-09"
     },
     {
       "ticker": "NVDA",
       "name": "NVIDIA",
-      "value": 186.64,
-      "chg_1d": 2.78,
-      "chg_5d": -8.8,
-      "chg_1m": -21.4,
-      "trade_date": "2026-11-06"
+      "value": 178.67,
+      "chg_1d": -4.27,
+      "chg_5d": -11.58,
+      "chg_1m": -21.05,
+      "trade_date": "2026-11-09"
     },
     {
       "ticker": "TSLA",
       "name": "Tesla",
-      "value": 358.22,
-      "chg_1d": 4.23,
-      "chg_5d": -10.4,
-      "chg_1m": -5.19,
-      "trade_date": "2026-11-06"
+      "value": 378.05,
+      "chg_1d": 5.54,
+      "chg_5d": -6.38,
+      "chg_1m": 0.01,
+      "trade_date": "2026-11-09"
     }
   ],
   "auto_axes": {
@@ -1024,41 +1024,41 @@
         },
         {
           "k": "실질금리",
-          "v": "2.60%",
+          "v": "2.63%",
           "tone": "neg",
           "source": "FRED:DFII10"
         }
       ],
-      "summary": "실질금리 2.60% — 주식에 큰 부담",
+      "summary": "실질금리 2.63% — 주식에 큰 부담",
       "pdfTip": "FRED DFII10 = 10Y TIPS = 실질금리. 2%+ 부담, 마이너스면 위험자산 폭등기.",
-      "as_of": "2026-11-05",
+      "as_of": "2026-11-06",
       "freq": "매일"
     },
     "flow": {
-      "rating": "부정",
+      "rating": "긍정",
       "metrics": [
         {
           "k": "QQQ 5일",
-          "v": "-5.0%",
-          "tone": "neg",
+          "v": "-0.3%",
+          "tone": "neu",
           "source": "Yahoo:QQQ"
         },
         {
           "k": "IWM 5일",
-          "v": "-2.0%",
-          "tone": "neg",
+          "v": "+1.2%",
+          "tone": "pos",
           "source": "Yahoo:IWM"
         },
         {
           "k": "TLT 5일",
-          "v": "+0.1%",
+          "v": "+0.3%",
           "tone": "neu",
           "source": "Yahoo:TLT"
         }
       ],
-      "summary": "패턴 4 공포 정점 — SQQQ 급증 → 역발상 매수 기회",
+      "summary": "패턴 2 중소형 선호 — IWM > QQQ → 위험 선호↑",
       "pdfTip": "SQQQ 유입 급증 = 역발상 매수. 4패턴 (PDF p.23).",
-      "as_of": "2026-11-06",
+      "as_of": "2026-11-09",
       "freq": "매일"
     },
     "employment": {
@@ -1120,53 +1120,53 @@
       "metrics": [
         {
           "k": "DXY",
-          "v": "102.16",
+          "v": "101.69",
           "tone": "neu",
           "source": "Yahoo:DX-Y.NYB"
         },
         {
           "k": "WTI",
-          "v": "$90.58",
+          "v": "$85.93",
           "tone": "neu",
           "source": "Yahoo:CL=F"
         },
         {
           "k": "구리",
-          "v": "$6.33/lb",
+          "v": "$6.35/lb",
           "tone": "pos",
           "source": "Yahoo:HG=F"
         }
       ],
-      "summary": "DXY 102.2, WTI $91 — 혼재",
+      "summary": "DXY 101.7, WTI $86 — 혼재",
       "pdfTip": "유가 $100+ 지속 시 Fed 매파 회귀. 구리=닥터 코퍼.",
-      "as_of": "2026-11-06",
+      "as_of": "2026-11-09",
       "freq": "매일"
     },
     "vix": {
-      "rating": "중립",
+      "rating": "긍정",
       "metrics": [
         {
           "k": "VIX",
-          "v": "25.64",
-          "tone": "neg",
+          "v": "19.92",
+          "tone": "pos",
           "source": "Yahoo:^VIX"
         },
         {
           "k": "1일 변화",
-          "v": "-9.0%",
+          "v": "-22.3%",
           "tone": "neu",
           "source": "계산값"
         },
         {
           "k": "5일 변화",
-          "v": "+32.0%",
+          "v": "-5.8%",
           "tone": "neu",
           "source": "계산값"
         }
       ],
-      "summary": "VIX 25.6 — 불안 증가",
+      "summary": "VIX 19.9 — 정상 범위, 시장 건강",
       "pdfTip": "VIX <10 자만, >30 공포. 백워데이션 발생 시 즉시 방어.",
-      "as_of": "2026-11-06",
+      "as_of": "2026-11-09",
       "freq": "매일"
     }
   },
@@ -1182,15 +1182,15 @@
         },
         {
           "k": "애널리스트 평균",
-          "v": "1.7/5",
+          "v": "1.6/5",
           "tone": "pos",
           "source": "recommendationMean"
         }
       ],
-      "summary": "대형주 30곳 중 이익 증가 73%, 애널리스트 매수우위(평균 1.7)",
+      "summary": "대형주 30곳 중 이익 증가 73%, 애널리스트 매수우위(평균 1.6)",
       "pdfTip": "실적보다 가이던스. 대형주 표본 집계로 매일 자동 갱신.",
-      "last_manual": "2026-11-09",
-      "as_of": "2026-11-09",
+      "last_manual": "2026-11-10",
+      "as_of": "2026-11-10",
       "freq": "매일(집계)"
     },
     "margin": {
@@ -1211,8 +1211,8 @@
       ],
       "summary": "대형주 영업이익률 중앙값 31.5%, 마진 확대 종목 60%",
       "pdfTip": "이익성장 > 매출성장 = 마진 확대(영업레버리지).",
-      "last_manual": "2026-11-09",
-      "as_of": "2026-11-09",
+      "last_manual": "2026-11-10",
+      "as_of": "2026-11-10",
       "freq": "매일(집계)"
     }
   },
@@ -1226,32 +1226,45 @@
         "direction": "down"
       },
       {
+        "axis": "flow",
+        "from": "부정",
+        "to": "긍정",
+        "direction": "up"
+      },
+      {
         "axis": "employment",
+        "from": "중립",
+        "to": "긍정",
+        "direction": "up"
+      },
+      {
+        "axis": "vix",
         "from": "중립",
         "to": "긍정",
         "direction": "up"
       }
     ],
-    "count": 2,
-    "is_inflection": false,
-    "summary": "2개 축 변동",
+    "count": 4,
+    "is_inflection": true,
+    "summary": "4개 축 변동 (변곡점!)",
     "first_run": false
   },
   "action": {
-    "signal": "약한 강세 관망",
-    "level": "neutral_bull",
-    "confidence": "낮음",
-    "cash_ratio": "25~35%",
-    "reason": "긍정 3 / 부정 2 — 약한 강세 (4축 미달, 정적 축 의존)",
-    "backtest_note": "강세 신호 부족 — 자동 6축 중 추가 긍정 전환 대기",
-    "allocation": "대형 우량주 45% + 방어주 25% + 현금 25~35%",
+    "signal": "매수 권장",
+    "level": "buy",
+    "confidence": "높음",
+    "cash_ratio": "10~20%",
+    "reason": "긍정 신호 5개 — 강세장 (4-4-반반 충족)",
+    "backtest_note": "백테스트: 강세 4+ → 3M 후 71.7% 확률 상승, 평균 +2.46%",
+    "allocation": "대형 우량주 60% + 성장주 20% + 현금 10~20%",
     "contrarian": null,
     "buy_triggers": [
-      "금리 부정→중립 전환",
-      "자금흐름 부정→중립 전환"
+      "금리 부정→중립 전환"
     ],
     "sell_triggers": [
-      "고용 긍정→중립 전환"
+      "자금흐름 긍정→중립 전환",
+      "고용 긍정→중립 전환",
+      "VIX 긍정→중립 전환"
     ],
     "vix_state": null
   },
@@ -1267,12 +1280,12 @@
     }
   ],
   "summary": {
-    "positive": 3,
-    "neutral": 3,
-    "negative": 2,
-    "score": 1,
-    "phase": "강세 우위 횡보",
-    "strategy": "중립 + 약공격"
+    "positive": 5,
+    "neutral": 2,
+    "negative": 1,
+    "score": 4,
+    "phase": "강세장",
+    "strategy": "공격적"
   },
   "data_sources": {
     "yahoo": "yfinance + Stooq fallback — 시세 38개",
